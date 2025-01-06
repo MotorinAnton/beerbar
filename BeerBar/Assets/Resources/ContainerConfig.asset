@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8a7ada5f9354b5e8dfdb23d9af13dc4, type: 3}
+  m_Name: ContainerConfig
+  m_EditorClassIdentifier: 
+  ContainersData:
+  - Prefab: {fileID: 2032143121015372552, guid: 20e4ae303504fce48a7952e48ea6711b, type: 3}
+    Type: 0
+    Level: 1
+    Capacity: 12
+    Price: 10
+  - Prefab: {fileID: 1631259781711390183, guid: dfc645d83343c1a439d89f04f517f6fe, type: 3}
+    Type: 0
+    Level: 2
+    Capacity: 19
+    Price: 50
+  - Prefab: {fileID: 5814572659161271916, guid: 5e54993fb87d28943932bb0b14cd4ccf, type: 3}
+    Type: 0
+    Level: 3
+    Capacity: 19
+    Price: 100
+  - Prefab: {fileID: -6111894840251012107, guid: 2e284cd248d0300429e76178907d0e6c, type: 3}
+    Type: 4
+    Level: 1
+    Capacity: 10
+    Price: 10
+  - Prefab: {fileID: 8340235235701804045, guid: da975a09f0cd9bb4dbd852a0f4be6ded, type: 3}
+    Type: 4
+    Level: 2
+    Capacity: 5
+    Price: 20
+  - Prefab: {fileID: 5722830991931706922, guid: c02df611c33c07945a78efa637d4925c, type: 3}
+    Type: 4
+    Level: 3
+    Capacity: 5
+    Price: 30
+  - Prefab: {fileID: 1574432971551126479, guid: 132a5b3b2d08f4b45ba9e025a766fae2, type: 3}
+    Type: 3
+    Level: 1
+    Capacity: 14
+    Price: 10
+  - Prefab: {fileID: 380892065445137343, guid: 0d383d134e0de90438124fb34c81367c, type: 3}
+    Type: 3
+    Level: 2
+    Capacity: 14
+    Price: 10
+  - Prefab: {fileID: 5580783379987367827, guid: 07d805ca5d5222847ac99103097f1511, type: 3}
+    Type: 3
+    Level: 3
+    Capacity: 14
+    Price: 10
+  - Prefab: {fileID: 680678850042966761, guid: a71baa4426800c24abb94fce75e391ac, type: 3}
+    Type: 3
+    Level: 4
+    Capacity: 14
+    Price: 10
+  - Prefab: {fileID: 3878158774075046324, guid: 96eeb91c20ebae34999f44ed775adb45, type: 3}
+    Type: 3
+    Level: 5
+    Capacity: 14
+    Price: 10
+  - Prefab: {fileID: 3415153200802022242, guid: b53bfa4a33dac2940880160f862730ef, type: 3}
+    Type: 3
+    Level: 6
+    Capacity: 14
+    Price: 10
+  - Prefab: {fileID: 2725856152374714197, guid: 0430350e60f14a74e86d87e212d97912, type: 3}
+    Type: 3
+    Level: 7
+    Capacity: 14
+    Price: 10
+  - Prefab: {fileID: 5336703308044735579, guid: 8fe15151b507a744db4291fe3bc12574, type: 3}
+    Type: 3
+    Level: 8
+    Capacity: 14
+    Price: 10
+  - Prefab: {fileID: 430430062207445493, guid: a0e7c2156c8b5c54c80f1c7ad573bb03, type: 3}
+    Type: 1
+    Level: 1
+    Capacity: 18
+    Price: 20
+  - Prefab: {fileID: 2493219201123648923, guid: c0f227b4b26c569499c0778577272621, type: 3}
+    Type: 1
+    Level: 2
+    Capacity: 18
+    Price: 20
+  - Prefab: {fileID: 2417753821945134900, guid: 80a936e91f45206409a86327713cefdc, type: 3}
+    Type: 1
+    Level: 3
+    Capacity: 18
+    Price: 20

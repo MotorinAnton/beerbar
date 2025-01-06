@@ -1,0 +1,261 @@
+using System.Collections.Generic;
+using System.Linq;
+using Core.Authoring.Bartenders;
+using Core.Authoring.Characters;
+using Core.Authoring.PhraseCustomerUi;
+using Core.Authoring.Points;
+using Core.Authoring.Products;
+using Core.Authoring.Tables;
+using Core.Components;
+using Core.Components.Wait;
+using Core.Constants;
+using Core.Utilities;
+using Unity.Collections;
+using Unity.Entities;
+using UnityEngine;
+using MoveCharacterCompleted = Core.Authoring.Characters.MoveCharacterCompleted;
+
+namespace Core.Authoring.Customers.Systems
+{
+    [RequireMatchingQueriesForUpdate]
+    public partial class PurchaseQueueCustomerMovementSystem : SystemBase
+    {
+        private EntityQuery _movePurchaseQueueCustomerQuery;
+        private EntityQuery _waitingPurchaseQueueCustomerQuery;
+        private EntityQuery _waitingFreePointPurchaseQueueCustomerQuery;
+        private EntityQuery _dissatisfiedPurchaseQueueCustomerQuery;
+        private EntityQuery _afterDissatisfiedPurchaseQueueCustomerQuery;
+        private EntityQuery _customerLookShowcaseQuery;
+        private EntityQuery _freeBarmanQuery;
+        private EntityQuery _purchasePointsQuery;
+        private EntityQuery _barmanCashPointsPointArray;
+        private EntityQuery _phraseUiManager;
+
+        protected override void OnCreate()
+        {
+            using var movePurchaseQueueCustomerBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _movePurchaseQueueCustomerQuery = movePurchaseQueueCustomerBuilder
+                .WithAll<Customer, PurchaseQueueCustomer, IndexMovePoint>()
+                .WithNone<MoveExit, WaitTime, WaitingCustomer, DissatisfiedCustomer>().Build(this);
+            
+            using var waitingPurchaseQueueCustomerBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _waitingPurchaseQueueCustomerQuery = waitingPurchaseQueueCustomerBuilder
+                .WithAll<Customer, PurchaseQueueCustomer, IndexMovePoint, WaitingCustomer, WaitTime>()
+                .WithNone<MoveExit, DissatisfiedCustomer>().Build(this);
+            
+            using var waitingFreePointPurchaseQueueCustomerBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _waitingFreePointPurchaseQueueCustomerQuery = waitingFreePointPurchaseQueueCustomerBuilder
+                .WithAll<Customer, PurchaseQueueCustomer, IndexMovePoint, WaitingCustomer>()
+                .WithNone<WaitTime, MoveExit, DissatisfiedCustomer>().Build(this);
+            
+            using var dissatisfiedPurchaseQueueCustomerBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _dissatisfiedPurchaseQueueCustomerQuery = dissatisfiedPurchaseQueueCustomerBuilder
+                .WithAll<Customer, DissatisfiedCustomer , WaitTime>().Build(this);
+            
+            using var afterDissatisfiedPurchaseQueueCustomerBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _afterDissatisfiedPurchaseQueueCustomerQuery = afterDissatisfiedPurchaseQueueCustomerBuilder
+                .WithAll<Customer, DissatisfiedCustomer>().WithNone<WaitTime, MoveExit>().Build(this);
+            
+            using var freeBarmanBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _freeBarmanQuery = freeBarmanBuilder.WithAll<Barman, FreeBarman>().WithNone<OrderBarman, WaitTime>().Build(this);
+            
+            using var purchasePointsBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _purchasePointsQuery = purchasePointsBuilder.WithAll<PurchasePoint, MoveCustomerPoint>().WithNone<PointNotAvailable>().Build(this);
+            
+            using var barmanCashPointsBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _barmanCashPointsPointArray = barmanCashPointsBuilder.WithAll<BarmanSpawnPoint, SpawnPoint>().Build(this);
+            
+            using var phraseUiManagerBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _phraseUiManager = phraseUiManagerBuilder.WithAll<PhraseCustomerUiManagerView>().Build(this);
+        }
+
+        protected override void OnUpdate()
+        {
+            WaitingCustomers();
+            WaitingFreePointCustomers();
+            DissatisfiedCustomers();
+            AfterDissatisfiedCustomers();
+            MoveCustomers();
+        }
+
+        private void MoveCustomers()
+        {
+            var moveCustomerEntityArray = _movePurchaseQueueCustomerQuery.ToEntityArray(Allocator.Temp);
+            var purchaseQueuePoints = _purchasePointsQuery.ToComponentDataArray<MoveCustomerPoint>(Allocator.Temp);
+
+            foreach (var customerEntity in moveCustomerEntityArray)
+            {
+                if (EntityManager.HasComponent<MoveCharacterCompleted>(customerEntity))
+                {
+                    EntityManager.RemoveComponent<MoveCharacterCompleted>(customerEntity);
+                    EntityManager.AddComponent<WaitingCustomer>(customerEntity);
+                    
+                    var customerUiEntity = EntityManager.GetComponentData<CustomerUIEntity>(customerEntity).UiEntity;
+
+                    if (EntityManager.HasComponent<WaitTime>(customerUiEntity))
+                    {
+                        continue;
+                    }
+
+                    var maxWaitTime = EntityUtilities.GetCustomerConfig().MaxWaitTimeInPurchaseQueue;
+                    EntityManager.AddComponentData(customerUiEntity, new WaitTime { Current = maxWaitTime });
+                }
+                else
+                {
+                    var indexCustomer = EntityManager.GetComponentData<IndexMovePoint>(customerEntity).Value;
+                    var rowCount = purchaseQueuePoints.Select(point => point.Row).ToHashSet().Count;
+                    var column = indexCustomer / rowCount;
+                    var row = indexCustomer % rowCount;
+                    var targetPoint = purchaseQueuePoints
+                        .FirstOrDefault(index => index.Column == column && index.Row == row).Point.Position;
+                    
+                    EntityManager.AddComponentData(customerEntity, new MoveCharacter { TargetPoint = targetPoint });
+                }
+            }
+        }
+
+        private void WaitingFreePointCustomers()
+        {
+            var purchaseQueuePoints = _purchasePointsQuery.ToComponentDataArray<MoveCustomerPoint>(Allocator.Temp);
+            var waitingFreePointCustomerEntityArray = _waitingFreePointPurchaseQueueCustomerQuery.ToEntityArray(Allocator.Temp);
+            var barmanCashPoints = _barmanCashPointsPointArray.ToComponentDataArray<SpawnPoint>(Allocator.Temp);
+            
+            foreach (var customerEntity in waitingFreePointCustomerEntityArray)
+            {
+                var customerView = EntityManager.GetComponentObject<CustomerView>(customerEntity).Value;
+                var transform = EntityManager.GetComponentObject<TransformView>(customerEntity).Value;
+                var animator = EntityManager.GetComponentObject<AnimatorView>(customerEntity).Value;
+                var audioSource = EntityManager.GetComponentObject<AudioSourceView>(customerEntity).Value;
+                var indexCustomer = EntityManager.GetComponentData<IndexMovePoint>(customerEntity).Value;
+                var rowCount = purchaseQueuePoints.Select(point => point.Row).ToHashSet().Count;
+                var column = indexCustomer / rowCount; // column
+                var row = indexCustomer % rowCount; // row
+                var targetRotationPoint = barmanCashPoints[row].Position;
+                
+                customerView.TurningCharacterToPoint(targetRotationPoint);
+
+                if (column != 0)
+                {
+                    continue;
+                }
+                EntityManager.AddComponent<PhraseSayCustomer>(customerEntity);
+                animator.SetBool(CustomerAnimationConstants.CashIdle, true);
+                
+                var freeBarman = _freeBarmanQuery.ToEntityArray(Allocator.Temp)
+                    .FirstOrDefault(entity => EntityManager.GetComponentData<BarmanIndex>(entity).Value == row);
+
+                if (freeBarman == default)
+                {
+                    continue;
+                }
+
+                var customerOrderProducts =
+                    EntityManager.GetComponentObject<CustomerProduct>(customerEntity).Products;
+                            
+                EntityManager.AddComponentObject(freeBarman,
+                    new OrderBarman
+                    {
+                        Products = customerOrderProducts, 
+                        CustomerEntity = customerEntity,
+                        CompletedProduct = new List<ProductData>().ToArray()
+                    });
+                EntityManager.AddComponentData(freeBarman,
+                    new WaitTime { Current = BarmanAnimationConstants.ServiceTime });
+                
+            }
+        }
+        private void WaitingCustomers()
+        {
+            var purchaseQueuePoints = _purchasePointsQuery.ToComponentDataArray<MoveCustomerPoint>(Allocator.Temp);
+            var waitingCustomerEntity = _waitingPurchaseQueueCustomerQuery.ToEntityArray(Allocator.Temp);
+            
+            foreach (var customerEntity in waitingCustomerEntity)
+            {
+                var customerView = EntityManager.GetComponentObject<CustomerView>(customerEntity).Value;
+                var targetPoint = purchaseQueuePoints[0].Point.Position;
+                
+                customerView.TurningCharacterToPoint(targetPoint);
+            }
+        }
+        
+        private void DissatisfiedCustomers()
+        {
+            var dissatisfiedCustomerEntity = _dissatisfiedPurchaseQueueCustomerQuery.ToEntityArray(Allocator.Temp);
+            
+            foreach (var customerEntity in dissatisfiedCustomerEntity)
+            {
+                if (_phraseUiManager.IsEmpty)
+                {
+                    continue;
+                }
+
+                var phraseUiManagerEntity = _phraseUiManager.ToEntityArray(Allocator.Temp)[0];
+                var phraseUiManager = EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity).PhraseCustomerUiManager;
+                
+                if (phraseUiManager.EventPanel.IsShow)
+                {
+                    continue;
+                } 
+                
+                var customerView = EntityManager.GetComponentObject<CustomerView>(customerEntity);
+                var randomPhrase = Random.Range(0, customerView.Dialogs.SwearsQueue.Length);
+                
+                phraseUiManager.EventPanel.SetPhrasePanelUiComponent(customerView.Dialogs.SwearsQueue[randomPhrase], customerView.Avatar);
+                        
+                phraseUiManager.StartEventPanelTween();
+            } 
+        }
+
+        private void AfterDissatisfiedCustomers()
+        {
+            var afterDissatisfiedCustomerEntity =
+                _afterDissatisfiedPurchaseQueueCustomerQuery.ToEntityArray(Allocator.Temp);
+
+            foreach (var customerEntity in afterDissatisfiedCustomerEntity)
+            {
+                var purchaseQueuePoints = _purchasePointsQuery.ToComponentDataArray<MoveCustomerPoint>(Allocator.Temp);
+                var indexCustomer = EntityManager.GetComponentData<IndexMovePoint>(customerEntity).Value;
+                var rowCount = purchaseQueuePoints.Select(point => point.Row).ToHashSet().Count;
+                var row = indexCustomer % rowCount;
+
+                EntityManager.RemoveComponent<DissatisfiedCustomer>(customerEntity);
+                EntityManager.AddComponent<MoveExit>(customerEntity);
+                EntityManager.AddComponentData(customerEntity,
+                    new UpdatePurchaseQueuePosition { UpdateRow = row });
+                
+                if (EntityManager.HasComponent<PhraseSayCustomer>(customerEntity))
+                {
+                    EntityManager.RemoveComponent<PhraseSayCustomer>(customerEntity);
+                }
+
+                if (_phraseUiManager.IsEmpty)
+                {
+                    continue;
+                }
+
+                var phraseUiManagerEntity = _phraseUiManager.ToEntityArray(Allocator.Temp)[0];
+                var phraseUiManagerView =
+                    EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity);
+                var phraseUiManager =
+                    EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity)
+                        .PhraseCustomerUiManager;
+
+                phraseUiManagerView.CustomerList.Remove(customerEntity);
+                
+        
+                /*foreach (var panel in phraseUiManager.PhrasePanels)
+                {
+                    if (panel.Customer != customerEntity)
+                    {
+                        continue;
+                    }
+
+                    phraseUiManager.PanelFadeOut(panel);
+                    EntityManager.AddComponent<StartTweenPhraseCustomerUi>(phraseUiManagerEntity);
+                    phraseUiManagerView.CustomerList.Remove(customerEntity);
+                    return;
+                }*/
+            }
+        }
+    }
+}

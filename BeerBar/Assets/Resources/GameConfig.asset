@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b0e65eea0774ca9bbe9232e18922f9b, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: 
+  Actions: {fileID: -944628639613478452, guid: 610a8dbd51fd25e469a0b5265d930b50, type: 3}
+  CameraConfig: {fileID: 11400000, guid: 6a823724026be874caa757fab8c6d4ff, type: 2}
+  BarmanConfig: {fileID: 11400000, guid: 6bb686cd79d4d704d8574e56db53dea6, type: 2}
+  CustomerConfig: {fileID: 11400000, guid: ca4b57e5ffff0de4c8556e9867cf887c, type: 2}
+  ProductKeeperConfig: {fileID: 11400000, guid: e7a5264e09ffb3f4da53b7ca04655f75, type: 2}
+  RepairmanConfig: {fileID: 11400000, guid: 8af46405cd75df242879e308e06954ad, type: 2}
+  CleanerConfig: {fileID: 11400000, guid: 15e454a39b2efe643b249834ce5c9e0b, type: 2}
+  ContainerConfig: {fileID: 11400000, guid: 425b3e03ddaa813479d937bab8e66232, type: 2}
+  ProductConfig: {fileID: 11400000, guid: c99ab09de5eaac741b487a95e51e5658, type: 2}
+  UIConfig: {fileID: 11400000, guid: e6a27a8036ce615438bf25dac5e0c30f, type: 2}
+  TableConfig: {fileID: 11400000, guid: 81fb70984f403d3478b76592121534a7, type: 2}
+  EventObjectConfig: {fileID: 11400000, guid: a84593a1f03b7994a968ac8cb02ac280, type: 2}
+  AudioConfig: {fileID: 11400000, guid: 83e52cd6021a0714dbf22e9d4d439b87, type: 2}
+  UpConfig: {fileID: 11400000, guid: 162527346948c8747a2a01ae49ed9ba1, type: 2}
+  RandomEventConfig: {fileID: 11400000, guid: b40e86d4fc7705747a97cea476615421, type: 2}
+  SelectMaterial: {fileID: 2100000, guid: d0f09ee2595ebe7469966b3024ec0eda, type: 2}
+  BreakBottleSelectMaterial:
+  - {fileID: 2100000, guid: 1cb6fd8bd78996547a079c8e099bce95, type: 2}
+  - {fileID: 2100000, guid: 3eb7fe2781098534eb9fb1f0cedcbdcb, type: 2}
+  TubeSpraySelectMaterial:
+  - {fileID: 2100000, guid: a2a2602d1dd59b546b65cebe5a0c71c4, type: 2}
+  - {fileID: 2100000, guid: 3a2b5c98cf0b5a549b675de55e71cbc4, type: 2}
+  ClearArrow: {fileID: 3492116261214010774, guid: 234af56141dd5e84a9110a28e748144d, type: 3}
+  RepairArrow: {fileID: -5116727166712997180, guid: c034f13220e60344a9aa45dc5bbfa812, type: 3}

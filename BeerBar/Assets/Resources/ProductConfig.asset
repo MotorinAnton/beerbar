@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 346c75cdc7104f208bb68ea70b5993a4, type: 3}
+  m_Name: ProductConfig
+  m_EditorClassIdentifier: 
+  Products:
+  - ProductType: 0
+    Prefabs:
+    - {fileID: 4657438057837404248, guid: acb4d348b3e66ad448b07d6829318dae, type: 3}
+    - {fileID: 6175906425306446943, guid: aa2fb0fcfa2e4b942a3c1af1ce0997e7, type: 3}
+    - {fileID: 7652422964229294757, guid: 5787a412b2391f049a95b36dc992752e, type: 3}
+    - {fileID: 1576758350275345557, guid: 55ce227143e92ce4eb53fc748cfb570d, type: 3}
+    - {fileID: 2603586338370896315, guid: 8cc3acc5610a0724c91520a4583a0670, type: 3}
+    Visual: {fileID: 21300000, guid: ffab055551a16574583244301b0e6c58, type: 3}
+    Level: 1
+    PurchaseCost: 1
+    SellPrice: 2
+  - ProductType: 0
+    Prefabs:
+    - {fileID: 7612942811502503748, guid: f5057b51d6ae28b42916a635d1f8a66b, type: 3}
+    - {fileID: 1691006116527294024, guid: 032e360368d719f468a7e95ac01336da, type: 3}
+    - {fileID: 6511571012912692622, guid: b53b31b261ae60e49b8631b9b8a4c64a, type: 3}
+    - {fileID: 5117145288720884664, guid: 2d53434542a5c9345ae44aca9aac38a3, type: 3}
+    - {fileID: 5588633416104072449, guid: 84cffb3a5a3f3aa40a892e4f63395c2c, type: 3}
+    Visual: {fileID: 21300000, guid: ffab055551a16574583244301b0e6c58, type: 3}
+    Level: 2
+    PurchaseCost: 2
+    SellPrice: 4
+  - ProductType: 0
+    Prefabs:
+    - {fileID: 3614151853848019622, guid: b1b03336f8b85864ba203c0d3a922165, type: 3}
+    - {fileID: 459075513089214404, guid: 30aea71afc3c9994bbe255da107cf25e, type: 3}
+    - {fileID: 6135123347612391907, guid: 67eda0e66aa94064c85e7625eb46789e, type: 3}
+    - {fileID: 2711702005767305438, guid: ff344d2315d96484bba6588967089fc5, type: 3}
+    - {fileID: 1715956529134765859, guid: 32e8be11d3038944f977e11e50f7cd2b, type: 3}
+    Visual: {fileID: 21300000, guid: ffab055551a16574583244301b0e6c58, type: 3}
+    Level: 3
+    PurchaseCost: 1
+    SellPrice: 2
+  - ProductType: 1
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: b294d5fd1c5e7f248a16bf414ee03414, type: 3}
+    Level: 2
+    PurchaseCost: 2
+    SellPrice: 4
+  - ProductType: 1
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: b294d5fd1c5e7f248a16bf414ee03414, type: 3}
+    Level: 3
+    PurchaseCost: 4
+    SellPrice: 8
+  - ProductType: 1
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: b294d5fd1c5e7f248a16bf414ee03414, type: 3}
+    Level: 1
+    PurchaseCost: 1
+    SellPrice: 2
+  - ProductType: 3
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: 69d26c8c5729fe74bb7b9ea7394d4c66, type: 3}
+    Level: 1
+    PurchaseCost: 1
+    SellPrice: 2
+  - ProductType: 3
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: 69d26c8c5729fe74bb7b9ea7394d4c66, type: 3}
+    Level: 2
+    PurchaseCost: 2
+    SellPrice: 4
+  - ProductType: 3
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: 69d26c8c5729fe74bb7b9ea7394d4c66, type: 3}
+    Level: 3
+    PurchaseCost: 4
+    SellPrice: 8
+  - ProductType: 3
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: 69d26c8c5729fe74bb7b9ea7394d4c66, type: 3}
+    Level: 4
+    PurchaseCost: 8
+    SellPrice: 16
+  - ProductType: 3
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: 69d26c8c5729fe74bb7b9ea7394d4c66, type: 3}
+    Level: 5
+    PurchaseCost: 16
+    SellPrice: 32
+  - ProductType: 3
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: 69d26c8c5729fe74bb7b9ea7394d4c66, type: 3}
+    Level: 6
+    PurchaseCost: 32
+    SellPrice: 64
+  - ProductType: 3
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: 69d26c8c5729fe74bb7b9ea7394d4c66, type: 3}
+    Level: 7
+    PurchaseCost: 64
+    SellPrice: 128
+  - ProductType: 3
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: 69d26c8c5729fe74bb7b9ea7394d4c66, type: 3}
+    Level: 8
+    PurchaseCost: 128
+    SellPrice: 256
+  - ProductType: 4
+    Prefabs: []
+    Visual: {fileID: 21300000, guid: a89b25de0b655664f8ad7bcd94f9fda1, type: 3}
+    Level: 1
+    PurchaseCost: 1
+    SellPrice: 2

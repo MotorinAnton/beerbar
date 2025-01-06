@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8646935776792255676
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.70710677
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8611403988861489726, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: -7304374210956639830, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 256b725aa9db9eb4ea01c87f01aaac62, type: 2}
+    - target: {fileID: -4998033174364647928, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ea2639dd55c3b984e8833e3b4ea1497a, type: 2}
+    - target: {fileID: 560015389932413690, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 61028b666cbb5ce48ba0f5469fe5e781, type: 2}
+    - target: {fileID: 919132149155446097, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_Name
+      value: Fridge1_1(rusty) (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3010169694600793847, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 8292553482127389416, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.03
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fb4ca808c57f29b4ba04d5083bb27de8, type: 3}

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3080f03f1e2f402bab10d5dbcbeb5f3e, type: 3}
+  m_Name: TableConfig
+  m_EditorClassIdentifier: 
+  TablesData:
+  - Prefab: {fileID: 416275130561109258, guid: f70a36ac35bc5734daa5c4e2ccb79cfc, type: 3}
+    Level: 1
+    Price: 30
+    QuantityAtTablePoints: 2
+  - Prefab: {fileID: 8191617436903629196, guid: 3afa69844d51dba43bc6b845f917e4b6, type: 3}
+    Level: 2
+    Price: 40
+    QuantityAtTablePoints: 3
+  - Prefab: {fileID: 5537560015130818372, guid: abbf1e13585bad74e92cc410e6aeb66c, type: 3}
+    Level: 3
+    Price: 60
+    QuantityAtTablePoints: 4

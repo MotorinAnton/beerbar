@@ -1,0 +1,321 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ee9e71bb5c94de89a000b6d25d1fdd4, type: 3}
+  m_Name: CustomerConfig
+  m_EditorClassIdentifier: 
+  Customers:
+  - RatingMin: 0
+    RatingMax: 50
+    Visual: {fileID: 11400000, guid: 8ba3363c4ab22e24ab0fbda8e87d5420, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 0
+    RatingMax: 50
+    Visual: {fileID: 11400000, guid: 8a86dc7783cac9e469e251e2566685bb, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 0
+    RatingMax: 50
+    Visual: {fileID: 11400000, guid: f529d8b1da5008c4a8b2fdf92a238b48, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 0
+    RatingMax: 50
+    Visual: {fileID: 11400000, guid: 9291992add76ff241a13b7e2c9eaad80, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 0
+    RatingMax: 50
+    Visual: {fileID: 11400000, guid: 52c6ecafc017ba54898de59717550781, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 0
+    RatingMax: 50
+    Visual: {fileID: 11400000, guid: 5d755371b12b06343bd778bfe508a746, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 10
+    RatingMax: 100
+    Visual: {fileID: 11400000, guid: 0f02c3b628092dd4b9a24063dac764c3, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 10
+    RatingMax: 100
+    Visual: {fileID: 11400000, guid: 132d5d1130006cd46beb8b8b29d4cb68, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 10
+    RatingMax: 100
+    Visual: {fileID: 11400000, guid: 1ebb7973631baf74ea6ad63dfeb17a6d, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 10
+    RatingMax: 100
+    Visual: {fileID: 11400000, guid: 2c3d8cc2ab46d644dab66cc889121f30, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 10
+    RatingMax: 100
+    Visual: {fileID: 11400000, guid: 7e4fed004af7ebd45a3d1be1cc8f09b3, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 20
+    RatingMax: 150
+    Visual: {fileID: 11400000, guid: cdc8bec2df0102749894dea2fd8a9de1, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 20
+    RatingMax: 150
+    Visual: {fileID: 11400000, guid: 4fb970b5c36b07342bf56222359fa116, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 20
+    RatingMax: 150
+    Visual: {fileID: 11400000, guid: fa19c83653177514a82f12505f16228f, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 20
+    RatingMax: 150
+    Visual: {fileID: 11400000, guid: 04dc3b80ef234ba4daeedbd2025b67f7, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 20
+    RatingMax: 150
+    Visual: {fileID: 11400000, guid: 5d155e266bc4a0246bce9b8cd0344d13, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 30
+    RatingMax: 175
+    Visual: {fileID: 11400000, guid: ce370a1ca6dd91e4d955eb82fccf3d85, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 30
+    RatingMax: 175
+    Visual: {fileID: 11400000, guid: c2df50c812970824cbde549fbf982726, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 30
+    RatingMax: 175
+    Visual: {fileID: 11400000, guid: 00c6a5a03ae4c5c43abad93d020c1971, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 30
+    RatingMax: 175
+    Visual: {fileID: 11400000, guid: 260f54b94b7f80d42abaecfb406b0420, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 30
+    RatingMax: 175
+    Visual: {fileID: 11400000, guid: 02ca8c9eb2dc6154cb2fc57771bf8a9c, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 40
+    RatingMax: 200
+    Visual: {fileID: 11400000, guid: 39e59a54cd2dd9c4eb52203dacc1630f, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 40
+    RatingMax: 200
+    Visual: {fileID: 11400000, guid: c3e2cd0caa0a10748b42f6a6c69939ad, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 40
+    RatingMax: 200
+    Visual: {fileID: 11400000, guid: 857c6013eccc5f14ea1eabcadad3e887, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 40
+    RatingMax: 200
+    Visual: {fileID: 11400000, guid: b35cfcfd600f9944db86e17819f4dcf5, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 40
+    RatingMax: 200
+    Visual: {fileID: 11400000, guid: ec76dbea39c7df44da868dc6076ce2bb, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 50
+    RatingMax: 225
+    Visual: {fileID: 11400000, guid: 70f7201d9df70424bb717807525732b4, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 50
+    RatingMax: 225
+    Visual: {fileID: 11400000, guid: 9b5f8cc234a9c2e41928fbaec1d698c8, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 50
+    RatingMax: 225
+    Visual: {fileID: 11400000, guid: 240c55535f47da34f8f6c2e42447218e, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 50
+    RatingMax: 225
+    Visual: {fileID: 11400000, guid: d6e6a3067d2037a43b0dfb5dc2bc2865, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 50
+    RatingMax: 225
+    Visual: {fileID: 11400000, guid: 367215e5d6d9a1540bbbc75a04ed0e68, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 60
+    RatingMax: 250
+    Visual: {fileID: 11400000, guid: 5b62456a389588642973a221f593e49e, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 60
+    RatingMax: 250
+    Visual: {fileID: 11400000, guid: bcc0589e9482c04438fc07fae04938ab, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 60
+    RatingMax: 250
+    Visual: {fileID: 11400000, guid: 060e9f9a06e7b144b8c7eb261625d4b4, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 60
+    RatingMax: 250
+    Visual: {fileID: 11400000, guid: 2c579e27fa10fbd40aa46ad9d327831b, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 60
+    RatingMax: 250
+    Visual: {fileID: 11400000, guid: 38b0f2da687c2494a8f2a2f858e89c68, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 70
+    RatingMax: 275
+    Visual: {fileID: 11400000, guid: 6cab51e5c71718241ab3e39308f456a3, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 70
+    RatingMax: 275
+    Visual: {fileID: 11400000, guid: badae9489ff1c9d46ada67dad2c64c44, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 70
+    RatingMax: 275
+    Visual: {fileID: 11400000, guid: d6bda920b1a120240834852d381779fa, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 70
+    RatingMax: 275
+    Visual: {fileID: 11400000, guid: aad1e793f36dc0a4d8ecee3adc7df363, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 70
+    RatingMax: 275
+    Visual: {fileID: 11400000, guid: ab55284f9113da740aaba3a02e8972e9, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 80
+    RatingMax: 300
+    Visual: {fileID: 11400000, guid: 7260ebeeb991e844ebb90a865aba22ac, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 80
+    RatingMax: 300
+    Visual: {fileID: 11400000, guid: 4f59e7521bc6b5f4a9e703e7e20960da, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 80
+    RatingMax: 300
+    Visual: {fileID: 11400000, guid: f35b71a66984f9347a56d9ce3c3143a8, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 80
+    RatingMax: 300
+    Visual: {fileID: 11400000, guid: 073ebaa1512508c4aabdcd3ed5a878d8, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 80
+    RatingMax: 300
+    Visual: {fileID: 11400000, guid: 7e69c96e028581d4488fd8fbc32c8c84, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 80
+    RatingMax: 300
+    Visual: {fileID: 11400000, guid: d3f0540ed50965340ba73573ba624fb5, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  - RatingMin: 80
+    RatingMax: 300
+    Visual: {fileID: 11400000, guid: bbe3a729dc0d168419cd71dbc5add5fb, type: 2}
+    Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
+    Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
+    Speed: 1.5
+  RandomEventChance: 5
+  BreakBottle:
+    Rating: 0
+  LossWallets:
+  - Rating: 0
+    MinCoins: 10
+    MaxCoins: 20
+  - Rating: 5
+    MinCoins: 50
+    MaxCoins: 100
+  - Rating: 10
+    MinCoins: 100
+    MaxCoins: 500
+  DrinkAtTheTableChance: 50
+  StartCountCustomers: 4
+  Ratio: 1
+  MaxWaitTimeInPurchaseQueue: 15
+  DrinkAtTheTableTime: 20
