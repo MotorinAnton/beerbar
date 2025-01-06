@@ -37,6 +37,7 @@ namespace Core.Authoring.Containers.Systems
             Entities.WithAll<SpawnContainer>().ForEach((Entity entity, in SpawnContainer spawnContainer) =>
             {
                 SpawnContainer(entity, spawnContainer);
+                
             }).WithoutBurst().WithStructuralChanges().Run();
         }
 
@@ -130,6 +131,7 @@ namespace Core.Authoring.Containers.Systems
                 Capacity = spawnContainer.Capacity,
                 Type = spawnContainer.Type
             });
+            
             EntityManager.AddComponentObject(containerEntity, new ContainerView { Value = container });
             EntityManager.AddComponentObject(containerEntity, new TransformView { Value = container.transform });
             EntityManager.AddComponent<Container>(containerEntity);

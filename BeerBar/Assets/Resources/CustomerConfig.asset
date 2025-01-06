@@ -301,7 +301,7 @@ MonoBehaviour:
     Audio: {fileID: 11400000, guid: 387e155a7d7041b4082a32653995e65c, type: 2}
     Dialogs: {fileID: 11400000, guid: c754e5f2ae73f324eb860e6ed9fdb392, type: 2}
     Speed: 1.5
-  RandomEventChance: 5
+  RandomEventChance: 100
   BreakBottle:
     Rating: 0
   LossWallets:
@@ -317,5 +317,5 @@ MonoBehaviour:
   DrinkAtTheTableChance: 50
   StartCountCustomers: 4
   Ratio: 1
-  MaxWaitTimeInPurchaseQueue: 15
+  MaxWaitTimeInPurchaseQueue: 55
   DrinkAtTheTableTime: 20

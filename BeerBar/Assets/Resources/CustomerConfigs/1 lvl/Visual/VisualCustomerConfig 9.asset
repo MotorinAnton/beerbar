@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Prefab: {fileID: 9200908467833163597, guid: 0c6279e247e17bd428a6d6c3d7cccf42, type: 3}
   Avatar: {fileID: 21300000, guid: 78ec22aba77b3d8448e733a06637edd4, type: 2}
+  WalkAnimatorSpeed: 1.5

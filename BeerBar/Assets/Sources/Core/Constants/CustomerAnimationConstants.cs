@@ -28,8 +28,16 @@ namespace Core.Constants
         public const float CustomerProductAnimationDuration = 0.5f;
         public const float UiOffsetY = 1.9f;
         public const float UiOffsetX = 0.7f;
-        
-
+        public const float UpdateQueueOffsetPosition = 0.4f;
+        public const float ImageUiFadeDuration = 0.8f;
+        public const float ProfitOffsetY = 2f;
+        public const float ProfitOffsetX = 1f;
+        public const float DrinkAnimationTime = 5f;
+        public const float StepRandomAnimation = 0.02f;
+        public const float SpeedTransitRandomAnimation = 0.2f;
+        public const float MoveQueueDelay = 0.2f;
+        public const float RandomRange = 3f;
+        public const int QuantityRandomAnimation = 3;
 
 
     }

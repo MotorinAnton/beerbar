@@ -505,7 +505,7 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
             }
             if (TrySetName<Table>(containerEntity, upgradeContainerEntity , level, EntityConstants.TableName))
             {
-               
+                
             }
         }
         

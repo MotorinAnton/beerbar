@@ -49,8 +49,7 @@ namespace Core.Authoring.Customers.Systems
         private EntityQuery _storeRatingQuery;
         private EntityQuery _phraseUiManager;
         private EntityQuery _bankQuery;
-
-
+        
         protected override void OnCreate()
         {
             using var moveExitCustomerBuilder = new EntityQueryBuilder(Allocator.Temp);
@@ -174,48 +173,11 @@ namespace Core.Authoring.Customers.Systems
                         .position;
 
                     var vector = customerPos;
-                    vector.x -= 0.4f;
-                    vector.z -= 0.4f;
-                    vector.y = 0;
+                    vector.x -= CustomerAnimationConstants.UpdateQueueOffsetPosition;
+                    vector.z -= CustomerAnimationConstants.UpdateQueueOffsetPosition;
+                    vector.y = 0f;
                     
                     EntityManager.AddComponentData(customerEntity, new MoveCharacter { TargetPoint = vector });
-                    
-                    /*if (EntityManager.HasComponent<DissatisfiedCustomer>(customerEntity))
-                    {
-                        continue;
-                    }
-
-                    CreateRandomEventCustomer(customerEntity, exitPoint);
-                    
-                    var customerConfig = EntityUtilities.GetCustomerConfig();
-                    
-                    if (Random.Range(0, 100) >= customerConfig.DrinkAtTheTableChance)
-                    {
-                        continue;
-                    }
-
-                    if (!CheckFreeTablePoint(customerEntity, out var freeIndex))
-                    {
-                        continue;
-                    }
-
-                    var tablePoints =
-                        _tablePointQuery.ToComponentDataArray<AtTablePoint>(Allocator.Temp);
-                    var tablePoint =
-                        tablePoints.FirstOrDefault(tablePoint =>
-                            tablePoint.IndexPoint == freeIndex);
-                    var customerIndex = EntityManager.GetComponentData<IndexMovePoint>(customerEntity);
-                    customerIndex.Value = freeIndex;
-                    
-                    var positionCustomer = EntityManager.GetComponentObject<TransformView>(customerEntity).Value.position;
-                    var newUpdateQueuePoint = CalculateUpdatePoint(positionCustomer, tablePoint.Point.Position, 0.4f);
-                    
-                    EntityManager.AddComponentData(customerEntity, new MoveCharacter { TargetPoint =  newUpdateQueuePoint});
-                                
-                    CreateRandomEventCustomer(customerEntity, tablePoint.Point.Position );
-                    EntityManager.SetComponentData(customerEntity, customerIndex);
-                    EntityManager.AddComponent<DrinkAtTheTableCustomer>(customerEntity);
-                    EntityManager.RemoveComponent<MoveExit>(customerEntity);*/
                 }
                 
                 if (!EntityManager.HasComponent<UpdatePurchaseQueuePosition>(customerEntity) &&
@@ -233,18 +195,15 @@ namespace Core.Authoring.Customers.Systems
                 {
                     continue;
                 }
-
                 
                 var updateRow = EntityManager.GetComponentData<UpdatePurchaseQueuePosition>(customerEntity)
                     .UpdateRow;
-                
-                
                 var entityCustomerUi = EntityManager.GetComponentData<CustomerUIEntity>(customerEntity).UiEntity;
                 var customerUiView = EntityManager.GetComponentObject<CustomerUiView>(entityCustomerUi);
                     
-                customerUiView.Value.CanvasGroupFaceEmotion.DOFade(0, 0.8f).SetDelay(1f);
-                customerUiView.Value.CanvasGroupProduct1.DOFade(0, 0.8f).SetDelay(1f);
-                customerUiView.Value.CanvasGroupProduct2.DOFade(0, 0.8f).SetDelay(1f);
+                customerUiView.Value.CanvasGroupFaceEmotion.DOFade(0, CustomerAnimationConstants.ImageUiFadeDuration).SetDelay(1f);
+                customerUiView.Value.CanvasGroupProduct1.DOFade(0, CustomerAnimationConstants.ImageUiFadeDuration).SetDelay(1f);
+                customerUiView.Value.CanvasGroupProduct2.DOFade(0, CustomerAnimationConstants.ImageUiFadeDuration).SetDelay(1f);
 
                 EntityManager.RemoveComponent<PurchaseQueueCustomer>(customerEntity);
                 
@@ -290,18 +249,9 @@ namespace Core.Authoring.Customers.Systems
                 EntityManager.AddComponent<DrinkAtTheTableCustomer>(customerEntity);
                 EntityManager.RemoveComponent<MoveCharacterCompleted>(customerEntity);
                 EntityManager.RemoveComponent<MoveExit>(customerEntity);
-
-                
             }
         }
-
-        private Vector3 CalculateUpdatePoint(Vector3 a, Vector3 b, float distance)
-        {
-            var direction = (b - a).normalized;
-            var point = a + direction * distance;
-
-            return point;
-        }
+        
         private void WaitingCustomers()
         {
             var waitingCustomerEntity = _waitingMoveExitCustomerQuery.ToEntityArray(Allocator.Temp);
@@ -363,9 +313,10 @@ namespace Core.Authoring.Customers.Systems
         {
             var randomEventStartCustomerEntity = _randomEventStartCustomerQuery.ToEntityArray(Allocator.Temp);
 
+            const int quantityCustomerRandomEvent = 2;
             foreach (var customerEntity in randomEventStartCustomerEntity)
             {
-                switch (Random.Range(0, 2))
+                switch (Random.Range(0, quantityCustomerRandomEvent))
                 {
                     case 0:
 
@@ -398,7 +349,6 @@ namespace Core.Authoring.Customers.Systems
                     var customerView = EntityManager.GetComponentObject<CustomerView>(customerEntity);
                     var customerUiEntity = EntityManager.GetComponentObject<CustomerView>(customerEntity).UiEntity;
                     var customerUiView = EntityManager.GetComponentObject<CustomerUiView>(customerUiEntity).Value;
-                    var audioSource = EntityManager.GetComponentObject<AudioSourceView>(customerEntity).Value;
                     customerUiView.FaceEmotionImage.overrideSprite = customerUiView.FaceEmotionSprites.Swears;
                     var breakBottleView = Object.Instantiate(config.EventObjectConfig.BreakBottlePrefab,
                         transform.position, transform.rotation);
@@ -409,7 +359,7 @@ namespace Core.Authoring.Customers.Systems
 
                     customerView.Value.PivotHand[0].gameObject.SetActive(false);
                     EntityManager.SetName(breakBottleObjectEntity, EntityConstants.BreakBottleName);
-                    EntityManager.AddComponentData(breakBottleObjectEntity, new WaitTime { Current = 5f });
+                    EntityManager.AddComponentData(breakBottleObjectEntity, new WaitTime { Current = BreakdownObjectConstants.CheckNearCustomerTime });
                     EntityManager.AddComponent<BreakBottleEntity>(breakBottleObjectEntity);
                     EntityManager.AddComponentObject(breakBottleObjectEntity,
                         new BreakBottleView { Value = breakBottleView });
@@ -430,14 +380,14 @@ namespace Core.Authoring.Customers.Systems
                         phraseUiManager.StartEventPanelTween();
                     } 
                 }
-
+                
                 if (EntityManager.HasComponent<LossWalletCustomer>(customerEntity))
                 {
                     var lossWalletsArray =
                         config.CustomerConfig.LossWallets;
 
                     var storeRatingScore = _storeRatingQuery.GetSingleton<StoreRating>().CurrentValue;
-                    
+
                     var availableLossWallets = new HashSet<LossWallet>();
 
                     foreach (var lossWallet in lossWalletsArray)
@@ -450,21 +400,28 @@ namespace Core.Authoring.Customers.Systems
 
                     var maxLossWallet = MaxWallet(availableLossWallets);
 
+                    var transformPosition = transform.position;
                     var lossWalletView = Object.Instantiate(config.EventObjectConfig.LossWalletPrefab,
-                        transform.position, transform.rotation);
-                    
-                    var startPosition = transform.position;
-                    startPosition.y += 0.6f;
+                        transformPosition, transform.rotation);
+
+                    var startPosition = transformPosition;
+                    startPosition.y += BreakdownObjectConstants.StartPositionLossWalletOffset;
 
                     lossWalletView.transform.position = startPosition;
                     
-                    
-                    var position = transform.position;
-                    position.z += Random.Range(-0.5f, 0.5f);
-                    position.x += Random.Range(-0.5f, 0.5f);
-                    
-                    lossWalletView.transform.DOMoveY(startPosition.y + 0.6f, 0.5f).SetEase(Ease.OutSine);
-                    lossWalletView.transform.DOMoveY(0.1f, 0.99f).SetEase(Ease.OutSine).SetDelay(0.5f);
+                    var position = transformPosition;
+                    position.z += Random.Range(-BreakdownObjectConstants.RangeLossWalletSpawnPosition,
+                        BreakdownObjectConstants.RangeLossWalletSpawnPosition);
+                    position.x += Random.Range(-BreakdownObjectConstants.RangeLossWalletSpawnPosition,
+                        BreakdownObjectConstants.RangeLossWalletSpawnPosition);
+
+                    lossWalletView.transform
+                        .DOMoveY(startPosition.y + BreakdownObjectConstants.StartPositionLossWalletOffset,
+                            BreakdownObjectConstants.MoveUpLossWalletDuration).SetEase(Ease.OutSine);
+                    lossWalletView.transform
+                        .DOMoveY(BreakdownObjectConstants.LossWalletPositionY,
+                            BreakdownObjectConstants.MoveDownLossWalletDuration).SetEase(Ease.OutSine)
+                        .SetDelay(BreakdownObjectConstants.MoveYLossWalletDuration);
 
                     var lossWalletEntity = EntityManager.CreateEntity();
 
@@ -476,7 +433,7 @@ namespace Core.Authoring.Customers.Systems
                     lossWalletView.Initialize(EntityManager, lossWalletEntity);
                     EntityManager.RemoveComponent<LossWalletCustomer>(customerEntity);
                 }
-                
+
                 EntityManager.RemoveComponent<RandomEvent>(customerEntity);
                 EntityManager.RemoveComponent<RandomEventEnded>(customerEntity);
             }
@@ -535,7 +492,6 @@ namespace Core.Authoring.Customers.Systems
                             customerUiView.EnableFaceEmotion();
                         }
                         
-                        
                         storeRating.SuccessPoints -= 1;
                         _storeRatingQuery.SetSingleton(storeRating);
                         EntityManager.AddComponent<MoveExit>(customerEntity);
@@ -549,11 +505,11 @@ namespace Core.Authoring.Customers.Systems
                         customerUiView.DisableDialog();
                         customerUiView.DisableFaceEmotion();
 
-                        var randomDrinkAnimation = Random.Range(0, 3);
+                        var randomDrinkAnimation = Random.Range(0, CustomerAnimationConstants.QuantityRandomAnimation);
                         var drinkAtTheTableTime = EntityUtilities.GetCustomerConfig().DrinkAtTheTableTime;
                         animator.SetFloat(CustomerAnimationConstants.RandomDrink, randomDrinkAnimation);
                         EntityManager.AddComponentData(customerEntity, new WaitTime { Current = drinkAtTheTableTime });
-                        var nextTransitionTime = drinkAtTheTableTime - 5f;
+                        var nextTransitionTime = drinkAtTheTableTime - CustomerAnimationConstants.DrinkAnimationTime;
                         EntityManager.AddComponentData(customerEntity,
                             new RandomAnimation
                             {
@@ -569,15 +525,15 @@ namespace Core.Authoring.Customers.Systems
                 {
                     var tablePoint =
                         tablePoints.FirstOrDefault(tablePoint =>
-                            tablePoint.IndexPoint == customerIndex.Value); // непонятно почему тут мб дефаулт
+                            tablePoint.IndexPoint == customerIndex.Value);
                     if (tablePoint.Table == default)
                     {
                         if (CheckFreeTablePoint(customerEntity, out var freeIndexTablePoint))
                         {
                             customerIndex.Value = freeIndexTablePoint;
                             EntityManager.SetComponentData(customerEntity, customerIndex);
-                            tablePoint = tablePoints.FirstOrDefault(tablePoint =>
-                                tablePoint.IndexPoint == customerIndex.Value);
+                            tablePoint = tablePoints.FirstOrDefault(atTablePoint =>
+                                atTablePoint.IndexPoint == customerIndex.Value);
                         }
                     }
                     
@@ -611,21 +567,19 @@ namespace Core.Authoring.Customers.Systems
             var customerTransform = EntityManager.GetComponentObject<TransformView>(customerEntity);
             var profitUiPosition = customerTransform.Value.position;
 
-            profitUiPosition.y += 2f;
-            profitUiPosition.x -= 1f;
+            profitUiPosition.y += CustomerAnimationConstants.ProfitOffsetY;
+            profitUiPosition.x -= CustomerAnimationConstants.ProfitOffsetX;
 
             var spawnProfitUiEntity = EntityManager.CreateEntity();
             EntityManager.AddComponentObject(spawnProfitUiEntity,
                 new SpawnProfitUi
                     { Type = ProfitUiType.Displase, Point = profitUiPosition, Text = "-" + 1 });
-            
         }
         
 
         private void DrinkAtTheTableCustomers()
         {
             var drinkAtTheTableCustomerEntity = _dinkAtTheTableCustomerQuery.ToEntityArray(Allocator.Temp);
-
             var tablePoints =
                 _allTablePointQuery.ToComponentDataArray<AtTablePoint>(Allocator.Temp);
 
@@ -651,18 +605,19 @@ namespace Core.Authoring.Customers.Systems
                 var animationNumber = animator.Value.GetFloat(CustomerAnimationConstants.RandomDrink);
                 var waitTime = EntityManager.GetComponentData<WaitTime>(customerEntity).Current;
                 var up = true;
+                const float drinkAnimationTime = CustomerAnimationConstants.DrinkAnimationTime;
                 
                 if (waitTime <= randomAnimation.NextTimeTransition)
                 {
                     randomAnimation.TransitionNextAnimation = true;
-                    randomAnimation.NextTimeTransition -= 5;
+                    randomAnimation.NextTimeTransition -= drinkAnimationTime;
                     randomAnimation.NumberAnimation = NextNumberAnimation((int)animationNumber);
                   
                     var customerTransform = EntityManager.GetComponentObject<TransformView>(customerEntity);
                     var profitUiPosition = customerTransform.Value.position;
                     var tableLevel = EntityManager.GetComponentData<Table>(tableEntity).Level;
                     
-                    profitUiPosition.y += 2f;
+                    profitUiPosition.y += CustomerAnimationConstants.ProfitOffsetY;
                     
                     var spawnProfitUiEntity = EntityManager.CreateEntity();
                     EntityManager.AddComponentObject(spawnProfitUiEntity,
@@ -680,28 +635,31 @@ namespace Core.Authoring.Customers.Systems
                     {
                         up = false;
                     }
-
+                    
+                    const float stepRandomAnimation = CustomerAnimationConstants.StepRandomAnimation;
+                    const float speedTransitRandomAnimation = CustomerAnimationConstants.SpeedTransitRandomAnimation;
+                    
                     if (up)
                     {
-                        animationNumber = Mathf.Lerp(animationNumber, randomAnimation.NumberAnimation + 0.02f,
-                            0.2f * World.Time.DeltaTime);
+                        animationNumber = Mathf.Lerp(animationNumber, randomAnimation.NumberAnimation + stepRandomAnimation,
+                            speedTransitRandomAnimation * World.Time.DeltaTime);
 
                         if (animationNumber >= randomAnimation.NumberAnimation)
                         {
                             randomAnimation.TransitionNextAnimation = false;
-                            randomAnimation.NextTimeTransition = waitTime - 5;
+                            randomAnimation.NextTimeTransition = waitTime - drinkAnimationTime;
                             animationNumber = randomAnimation.NumberAnimation;
                         }
                     }
                     else
                     {
-                        animationNumber = Mathf.Lerp(animationNumber, randomAnimation.NumberAnimation - 0.02f,
-                            0.2f * World.Time.DeltaTime);
+                        animationNumber = Mathf.Lerp(animationNumber, randomAnimation.NumberAnimation - stepRandomAnimation,
+                            speedTransitRandomAnimation * World.Time.DeltaTime);
 
                         if (animationNumber <= randomAnimation.NumberAnimation)
                         {
                             randomAnimation.TransitionNextAnimation = false;
-                            randomAnimation.NextTimeTransition = waitTime - 5;
+                            randomAnimation.NextTimeTransition = waitTime - drinkAnimationTime;
                             animationNumber = 0;
                         }
                     }
@@ -716,23 +674,21 @@ namespace Core.Authoring.Customers.Systems
         private void ToastAtTheTableCustomers()
         {
             var toastAtTheTableCustomerEntity = _toastingCustomerQuery.ToEntityArray(Allocator.Temp);
-
             var tablePoints =
                 _allTablePointQuery.ToComponentDataArray<AtTablePoint>(Allocator.Temp);
 
             foreach (var customerEntity in toastAtTheTableCustomerEntity)
             {
                 var animator = EntityManager.GetComponentObject<AnimatorView>(customerEntity).Value;
+                var customerView = EntityManager.GetComponentObject<CustomerView>(customerEntity).Value;
                 var customerIndex = EntityManager.GetComponentData<IndexMovePoint>(customerEntity);
-                var transform = EntityManager.GetComponentObject<TransformView>(customerEntity).Value;
                 var tableEntity = tablePoints.FirstOrDefault(tablePoint => tablePoint.IndexPoint == customerIndex.Value)
                     .Table;
-                var tableViewPosition =
+                var tablePosition =
                     EntityManager.GetComponentObject<TableView>(tableEntity).Value.transform.position;
-                var direction = tableViewPosition - transform.position;
-                var rotation = Quaternion.LookRotation(direction);
-
-                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 5f * World.Time.DeltaTime);
+                
+               customerView.TurningCharacterToPoint(tablePosition);
+               
                 animator.SetBool(CustomerAnimationConstants.Idle, false);
                 animator.SetBool(CustomerAnimationConstants.Toast, true);
             }
@@ -741,6 +697,7 @@ namespace Core.Authoring.Customers.Systems
         private void AfterToastAtTheTableCustomers()
         {
             var afterToastAtTheTableCustomerEntity = _afterToastingCustomerQuery.ToEntityArray(Allocator.Temp);
+            
             foreach (var customerEntity in afterToastAtTheTableCustomerEntity)
             {
                 var animator = EntityManager.GetComponentObject<AnimatorView>(customerEntity).Value;
@@ -791,15 +748,13 @@ namespace Core.Authoring.Customers.Systems
             var purchaseQueueCustomers = _purchaseQueueAllCustomersQuery.ToEntityArray(Allocator.Temp);
             var purchaseQueuePoints = _purchasePointsQuery.ToComponentDataArray<MoveCustomerPoint>(Allocator.Temp);
             var rowCount = purchaseQueuePoints.Select(point => point.Row).ToHashSet().Count;
-            //var ocupPiont = _purchaseQueueAllCustomersQuery.ToComponentDataArray<IndexMovePoint>(Allocator.Temp);
-            //var hash = ocupPiont.Select(s => s.Value);
 
             foreach (var customer in purchaseQueueCustomers)
             {
                 var indexCustomer = EntityManager.GetComponentData<IndexMovePoint>(customer);
                 var rowCustomer = indexCustomer.Value % rowCount;
-                
-                if (rowCustomer == updateRow && indexCustomer.Value >= rowCount )
+
+                if (rowCustomer == updateRow && indexCustomer.Value >= rowCount)
                 {
                     indexCustomer.Value -= rowCount;
                     EntityManager.SetComponentData(customer, indexCustomer);
@@ -810,10 +765,9 @@ namespace Core.Authoring.Customers.Systems
                         EntityManager.RemoveComponent<StartWaitTime>(customer);
                     }
 
-                    EntityManager.AddComponentData(customer, new WaitTime { Current = 0.2f * indexCustomer.Value });
+                    EntityManager.AddComponentData(customer,
+                        new WaitTime { Current = CustomerAnimationConstants.MoveQueueDelay * indexCustomer.Value });
                 }
-                
-                //EntityManager.AddComponentData(customer, new WaitTime { Current = 0.2f * indexCustomer.Value });
             }
         }
 
@@ -857,16 +811,17 @@ namespace Core.Authoring.Customers.Systems
                 return;
             }
 
+            const float range = CustomerAnimationConstants.RandomRange;
             var transform = EntityManager.GetComponentObject<TransformView>(customerEntity).Value;
             var distance = Vector3.Distance(transform.position, movementPoint);
-            var randomDistance = Random.Range(3f, distance - 3f);
+            var randomDistance = Random.Range(range, distance - range);
             EntityManager.AddComponentData(customerEntity,
                 new RandomEvent { DistanceToExit = randomDistance });
         }
 
         private int NextNumberAnimation(int currentAnimation)
         {
-            var randomAnimationNumber = Random.Range(0, 3);
+            var randomAnimationNumber = Random.Range(0, CustomerAnimationConstants.QuantityRandomAnimation);
 
             if (randomAnimationNumber == currentAnimation)
             {
@@ -880,7 +835,7 @@ namespace Core.Authoring.Customers.Systems
         {
             var config = EntityUtilities.GetGameConfig();
             var arrowPoint = parentTransform.position;
-            arrowPoint.y += 0.3f;
+            arrowPoint.y += BreakdownObjectConstants.MovementArrowBreakBottleOffsetY;
 
             var clearArrow = Object.Instantiate(config.ClearArrow, arrowPoint, parentTransform.rotation);
             clearArrow.transform.SetParent(parentTransform);

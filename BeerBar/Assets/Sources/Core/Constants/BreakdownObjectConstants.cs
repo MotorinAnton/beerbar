@@ -21,10 +21,19 @@ namespace Core.Constants
         public const float MovementArrowTubeOffset = 0.3f;
         public const float MovementArrowElectricityOffset = 0.2f;
         public const float MovementArrowTableOffsetY = 1.5f;
+        public const float MovementArrowBreakBottleOffsetY = 0.3f;
         
         public const float ElectricityFlashDuration = 0.2f;
         public const int ElectricityFlashLoop = 10;
         
+        public const float CheckNearCustomerTime = 5f;
+        
+        public const float RangeLossWalletSpawnPosition = 0.5f;
+        public const float MoveYLossWalletDuration = 0.5f;
+        public const float MoveUpLossWalletDuration = 0.6f;
+        public const float MoveDownLossWalletDuration = 0.99f;
+        public const float LossWalletPositionY = 0.1f;
+        public const float StartPositionLossWalletOffset = 0.6f;
         
     }
 }
