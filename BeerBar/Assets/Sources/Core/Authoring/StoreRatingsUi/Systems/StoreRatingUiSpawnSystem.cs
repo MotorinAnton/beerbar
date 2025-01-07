@@ -14,7 +14,6 @@ namespace Core.Authoring.CoinsUi.Systems
             Entities.WithAll<SpawnStoreRatingUi>().ForEach((Entity entity, in SpawnStoreRatingUi spawnStoreRatingUi) =>
             {
                 SpawnStoreRatingUi(entity, spawnStoreRatingUi);
-                
             }).WithoutBurst().WithStructuralChanges().Run();
         }
 

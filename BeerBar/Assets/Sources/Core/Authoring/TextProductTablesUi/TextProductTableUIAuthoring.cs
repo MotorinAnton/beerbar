@@ -17,8 +17,7 @@ namespace Core.Authoring.TextProductTablesUI
     {
         public TextProductTableUIAuthoring TextProductTablesUIPrefab;
     }
-    public struct TextProductTableUI : IComponentData { }
-    
+
     public class TextProductTableUIView : IComponentData
     {
         public TextProductTableUIAuthoring Value;

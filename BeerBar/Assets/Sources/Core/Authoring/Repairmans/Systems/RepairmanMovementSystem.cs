@@ -33,25 +33,29 @@ namespace Core.Authoring.Repairmans.Systems
         {
             using var freeRepairmanBuilder = new EntityQueryBuilder(Allocator.Temp);
             _freeRepairmanQuery = freeRepairmanBuilder.WithAll<Repairman, FreeRepairman>().Build(this);
-            
+
             using var moveRepairsRepairmanBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _moveRepairsRepairmanQuery = moveRepairsRepairmanBuilder.WithAll<Repairman, MoveRepairsRepairman>().WithNone<MoveCharacter>().Build(this);
-            
+            _moveRepairsRepairmanQuery = moveRepairsRepairmanBuilder.WithAll<Repairman, MoveRepairsRepairman>()
+                .WithNone<MoveCharacter>().Build(this);
+
             using var repairsRepairmanBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _repairsRepairmanQuery = repairsRepairmanBuilder.WithAll<Repairman, RepairsRepairman, WaitTime>().Build(this);
-            
+            _repairsRepairmanQuery =
+                repairsRepairmanBuilder.WithAll<Repairman, RepairsRepairman, WaitTime>().Build(this);
+
             using var afterRepairsRepairmanBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _afterRepairsRepairmanQuery = afterRepairsRepairmanBuilder.WithAll<Repairman, RepairsRepairman>().WithNone<WaitTime>().Build(this);
-            
+            _afterRepairsRepairmanQuery = afterRepairsRepairmanBuilder.WithAll<Repairman, RepairsRepairman>()
+                .WithNone<WaitTime>().Build(this);
+
             using var moveExitRepairmanBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _moveExitRepairmanQuery = moveExitRepairmanBuilder.WithAll<Repairman, MoveExitRepairman>().WithNone<MoveCharacter>().Build(this);
-            
+            _moveExitRepairmanQuery = moveExitRepairmanBuilder.WithAll<Repairman, MoveExitRepairman>()
+                .WithNone<MoveCharacter>().Build(this);
+
             using var repairPointsBuilder = new EntityQueryBuilder(Allocator.Temp);
             _repairPointsQuery = repairPointsBuilder.WithAll<RepairPoints>().Build(this);
-            
+
             using var spawnPointRepairmanBuilder = new EntityQueryBuilder(Allocator.Temp);
             _spawnPointRepairmanQuery = spawnPointRepairmanBuilder.WithAll<SpawnPointRepairman>().Build(this);
-            
+
             using var bankBuilder = new EntityQueryBuilder(Allocator.Temp);
             _bankQuery = bankBuilder.WithAllRW<Bank>().Build(this);
         }
@@ -64,29 +68,29 @@ namespace Core.Authoring.Repairmans.Systems
             FreeRepairman();
             AfterRepairsRepairman();
         }
-        
+
         private void FreeRepairman()
         {
             var freeRepairmanArray = _freeRepairmanQuery.ToEntityArray(Allocator.Temp);
-            
+
             foreach (var repairmanEntity in freeRepairmanArray)
             {
                 var orders = EntityManager.GetComponentObject<OrderRepairman>(repairmanEntity).RepairObjectList;
                 var animator = EntityManager.GetComponentObject<AnimatorView>(repairmanEntity).Value;
                 animator.SetBool(RepairmanAnimationConstants.Walk, false);
-                
+
                 if (orders.Count == 0)
                 {
                     return;
                 }
-                
+
                 var bank = _bankQuery.GetSingleton<Bank>();
 
-                if (bank.Coins < 10) 
+                if (bank.Coins < 10)
                 {
                     return;
                 }
-                
+
                 EntityManager.AddComponent<MoveRepairsRepairman>(repairmanEntity);
                 EntityManager.RemoveComponent<FreeRepairman>(repairmanEntity);
             }
@@ -134,7 +138,7 @@ namespace Core.Authoring.Repairmans.Systems
                     EntityManager.GetComponentObject<RepairmanView>(repairmanEntity).Value.PivotHand[0].gameObject
                         .SetActive(true);
                     EntityManager.AddComponent<RepairsRepairman>(repairmanEntity);
-                    
+
                     EntityManager.AddComponentData(repairmanEntity,
                         new WaitTime { Current = AnimationUtilities.AnimationLength(animator, animationName) });
                     EntityManager.RemoveComponent<MoveRepairsRepairman>(repairmanEntity);
@@ -146,11 +150,11 @@ namespace Core.Authoring.Repairmans.Systems
                 }
             }
         }
-        
+
         private void MoveExitRepairman()
         {
             var moveExitRepairmanArray = _moveExitRepairmanQuery.ToEntityArray(Allocator.Temp);
-            
+
             foreach (var repairmanEntity in moveExitRepairmanArray)
             {
                 if (EntityManager.HasComponent<MoveCharacterCompleted>(repairmanEntity))
@@ -168,7 +172,7 @@ namespace Core.Authoring.Repairmans.Systems
                 }
             }
         }
-        
+
         private void AfterRepairsRepairman()
         {
             var repairmanEntityArray = _afterRepairsRepairmanQuery.ToEntityArray(Allocator.Temp);
@@ -177,15 +181,16 @@ namespace Core.Authoring.Repairmans.Systems
             {
                 var animator = EntityManager.GetComponentObject<AnimatorView>(repairmanEntity).Value;
                 animator.SetBool(RepairmanAnimationConstants.TubeRepair, false);
-                
-                EntityManager.GetComponentObject<RepairmanView>(repairmanEntity).Value.PivotHand[0].gameObject.SetActive(false);
-                
+
+                EntityManager.GetComponentObject<RepairmanView>(repairmanEntity).Value.PivotHand[0].gameObject
+                    .SetActive(false);
+
                 var repairmanPosition = EntityManager.GetComponentObject<TransformView>(repairmanEntity).Value.position;
-                
+
                 SpawnProfitUi(repairmanPosition);
 
                 var orders = EntityManager.GetComponentObject<OrderRepairman>(repairmanEntity).RepairObjectList;
-                
+
                 if (EntityManager.HasComponent<TableView>(orders[0]))
                 {
                     var tableView = EntityManager.GetComponentObject<TableView>(orders[0]);
@@ -198,19 +203,21 @@ namespace Core.Authoring.Repairmans.Systems
                         }
                     }
                 }
-                
+
                 if (EntityManager.HasComponent<Tube>(orders[0]))
                 {
                     var tubeView = EntityManager.GetComponentObject<TubeView>(orders[0]).Value;
-                    
+
                     foreach (var particle in tubeView.Particles)
                     {
-                        particle.Stop(); ;
+                        particle.Stop();
+                        ;
                     }
-                    
+
                     if (EntityManager.HasComponent<WaitTime>(orders[0]))
                     {
-                        var progress = tubeView.ProgressMeshRenderers[0].material.GetFloat(BreakdownObjectConstants.PipeLeak);
+                        var progress = tubeView.ProgressMeshRenderers[0].material
+                            .GetFloat(BreakdownObjectConstants.PipeLeak);
                         var waitTime = EntityManager.GetComponentData<WaitTime>(orders[0]);
                         var startWaitTime = EntityManager.GetComponentData<StartWaitTime>(orders[0]).Start;
                         waitTime.Current = progress * startWaitTime;
@@ -218,27 +225,30 @@ namespace Core.Authoring.Repairmans.Systems
                     }
                     else
                     {
-                        EntityManager.AddComponentData(orders[0], new WaitTime { Current = BreakdownObjectConstants.FlowTime });
+                        EntityManager.AddComponentData(orders[0],
+                            new WaitTime { Current = BreakdownObjectConstants.FlowTime });
                     }
                 }
-                
+
                 if (EntityManager.HasComponent<Electricity>(orders[0]))
                 {
                     animator.SetBool(RepairmanAnimationConstants.ElectricityRepair, false);
 
                     var electricityView = EntityManager.GetComponentObject<ElectricityView>(orders[0]).Value;
-                    
+
                     foreach (var particle in electricityView.Particles)
                     {
-                        particle.Stop(); ;
+                        particle.Stop();
+                        ;
                     }
-                    
-                    var closeDoorAnimation = electricityView.Animation.GetClip(BreakdownObjectConstants.ElectricalDoorClose.Value);
+
+                    var closeDoorAnimation =
+                        electricityView.Animation.GetClip(BreakdownObjectConstants.ElectricalDoorClose.Value);
                     electricityView.Animation.clip = closeDoorAnimation;
                     electricityView.Animation.Play();
                     electricityView.TweenFinished();
                 }
-                
+
                 if (EntityManager.HasComponent<TVView>(orders[0]))
                 {
                     var tvView = EntityManager.GetComponentObject<TVView>(orders[0]).Value.OnRenderer;
@@ -247,9 +257,9 @@ namespace Core.Authoring.Repairmans.Systems
 
                 var repairArrow = EntityManager.GetComponentObject<RepairMovementArrowView>(orders[0]).Arrow;
                 repairArrow.DisableArrow();
-                
+
                 EntityManager.RemoveComponent<Breakdown>(orders[0]);
-                
+
                 orders.Remove(orders[0]);
 
                 if (orders.Count > 0)
@@ -264,7 +274,7 @@ namespace Core.Authoring.Repairmans.Systems
                 EntityManager.RemoveComponent<RepairsRepairman>(repairmanEntity);
             }
         }
-        
+
         private void RepairsRepairman()
         {
             var repairsRepairmanArray = _repairsRepairmanQuery.ToEntityArray(Allocator.Temp);
@@ -276,7 +286,7 @@ namespace Core.Authoring.Repairmans.Systems
                 var orders = EntityManager.GetComponentObject<OrderRepairman>(repairmanEntity);
                 var orderEntity = orders.RepairObjectList[0];
                 var targetRotationPoint = new Vector3();
-                
+
                 if (EntityManager.HasComponent<TVView>(orderEntity))
                 {
                     targetRotationPoint = EntityManager.GetComponentObject<TVView>(orderEntity).Value
@@ -302,7 +312,7 @@ namespace Core.Authoring.Repairmans.Systems
                 {
                     targetRotationPoint =
                         EntityManager.GetComponentObject<ElectricityView>(orderEntity).Value.transform.position;
-                    
+
                     animator.SetBool(RepairmanAnimationConstants.ElectricityRepair, true);
 
                     if (!EntityManager.HasComponent<TweenProcessing>(orderEntity))
@@ -321,7 +331,7 @@ namespace Core.Authoring.Repairmans.Systems
                         EntityManager.AddComponent<TweenProcessing>(orderEntity);
                     }
                 }
-                
+
                 repairmanView.TurningCharacterToPoint(targetRotationPoint);
             }
         }

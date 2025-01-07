@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: ProductKeeperConfig
   m_EditorClassIdentifier: 
   ProductKeeperPrefab: {fileID: 7671062606156610191, guid: 3975d0e58583cea4b8a5bac4dcd93c54, type: 3}
+  WalkAnimatorSpeed: 2
+  MoveSpeed: 2

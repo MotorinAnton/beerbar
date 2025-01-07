@@ -14,7 +14,6 @@ namespace Core.Authoring.Repairmans.Systems
             Entities.WithAll<SpawnRepairman>().ForEach((Entity entity, in SpawnRepairman spawnRepairman) =>
             {
                 SpawnRepairman(entity, spawnRepairman);
-                
             }).WithoutBurst().WithStructuralChanges().Run();
         }
 
@@ -30,12 +29,14 @@ namespace Core.Authoring.Repairmans.Systems
                 new NavMeshAgentView { Agent = repairmanView.NavMeshAgent });
             EntityManager.AddComponent<Repairman>(repairmanEntity);
             EntityManager.AddComponent<FreeRepairman>(repairmanEntity);
-            EntityManager.AddComponentObject(repairmanEntity, new RepairmanDataComponent { Value = spawnRepairman.RepairmanData });
+            EntityManager.AddComponentObject(repairmanEntity,
+                new RepairmanDataComponent { Value = spawnRepairman.RepairmanData });
             EntityManager.AddComponentObject(repairmanEntity, new RepairmanView { Value = repairmanView });
-            EntityManager.AddComponentObject(repairmanEntity , new TransformView{ Value = repairmanView.transform });
+            EntityManager.AddComponentObject(repairmanEntity, new TransformView { Value = repairmanView.transform });
             EntityManager.AddComponentObject(repairmanEntity, new AnimatorView { Value = repairmanView.Animator });
-            EntityManager.AddComponentObject(repairmanEntity, new OrderRepairman{ RepairObjectList = new List<Entity>()});
-            
+            EntityManager.AddComponentObject(repairmanEntity,
+                new OrderRepairman { RepairObjectList = new List<Entity>() });
+
             var randomEventEntity = EntityManager.CreateEntity();
             EntityManager.AddComponent<RandomEventEntity>(randomEventEntity);
             repairmanView.Initialize(EntityManager, repairmanEntity);

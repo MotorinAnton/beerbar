@@ -13,28 +13,31 @@ namespace Core.Authoring.TextProductTablesUI.Systems
         protected override void OnCreate()
         {
             using var spawnPointsTextProductTableUIBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _spawnPointTextProductTableUIQuery = spawnPointsTextProductTableUIBuilder.WithAll<SpawnPointTextProductTableUi>().Build(this);
+            _spawnPointTextProductTableUIQuery = spawnPointsTextProductTableUIBuilder
+                .WithAll<SpawnPointTextProductTableUi>().Build(this);
         }
 
         protected override void OnUpdate()
         {
-            Entities.WithAll<SpawnTextProductTableUI>().ForEach((Entity entity, in SpawnTextProductTableUI spawnTextProductTableUI) =>
-            {
-                SpawnTextProductTablesUI(entity, spawnTextProductTableUI);
-            }).WithoutBurst().WithStructuralChanges().Run();
+            Entities.WithAll<SpawnTextProductTableUI>()
+                .ForEach((Entity entity, in SpawnTextProductTableUI spawnTextProductTableUI) =>
+                {
+                    SpawnTextProductTablesUI(entity, spawnTextProductTableUI);
+                }).WithoutBurst().WithStructuralChanges().Run();
         }
 
         private void SpawnTextProductTablesUI(Entity entity, in SpawnTextProductTableUI spawnTextProductTable)
         {
             var textTableUIEntity = EntityManager.CreateEntity();
-
             var spawnPoint =
-                _spawnPointTextProductTableUIQuery.ToComponentDataArray<SpawnPointTextProductTableUi>(Allocator.Temp)[0];
-
+                _spawnPointTextProductTableUIQuery
+                    .ToComponentDataArray<SpawnPointTextProductTableUi>(Allocator.Temp)[0];
+            var textTableUIView = Object.Instantiate(spawnTextProductTable.TextProductTablesUIPrefab,
+                spawnPoint.Position, spawnPoint.Rotation);
             EntityManager.SetName(textTableUIEntity, EntityConstants.TextProductTableUiName);
-            var textTableUIView = Object.Instantiate(spawnTextProductTable.TextProductTablesUIPrefab, spawnPoint.Position, spawnPoint.Rotation);
-            textTableUIView.Initialize(EntityManager, textTableUIEntity);
             EntityManager.AddComponentObject(textTableUIEntity, new TextProductTableUIView { Value = textTableUIView });
+            textTableUIView.Initialize(EntityManager, textTableUIEntity);
+
             EntityManager.DestroyEntity(entity);
         }
     }

@@ -36,11 +36,4 @@ namespace Core.Configs
         Electricity,
         Table,
     }
-    
-    // public class RandomEventObjectConfigData : IComponentData
-    // {
-    //     public RandomEventObjectConfig Config;
-    // }
-    //
-    // public struct RandomEventObjectConfigEntity : IComponentData { }
 }

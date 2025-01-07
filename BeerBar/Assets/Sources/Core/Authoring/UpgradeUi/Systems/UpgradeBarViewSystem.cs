@@ -30,10 +30,8 @@ namespace Core.Authoring.UpgradeUi.Systems
                 {
                     upgradeBarUiView.SetRating((int)currentStoreRating.CurrentValue);
                 }).WithoutBurst().Run();
-
-            // TODO: Нужна оптимизация?
+            
             var upCompletedEntity = _completedUpQuery.ToEntityArray(Allocator.Temp)[0];
-            var availableUp = EntityManager.GetComponentObject<AvailableUp>(upCompletedEntity).AvailableUps;
             var completedUp = EntityManager.GetComponentObject<CompletedUp>(upCompletedEntity).CompleteUp;
 
             Entities

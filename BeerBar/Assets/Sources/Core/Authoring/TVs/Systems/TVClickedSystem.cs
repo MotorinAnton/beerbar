@@ -11,13 +11,12 @@ namespace Core.Authoring.EventObjects.Systems
         {
             Entities.WithAll<TVEntity , TVView, Clicked>().WithNone<Breakdown>().ForEach((Entity entity, in TVView tvView) =>
                 {
-                    NextСhanel(entity, tvView);
+                    NextСhannel(entity, tvView);
                     
                 }).WithoutBurst().WithStructuralChanges().Run();
-            
         }
 
-        private void NextСhanel(Entity tVEntity, TVView tvView)
+        private void NextСhannel(Entity tVEntity, TVView tvView)
         {
             if (tvView.Chanal == tvView.Value.Chanel.Length - 1 )
             {

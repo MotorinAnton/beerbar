@@ -108,10 +108,10 @@ namespace Core.Scenes.Systems
             }
             
             var config = EntityUtilities.GetGameConfig();
-
+            CreateMainCamera(config);
             CreateStoreRating();
             CreateBank();
-            CreateMainCamera(config);
+            
             CreateProductKeeper(config);
             CreateRepairman(config);
             CreateCleaner(config);

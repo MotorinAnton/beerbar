@@ -1,7 +1,6 @@
 ﻿using Core.Authoring.Warehouses;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Core.Authoring.TextProductTablesUI.Systems
 {
@@ -15,13 +14,14 @@ namespace Core.Authoring.TextProductTablesUI.Systems
             using var productWarehouseBuilder = new EntityQueryBuilder(Allocator.Temp);
             _productWarehouse = productWarehouseBuilder.WithAll<WarehouseProduct>().Build(this);
         }
-        
+
         protected override void OnUpdate()
         {
-            Entities.WithAll<TextProductTableUIView>().ForEach((Entity entity, in TextProductTableUIView textProductTableUIView) =>
-            {
-                ChangeTextProductTableUIView(entity, textProductTableUIView);
-            }).WithoutBurst().Run();
+            Entities.WithAll<TextProductTableUIView>()
+                .ForEach((Entity entity, in TextProductTableUIView textProductTableUIView) =>
+                {
+                    ChangeTextProductTableUIView(entity, textProductTableUIView);
+                }).WithoutBurst().Run();
         }
 
         private void ChangeTextProductTableUIView(Entity entity, in TextProductTableUIView textProductTableUIView)

@@ -18,7 +18,6 @@ namespace Core.Authoring.Tables
         [SerializeField] private ParticleSystem _up;
                 
         public ParticleSystem ParticleSystem => _up;
-     
     }
 
     public struct Table : IComponentData
@@ -39,7 +38,6 @@ namespace Core.Authoring.Tables
         public int IndexLevelUpFx;
         public MovementArrowAuthoring ClearArrow;
         public MovementArrowAuthoring RepairArrow;
-
     }
     
     public class TableView : IComponentData

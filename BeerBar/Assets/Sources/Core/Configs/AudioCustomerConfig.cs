@@ -10,6 +10,5 @@ namespace Core.Configs
         public AudioClip[] Swears;
         public AudioClip[] Success;
         public AudioClip[] Neutral;
-        
     }
 }

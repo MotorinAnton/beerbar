@@ -12,7 +12,12 @@ namespace Core.Authoring.TextProductTablesUI
             {
                 var entity = GetEntity(TransformUsageFlags.None);
                 var transform = authoring.transform;
-                var spawnPoint = new SpawnPointTextProductTableUi { Position = transform.position, Rotation = transform.rotation };
+                var spawnPoint = new SpawnPointTextProductTableUi
+                {
+                    Position = transform.position,
+                    Rotation = transform.rotation
+                    
+                };
                 AddComponent(entity, spawnPoint);
             }
         }

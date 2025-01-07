@@ -16,13 +16,12 @@ namespace Core.Constants
         public static readonly int TakeBottle = Animator.StringToHash("TakeBottle");
         public static readonly int TakeSnack = Animator.StringToHash("TakeSnack");
         public static readonly int Walk = Animator.StringToHash("Walk");
-        public static readonly int Idle = Animator.StringToHash("Idle");
         public static readonly int WalkBottle = Animator.StringToHash("WalkBottle");
         public static readonly int BarmanPutOnTableX2SpeedPlease = Animator.StringToHash("Barman_put_on_table_x2_speed_please");
         public const float ServiceTime = 1f;
-        
         public const float MaxPositionYSpillProduct = 0.45f;
         public const float SpillMoveDuration = 5f;
         public const float SpillMoveDelay = 0.2f;
+        public const float AddBarmanFXOffsetY = 2f;
     }
 }

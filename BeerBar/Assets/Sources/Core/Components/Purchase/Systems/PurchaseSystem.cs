@@ -65,7 +65,6 @@ namespace Core.Components.Purchase.Systems
                     {
                         storeRating.SuccessPoints -= 1;
                     }
-
                     break;
 
                 case > 0:

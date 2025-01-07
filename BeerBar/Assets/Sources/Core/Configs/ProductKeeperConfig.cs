@@ -14,9 +14,4 @@ namespace Core.Configs
         public float WalkAnimatorSpeed = 1;
         public float MoveSpeed = 1.5f;
     }
-    public class ProductKeeperConfigData : IComponentData
-    {
-        public ProductKeeperConfig Config;
-    }
-    public struct ProductKeeperConfigEntity : IComponentData { }
 }

@@ -74,25 +74,25 @@ namespace Core.Authoring.Tables
         public Transform[] TablePoints;
         public Transform[] PointsOnTable;
     }
-    
+
     public struct SpawnPointTable : IComponentData
     {
         public int Level;
         public SpawnPoint SpawnPoint;
     }
-    
+
     public struct PointAtTheTable : IBufferElementData
     {
         public Point Point;
         public int IndexPoint;
     }
-    
+
     public struct PointOnTheTable : IBufferElementData
     {
         public Point Point;
         public int IndexPoint;
     }
-    
+
     public struct BarmanCleanTablePoint : IComponentData
     {
         public Point Point;
@@ -105,16 +105,15 @@ namespace Core.Authoring.Tables
         public Point Point;
         public int IndexPoint;
     }
-    
+
     public struct OnTablePoint : IComponentData
     {
         public Entity Table;
         public Point Point;
         public int IndexPoint;
     }
-    
+
     public struct PointDirtTable : IComponentData { }
-    
+
     public struct PointNotAvailable : IComponentData { }
-    
 }

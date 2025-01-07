@@ -1,7 +1,6 @@
 ﻿using Core.Authoring.Characters;
 using Core.Constants;
 using Sirenix.OdinInspector;
-using Unity.Entities;
 using UnityEngine;
 
 namespace Core.Configs
@@ -14,9 +13,4 @@ namespace Core.Configs
         public float WalkAnimatorSpeed = 1;
         public float MoveSpeed = 1.5f;
     }
-    public class RepairmanConfigData : IComponentData
-    {
-        public RepairmanConfig Config;
-    }
-    public struct RepairmanConfigEntity : IComponentData { }
 }

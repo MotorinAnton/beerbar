@@ -1,7 +1,6 @@
 ﻿using System;
 using Core.Authoring.Products;
 using Core.Constants;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Core.Configs
@@ -42,22 +41,15 @@ namespace Core.Configs
     {
         public UpType UpType;
         public int Level;
-        //public 
-        //public ContainerUp ContainerUp;
-        //public TableUp TableUp;
-
     }
+    
     [Serializable]
     public class ContainerUp : UpData
     {
         public ProductType ProductType;
     }
+    
     [Serializable]
-    public class TableUp : UpData
-    {
-        public int Count;
-    }
-
     public enum UpVisualType
     {
         Small,

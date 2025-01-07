@@ -1,22 +1,21 @@
 using System.Collections.Generic;
-using Core.Authoring.Cameras;
 using Core.Authoring.MovementArrows;
 using Core.Authoring.UpgradeAndEventButtonsUi;
 using Core.Components;
 using Core.Constants;
-using Core.Utilities;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
+
 namespace Core.Authoring.Tables.Systems
 {
     [RequireMatchingQueriesForUpdate]
     public partial class TableSpawnSystem : SystemBase
     {
         private EntityQuery _tableLevelUpFxPointsQuery;
+
         protected override void OnCreate()
         {
-            
             using var tableLevelUpFxPointsBuilder = new EntityQueryBuilder(Allocator.Temp);
             _tableLevelUpFxPointsQuery = tableLevelUpFxPointsBuilder.WithAll<TableLevelUpFxPoint>().Build(this);
         }
@@ -26,15 +25,12 @@ namespace Core.Authoring.Tables.Systems
             Entities.WithAll<SpawnTable>().ForEach((Entity entity, in SpawnTable spawnTable) =>
             {
                 SpawnTable(entity, spawnTable);
-                
             }).WithoutBurst().WithStructuralChanges().Run();
         }
 
         private void SpawnTable(Entity spawnTableEntity, SpawnTable spawnTable)
         {
             var tableEntity = EntityManager.CreateEntity();
-
-
             var tableView = new TableView
             {
                 AtTablePointsEntity = new List<Entity>(), CleanTablePoint = spawnTable.CleanTablePoint
@@ -66,7 +62,6 @@ namespace Core.Authoring.Tables.Systems
                     EntityConstants.PointOnTableName + tablePoint.IndexPoint.ToString());
             }
 
-
             for (var index = 0; index < tableView.AtTablePointsEntity.Count; index++)
             {
                 var pointEntity = tableView.AtTablePointsEntity[index];
@@ -79,15 +74,12 @@ namespace Core.Authoring.Tables.Systems
 
             var tableLevelUpFxPoints = _tableLevelUpFxPointsQuery.ToEntityArray(Allocator.Temp)[0];
             var fxPoint = EntityManager.GetBuffer<LevelUpFxPoint>(tableLevelUpFxPoints)[spawnTable.IndexLevelUpFx];
-
-
             var table = Object.Instantiate(spawnTable.Prefab,
                 spawnTable.SpawnPoint.Position, spawnTable.SpawnPoint.Rotation);
             tableView.Value = table;
             table.NavMeshObstacle.enabled = true;
 
             var transformFX = table.ParticleSystem.transform;
-
             transformFX.rotation = fxPoint.Rotation;
             transformFX.position = fxPoint.Position;
 
@@ -113,9 +105,10 @@ namespace Core.Authoring.Tables.Systems
             table.Initialize(EntityManager, tableEntity);
 
             var buttonsEntity = EntityManager.CreateEntity();
-            EntityManager.AddComponentObject(buttonsEntity, new SpawnUpgradeAndEvenButtonUi { ObjectEntity = tableEntity });
+            EntityManager.AddComponentObject(buttonsEntity,
+                new SpawnUpgradeAndEvenButtonUi { ObjectEntity = tableEntity });
             EntityManager.AddComponent<Table>(buttonsEntity);
-            
+
             EntityManager.DestroyEntity(spawnTableEntity);
         }
     }

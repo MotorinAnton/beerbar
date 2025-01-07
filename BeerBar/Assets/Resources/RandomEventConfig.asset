@@ -16,7 +16,7 @@ MonoBehaviour:
   MaxTime: 40
   Events:
   - Rating: 0
-    Chance: 100
+    Chance: 5
     Object: 0
   - Rating: 0
     Chance: 5

@@ -1,5 +1,4 @@
-﻿using Core.Authoring.RootCanvas;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 
 namespace Core.Authoring.LoadingUi.Systems

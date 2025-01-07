@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: RepairmanConfig
   m_EditorClassIdentifier: 
   RepairmanPrefab: {fileID: 6498573191818507462, guid: 02186aa9e9ea0384799eccb1a31a02c0, type: 3}
-  WalkAnimatorSpeed: 1
-  MoveSpeed: 1.5
+  WalkAnimatorSpeed: 2
+  MoveSpeed: 2

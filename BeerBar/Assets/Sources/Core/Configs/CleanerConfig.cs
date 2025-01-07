@@ -18,5 +18,4 @@ namespace Core.Configs
     {
         public CleanerConfig Config;
     }
-    public struct CleanerConfigEntity : IComponentData { }
 }

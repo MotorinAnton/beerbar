@@ -17,11 +17,10 @@ namespace Core.Authoring.Tables.Systems
             using var tableBuilder = new EntityQueryBuilder(Allocator.Temp);
             _cleanTableQuery = tableBuilder.WithAll<Table, CleanTable>()
                 .Build(this);
-            
+
             using var allCleanerBuilder = new EntityQueryBuilder(Allocator.Temp);
             _cleanerQuery = allCleanerBuilder.WithAll<Cleaner>()
                 .Build(this);
-
         }
 
         protected override void OnUpdate()
@@ -37,40 +36,38 @@ namespace Core.Authoring.Tables.Systems
         private void CreateClearTableOrder(Entity table)
         {
             EntityManager.RemoveComponent<CleanTable>(table);
-            
+
             var cleanerArray = _cleanerQuery.ToEntityArray(Allocator.Temp);
             var cleanerEntity = cleanerArray[0];
             var tablesOrder = new HashSet<Entity>();
 
             if (EntityManager.HasBuffer<OrderCleanTable>(cleanerEntity))
             {
-                 var buffer = EntityManager.GetBuffer<OrderCleanTable>(cleanerEntity);
-                 
-                 foreach (var orderTable in buffer)
-                 {
-                     tablesOrder.Add(orderTable.Table);
-                 }
+                var buffer = EntityManager.GetBuffer<OrderCleanTable>(cleanerEntity);
+
+                foreach (var orderTable in buffer)
+                {
+                    tablesOrder.Add(orderTable.Table);
+                }
             }
-           
 
             if (tablesOrder.Contains(table))
             {
                 return;
             }
-            
-            
+
             var newBuffer = EntityManager.AddBuffer<OrderCleanTable>(cleanerEntity);
             newBuffer.Add(new OrderCleanTable { Table = table });
-            
+
             if (!EntityManager.HasComponent<CleaningCompletedCleaner>(cleanerEntity))
             {
                 return;
             }
 
+            EntityManager.AddComponent<FreeCleaner>(cleanerEntity);
             EntityManager.RemoveComponent<MoveCharacter>(cleanerEntity);
             EntityManager.RemoveComponent<CleaningCompletedCleaner>(cleanerEntity);
             EntityManager.RemoveComponent<MoveExitCleaner>(cleanerEntity);
-            EntityManager.AddComponent<FreeCleaner>(cleanerEntity);
             EntityManager.RemoveComponent<CleanTable>(table);
         }
     }

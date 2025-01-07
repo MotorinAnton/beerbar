@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CleanerConfig
   m_EditorClassIdentifier: 
   CleanerPrefab: {fileID: 1882281313661613580, guid: 2d3ba7b0da949554396db404d7ab35ca, type: 3}
-  WalkAnimatorSpeed: 1
-  MoveSpeed: 1.5
+  WalkAnimatorSpeed: 2.1
+  MoveSpeed: 2.2

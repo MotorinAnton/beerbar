@@ -11,6 +11,7 @@ namespace Core.Authoring.ProfitUi.System
     public partial class ProfitUiSpawnSystem : SystemBase
     {
         private EntityQuery _mainCameraQuery;
+
         protected override void OnCreate()
         {
             using var mainCameraBuilder = new EntityQueryBuilder(Allocator.Temp);
@@ -22,7 +23,6 @@ namespace Core.Authoring.ProfitUi.System
             Entities.WithAll<SpawnProfitUi>().ForEach((Entity entity, in SpawnProfitUi spawnProfitUi) =>
             {
                 SpawnProfitUi(entity, spawnProfitUi);
-                
             }).WithoutBurst().WithStructuralChanges().Run();
         }
 
@@ -33,7 +33,7 @@ namespace Core.Authoring.ProfitUi.System
             var profitCoinUiPrefab = EntityUtilities.GetGameConfig().UIConfig.ProfitCoinPrefab;
             var profitUiCoin = Object.Instantiate(profitCoinUiPrefab);
             var transform = profitUiCoin.transform;
-            
+
             if (spawnProfitUi.Profit)
             {
                 profitUiCoin.CoinImage.gameObject.SetActive(true);
@@ -48,7 +48,7 @@ namespace Core.Authoring.ProfitUi.System
 
             profitUiCoin.Text.text = spawnProfitUi.Text;
             transform.position = spawnProfitUi.Point;
-            
+
             profitUiCoin.transform.LookAt(
                 transform.position + mainCamera.Value.transform.rotation * Vector3.forward,
                 mainCamera.Value.gameObject.transform.rotation * Vector3.up);

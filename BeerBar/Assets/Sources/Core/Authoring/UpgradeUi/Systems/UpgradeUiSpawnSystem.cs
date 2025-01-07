@@ -13,9 +13,7 @@ namespace Core.Authoring.UpgradeUi.Systems
     {
         protected override void OnUpdate()
         {
-            // TODO: Move out from update.
             var upConfig = EntityUtilities.GetGameConfig().UpConfig;
-
             var maximumRating = EntityUtilities.GetGameConfig().UpConfig.UpLine.Max(x => x.Rating);
 
             Entities
@@ -24,13 +22,10 @@ namespace Core.Authoring.UpgradeUi.Systems
                 {
                     SpawnUpgradeDescriptionUi(spawnUpgradeBarUi);
 
-
                     var upgradeBarUiEntity =
                         EntityManager.CreateSingleton<UpgradeBarUi>(EntityConstants.UpgradeBarUiName);
-
                     var upgradeBarUiView = Object.Instantiate(spawnUpgradeBarUi.UpgradeBarUiPrefab);
                     upgradeBarUiView.Initialize(EntityManager, upgradeBarUiEntity);
-
                     upgradeBarUiView.SetMaximumRating(maximumRating);
 
                     var upgradeBarUiViewComponent = new UpgradeBarUiView { UpgradeBarUiAuthoring = upgradeBarUiView };
@@ -44,11 +39,8 @@ namespace Core.Authoring.UpgradeUi.Systems
 
                     EntityManager.AddComponentObject(upgradeBarUiEntity, upgradeBarUiViewComponent);
 
-
                     SpawnUpgradeElementsUi(upgradeBarUiView.IconsParentRectTransform,
                         spawnUpgradeBarUi, upConfig);
-
-
                     upgradeBarUiView.UpdateContentWidth();
 
                     EntityManager.DestroyEntity(entity);
@@ -81,7 +73,6 @@ namespace Core.Authoring.UpgradeUi.Systems
             foreach (var up in upConfig.UpLine)
             {
                 var upgradeElementUi = EntityManager.CreateEntity();
-
                 var prefab = up.UpVisualType switch
                 {
                     UpVisualType.Small => spawnUpgradeUi.UpgradeElementUiSmallPrefab,
