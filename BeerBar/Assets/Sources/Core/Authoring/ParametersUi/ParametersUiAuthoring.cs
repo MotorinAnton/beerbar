@@ -80,7 +80,6 @@ namespace Core.Authoring.ParametersUi
     {
         public ParametersUiAuthoring ParametersUiAuthoring;
     }
-
-    // TODO: Сделать один общий CloseClicked для всех окон?
+    
     public struct CloseClicked : IComponentData { }
 }

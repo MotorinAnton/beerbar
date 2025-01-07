@@ -14,7 +14,6 @@ namespace Core.Authoring.Products.Systems
                 Entity entity, in ProductView productViews) =>
             {
                 MakeCurrentQuantity(entity, productViews);
-
             }).WithoutBurst().WithStructuralChanges().Run();
         }
         
@@ -32,7 +31,7 @@ namespace Core.Authoring.Products.Systems
 
                 if (product.Value.ProductType != ProductType.Spill)
                 {
-                    for (int i = 0; i < productViews.Products[index].Count; i++)
+                    for (var i = 0; i < productViews.Products[index].Count; i++)
                     {
                         if (i < product.Value.Count)
                         {
@@ -51,15 +50,8 @@ namespace Core.Authoring.Products.Systems
                     continue;
                 }
 
-                if (product.Value.ProductType == ProductType.Nuts)
-                {
-                    productViews.CurrentProductIndicatorQuantity(indicatorQuantityProductList[index], product.Value.Count, 2);
-                        
-                }
-                else
-                {
-                    productViews.CurrentProductIndicatorQuantity(indicatorQuantityProductList[index], product.Value.Count, 5);
-                }
+                ProductView.CurrentProductIndicatorQuantity(indicatorQuantityProductList[index], product.Value.Count,
+                    product.Value.ProductType == ProductType.Nuts ? 2 : 5);
             }
         }
     }

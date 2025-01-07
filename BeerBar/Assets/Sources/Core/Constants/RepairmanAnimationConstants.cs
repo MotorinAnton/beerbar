@@ -11,5 +11,6 @@ namespace Core.Constants
         public static readonly int Walk = Animator.StringToHash("Walk");
         public static readonly int TubeRepair = Animator.StringToHash("TubeRepair");
         public static readonly int ElectricityRepair = Animator.StringToHash("ElectricityRepair");
+        public const float ProfitOffsetY = 2f;
     }
 }

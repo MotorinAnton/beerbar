@@ -66,7 +66,6 @@ namespace Core.Authoring.EventObjects.Systems
                 
                 var config = EntityUtilities.GetGameConfig();
                 var randomEventConfig = config.RandomEventConfig;
-                
                 var afterTimeStartRandomEvent = Random.Range(randomEventConfig.MinTime, randomEventConfig.MaxTime);
                 
                 EntityManager.AddComponentData(entity, new WaitTime { Current = afterTimeStartRandomEvent });
@@ -89,7 +88,6 @@ namespace Core.Authoring.EventObjects.Systems
             var randomEventConfig = config.RandomEventConfig;
             var randomEventArray = randomEventConfig.Events;
             var storeRatingScore = _storeRatingQuery.GetSingleton<StoreRating>().CurrentValue;
-            
             var availableRandomEvents = new List<RandomEvent>();
 
             foreach (var randomEvent in randomEventArray)

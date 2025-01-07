@@ -74,7 +74,7 @@ namespace Core.Authoring.Products.Systems
                         }
                     
                         buffer.Add(new ContainerProduct { Value = productData });
-
+                        
                         productViews.IndicatorQuantityProduct1 = CreateIndicatorQuantityUi(
                             containerView.Value.Pivots.IndicatorQuantityProduct1.transform, containerView.Value.transform);
                     
@@ -86,7 +86,6 @@ namespace Core.Authoring.Products.Systems
                         var productList = new List<GameObject>();
                         var product2Config = config.ProductConfig.Products.FirstOrDefault(prod =>
                             prod.ProductType == description.Type && prod.Level == description.Level - 1);
-                    
                         var product2Data = new ProductData
                         {
                             Count = 0,
@@ -115,7 +114,6 @@ namespace Core.Authoring.Products.Systems
                         buffer.Add(new ContainerProduct{ Value = product2Data });
                         productViews.Products.Add(productList);
                     }
-
                     break;
                 }
                 case ProductType.Spill:
@@ -134,15 +132,12 @@ namespace Core.Authoring.Products.Systems
                         buffer.Add(new ContainerProduct { Value = productData });
                         productViews.Products.Add(product1List);
                         productViews.Products.Add(product2List);
-
                     }
-
                     break;
                 }
-
             }
 
-            if(description.Type != ProductType.Spill && description.Type != ProductType.BottleBeer)
+            if (description.Type != ProductType.Spill && description.Type != ProductType.BottleBeer)
             {
                 if (containerView.Value.Pivots.Product1.Count > 0)
                 {
@@ -188,24 +183,24 @@ namespace Core.Authoring.Products.Systems
                     productViews.Products.Add(product2List);
                 }
             }
-            
             EntityManager.AddComponentObject(containerEntity, productViews);
         }
 
-        private ContainerUiAuthoring CreateIndicatorQuantityUi( Transform spawnPoint , Transform containerView)
+        private ContainerUiAuthoring CreateIndicatorQuantityUi( Transform spawnPoint , Component containerView)
         {
             var containerUiPrefab = EntityUtilities.GetUIConfig().ContainerUiPrefab;
             var cameraEntity = _mainCameraQuery.ToEntityArray(Allocator.Temp)[0];
             var mainCamera = EntityManager.GetComponentObject<CameraView>(cameraEntity);
-                    
-            var indicatorQuantityProduct1Ui = Object.Instantiate(containerUiPrefab,
+            var indicatorQuantityProduct1Ui = Object.Instantiate(
+                containerUiPrefab,
                 spawnPoint.position,
                 spawnPoint.rotation,
                 containerView.transform);
             var transform = indicatorQuantityProduct1Ui.transform;
-                    
-            transform.LookAt(transform.position + mainCamera.Value.transform.rotation * Vector3.forward,
-                mainCamera.Value.transform.rotation * Vector3.up);
+            var rotation = mainCamera.Value.transform.rotation;
+            
+            transform.LookAt(transform.position + rotation * Vector3.forward,
+                rotation * Vector3.up);
             indicatorQuantityProduct1Ui.gameObject.SetActive(false);
             
             return indicatorQuantityProduct1Ui;

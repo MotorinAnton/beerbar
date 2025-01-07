@@ -126,7 +126,8 @@ namespace Core.Authoring.Bartenders.Systems
                     purchasePoints.FirstOrDefault(point => point.Row == indexBarman && point.Column == 0).Point
                         .Position;
 
-                var vectorTargetRotationPoint = new Vector3(targetRotationPoint.x, targetRotationPoint.y, targetRotationPoint.z);
+                var vectorTargetRotationPoint =
+                    new Vector3(targetRotationPoint.x, targetRotationPoint.y, targetRotationPoint.z);
                 barmanView.Value.TurningCharacterToPoint(vectorTargetRotationPoint);
 
 
@@ -155,7 +156,7 @@ namespace Core.Authoring.Bartenders.Systems
 
                 var customerUiEntity = EntityManager
                     .GetComponentData<CustomerUIEntity>(order.CustomerEntity).UiEntity;
-                
+
                 if (EntityManager.HasComponent<WaitTime>(customerUiEntity))
                 {
                     EntityManager.RemoveComponent<WaitTime>(customerUiEntity);
@@ -200,9 +201,10 @@ namespace Core.Authoring.Bartenders.Systems
 
                 if (containerDescription.Type == ProductType.Spill)
                 {
-                    var sumAnimationTime = AnimationUtilities.AnimationLength(animator, BarmanAnimationConstants.BarmanIdleToDraft) +
-                                           AnimationUtilities.AnimationLength(animator, BarmanAnimationConstants.BarmanDraftProcess) +
-                                           AnimationUtilities.AnimationLength(animator, BarmanAnimationConstants.BarmanDraftEnd);
+                    var sumAnimationTime =
+                        AnimationUtilities.AnimationLength(animator, BarmanAnimationConstants.BarmanIdleToDraft) +
+                        AnimationUtilities.AnimationLength(animator, BarmanAnimationConstants.BarmanDraftProcess) +
+                        AnimationUtilities.AnimationLength(animator, BarmanAnimationConstants.BarmanDraftEnd);
 
                     EntityManager.AddComponent<DraftBarman>(barmanEntity);
                     EntityManager.AddComponent<ApplyRootMotion>(barmanEntity);
@@ -216,12 +218,15 @@ namespace Core.Authoring.Bartenders.Systems
                 EntityManager.AddComponent<TakeProductBarman>(barmanEntity);
                 EntityManager.AddComponentData(barmanEntity,
                     new WaitTime
-                        { Current = AnimationUtilities.AnimationLength(animator, BarmanAnimationConstants.BarmanPickProduct) });
+                    {
+                        Current = AnimationUtilities.AnimationLength(animator,
+                            BarmanAnimationConstants.BarmanPickProduct)
+                    });
                 EntityManager.RemoveComponent<MoveContainerPointBarman>(barmanEntity);
                 EntityManager.RemoveComponent<MoveCharacterCompleted>(barmanEntity);
             }
         }
-        
+
         private void TakingProductBarman()
         {
             var takingProductBarmanArray = _takingProductBarmanQuery.ToEntityArray(Allocator.Temp);
@@ -238,9 +243,9 @@ namespace Core.Authoring.Bartenders.Systems
                     .position;
                 var vectorTargetRotationPoint =
                     new Vector3(targetRotationPoint.x, targetRotationPoint.y, targetRotationPoint.z);
-                
+
                 barmanView.Value.TurningCharacterToPoint(vectorTargetRotationPoint);
-          
+
                 var animator = EntityManager.GetComponentObject<AnimatorView>(barmanEntity).Value;
 
                 if (containerDescription.Type is ProductType.BottleBeer or ProductType.Spill)
@@ -248,7 +253,7 @@ namespace Core.Authoring.Bartenders.Systems
                     animator.SetBool(BarmanAnimationConstants.TakeBottle, true);
                     continue;
                 }
-                
+
                 animator.SetBool(BarmanAnimationConstants.TakeSnack, true);
             }
         }
@@ -283,7 +288,9 @@ namespace Core.Authoring.Bartenders.Systems
                 {
                     var productOrder = order.Products[productIdx];
 
-                    for (int containerProductIdx = 0; containerProductIdx < containerProduct.Length; containerProductIdx++)
+                    for (int containerProductIdx = 0;
+                         containerProductIdx < containerProduct.Length;
+                         containerProductIdx++)
                     {
                         var productContainer = containerProduct[containerProductIdx];
 
@@ -300,7 +307,8 @@ namespace Core.Authoring.Bartenders.Systems
                             order.CompletedProduct = productCompletedList.ToArray();
                             order.Products = productListOrder.ToArray();
                         }
-                        else if (productContainer.Value.Count > 0 && productContainer.Value.Count < productOrder.Count &&
+                        else if (productContainer.Value.Count > 0 &&
+                                 productContainer.Value.Count < productOrder.Count &&
                                  productContainer.Value.ProductType == productOrder.ProductType)
                         {
                             productOrder.Count = productContainer.Value.Count;
@@ -345,7 +353,7 @@ namespace Core.Authoring.Bartenders.Systems
                 EntityManager.RemoveComponent<TakeProductBarman>(barmanEntity);
             }
         }
-        
+
         private void DraftBarman()
         {
             var draftBarmanArray = _draftBarmanQuery.ToEntityArray(Allocator.Temp);
@@ -400,15 +408,15 @@ namespace Core.Authoring.Bartenders.Systems
             foreach (var barmanEntity in draftBarmanArray)
             {
                 var animator = EntityManager.GetComponentObject<AnimatorView>(barmanEntity).Value;
-                
+
                 animator.SetBool(BarmanAnimationConstants.Draft, false);
-              
+
                 EntityManager.RemoveComponent<DraftBarman>(barmanEntity);
                 EntityManager.RemoveComponent<ApplyRootMotion>(barmanEntity);
                 EntityManager.AddComponent<TakeProductBarman>(barmanEntity);
             }
         }
-        
+
 
         private void MoveCashPointBarman()
         {
@@ -420,7 +428,7 @@ namespace Core.Authoring.Bartenders.Systems
             foreach (var barmanEntity in moveCashPointBarmanArray)
             {
                 var indexBarman = EntityManager.GetComponentData<BarmanIndex>(barmanEntity).Value;
-                
+
                 if (!EntityManager.HasComponent<MoveCharacterCompleted>(barmanEntity))
                 {
                     var cashPoint = cashPoints[indexBarman].Position;
@@ -428,9 +436,9 @@ namespace Core.Authoring.Bartenders.Systems
                     EntityManager.AddComponentData(barmanEntity, new MoveCharacter { TargetPoint = cashPoint });
                     continue;
                 }
-                
+
                 var animator = EntityManager.GetComponentObject<AnimatorView>(barmanEntity).Value;
-                
+
                 EntityManager.AddComponent<GiveProductBarman>(barmanEntity);
                 EntityManager.AddComponentData(barmanEntity,
                     new WaitTime
@@ -440,7 +448,7 @@ namespace Core.Authoring.Bartenders.Systems
                     });
                 EntityManager.RemoveComponent<MoveCashPointBarman>(barmanEntity);
                 EntityManager.RemoveComponent<MoveCharacterCompleted>(barmanEntity);
-                
+
                 var barmanView = EntityManager.GetComponentObject<BarmanView>(barmanEntity);
                 var targetRotationPoint =
                     purchasePoints.FirstOrDefault(point => point.Row == indexBarman && point.Column == 0).Point
@@ -448,7 +456,7 @@ namespace Core.Authoring.Bartenders.Systems
                 barmanView.Value.TurningCharacterToPoint(targetRotationPoint);
             }
         }
-        
+
         private void GivingProductBarman()
         {
             var givingProductBarmanArray = _givingProductBarmanQuery.ToEntityArray(Allocator.Temp);
@@ -460,20 +468,20 @@ namespace Core.Authoring.Bartenders.Systems
                 var barmanView = EntityManager.GetComponentObject<BarmanView>(barmanEntity);
                 var indexBarman = EntityManager.GetComponentData<BarmanIndex>(barmanEntity).Value;
                 var orderBarman = EntityManager.GetComponentObject<OrderBarman>(barmanEntity);
-                
+
                 var targetRotationPoint =
                     purchasePoints.FirstOrDefault(point => point.Row == indexBarman && point.Column == 0).Point
                         .Position;
                 var vectorTargetRotationPoint =
                     new Vector3(targetRotationPoint.x, targetRotationPoint.y, targetRotationPoint.z);
-                
+
                 barmanView.Value.TurningCharacterToPoint(vectorTargetRotationPoint);
-                
+
                 animator.SetBool(BarmanAnimationConstants.Give, true);
 
                 var customerAnimator = EntityManager.GetComponentObject<AnimatorView>(orderBarman.CustomerEntity).Value;
                 var customerView = EntityManager.GetComponentObject<CustomerView>(orderBarman.CustomerEntity);
-                
+
                 customerAnimator.SetBool(CustomerAnimationConstants.TakeBottle, true);
                 customerView.Value.TurningCharacterToPoint(barmanView.Value.transform.position);
             }
@@ -493,16 +501,16 @@ namespace Core.Authoring.Bartenders.Systems
                 {
                     barmanView.DisableBottle();
                 }
-                
+
                 animator.SetBool(BarmanAnimationConstants.Give, false);
-                
+
                 var customerAnimator = EntityManager.GetComponentObject<AnimatorView>(orderBarman.CustomerEntity).Value;
                 var customerView = EntityManager.GetComponentObject<CustomerView>(orderBarman.CustomerEntity);
 
                 customerView.Value.PivotHand[0].gameObject.SetActive(true);
                 customerAnimator.SetBool(CustomerAnimationConstants.TakeBottle, false);
                 customerAnimator.SetBool(CustomerAnimationConstants.CashIdle, false);
-                
+
                 EntityManager.AddComponent<Purchase>(barmanEntity);
                 EntityManager.RemoveComponent<GiveProductBarman>(barmanEntity);
             }
@@ -512,7 +520,7 @@ namespace Core.Authoring.Bartenders.Systems
         {
             var containerEntities = new HashSet<Entity>();
             var containerArray = _containerProductQuery.ToEntityArray(Allocator.Temp);
-            
+
             foreach (var orderProduct in orders)
             {
                 foreach (var containerEntity in containerArray)
@@ -576,12 +584,13 @@ namespace Core.Authoring.Bartenders.Systems
             pointIndex = default;
             return false;
         }
+
         private HashSet<int> IndexPointContainers(HashSet<Entity> containers)
         {
             var barPoints = _barmanPointsContainerQuery.ToComponentDataArray<BarmanPointContainer>(Allocator.Temp);
 
             var containerPoints = new HashSet<int>();
-            
+
             foreach (var containerEntity in containers)
             {
                 foreach (var barPoint in barPoints)

@@ -9,7 +9,7 @@ using Unity.Entities;
 
 namespace Core.Authoring.Bartenders.AddBarmanFX.Systems
 {
-    
+    [RequireMatchingQueriesForUpdate]
     public partial class AddBarmanUiViewSystem : SystemBase
     {
         private EntityQuery _purchaseQueueCustomerQuery;
@@ -20,17 +20,18 @@ namespace Core.Authoring.Bartenders.AddBarmanFX.Systems
         {
             using var barmanBuilder = new EntityQueryBuilder(Allocator.Temp);
             _barmanQuery = barmanBuilder.WithAll<Barman, BarmanView>().Build(this);
-            
+
             using var spawnPointBarmanBuilder = new EntityQueryBuilder(Allocator.Temp);
             _spawnPointBarmanQuery = spawnPointBarmanBuilder.WithAll<BarmanSpawnPoint, SpawnPoint>().Build(this);
-            
+
             using var purchaseQueueCustomerBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _purchaseQueueCustomerQuery = purchaseQueueCustomerBuilder.WithAll<Customer, PurchaseQueueCustomer>().Build(this);
+            _purchaseQueueCustomerQuery =
+                purchaseQueueCustomerBuilder.WithAll<Customer, PurchaseQueueCustomer>().Build(this);
         }
 
         protected override void OnUpdate()
         {
-            Entities.WithAll< AddBarmanFXView, Clicked >()
+            Entities.WithAll<AddBarmanFXView, Clicked>()
                 .ForEach((Entity entity, in AddBarmanFXView addBarmanFXView) =>
                 {
                     CreateBarman();
@@ -38,7 +39,7 @@ namespace Core.Authoring.Bartenders.AddBarmanFX.Systems
 
                 }).WithoutBurst().WithStructuralChanges().Run();
         }
-        
+
         private void CreateBarman()
         {
             var config = EntityUtilities.GetBarmanConfig();
@@ -47,16 +48,16 @@ namespace Core.Authoring.Bartenders.AddBarmanFX.Systems
             var indexBarman = barmanArray.Length;
             var spawnPoint =
                 _spawnPointBarmanQuery.ToComponentDataArray<SpawnPoint>(Allocator.Temp)[indexBarman];
-            
+
             EntityManager.AddComponentObject(barman, new SpawnBarman
             {
-                BarmanData = config , 
-                Point = spawnPoint, 
+                BarmanData = config,
+                Point = spawnPoint,
                 IndexBarman = indexBarman
             });
-            
+
             var purchaseQueueCustomerEntity = _purchaseQueueCustomerQuery.ToEntityArray(Allocator.Temp);
-            
+
             foreach (var customerEntity in purchaseQueueCustomerEntity)
             {
                 var indexCustomer = EntityManager.GetComponentData<IndexMovePoint>(customerEntity).Value;

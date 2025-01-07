@@ -11,6 +11,7 @@ using Core.Authoring.SelectGameObjects;
 using Core.Components;
 using Core.Components.Destroyed;
 using Core.Components.Wait;
+using Core.Constants;
 using DG.Tweening;
 using Unity.Collections;
 using Unity.Entities;
@@ -19,7 +20,7 @@ using UnityEngine;
 namespace Core.Authoring.EventObjects.Systems
 {
     [RequireMatchingQueriesForUpdate]
-    public partial class EventObjectClickHandleSystem : SystemBase
+    public partial class EventObjectClickedSystem : SystemBase
     {
         private EntityQuery _bankQuery;
         private EntityQuery _cleanerQuery;
@@ -51,7 +52,6 @@ namespace Core.Authoring.EventObjects.Systems
                     
                 }).WithoutBurst().WithStructuralChanges().Run();
             
-            
             Entities.WithAll<BreakBottleEntity>().WithNone<WaitTime>().ForEach((Entity entity) =>
             {
                 CheckNearCustomer(entity);
@@ -76,7 +76,7 @@ namespace Core.Authoring.EventObjects.Systems
                 var customerTransform = EntityManager.GetComponentObject<TransformView>(customerEntity).Value;
                 var distance = Vector3.Distance(customerTransform.position, breakBottleView.transform.position);
 
-                const float minDistance = 1.5f;
+                const float minDistance = CustomerAnimationConstants.MinDistanceBreakBottleCustomer;
                 
                 if (!(distance < minDistance))
                 {
@@ -113,8 +113,7 @@ namespace Core.Authoring.EventObjects.Systems
 
             EntityManager.AddComponentData(breakBottleEntity, new WaitTime { Current = 5f });
         }
-
-
+        
         private void CreateClearBreakBottleOrder(Entity breakBottleEntity)
         {
             if (EntityManager.HasComponent<Destroyed>(breakBottleEntity))
@@ -181,27 +180,28 @@ namespace Core.Authoring.EventObjects.Systems
             var profitUiPosition = EntityManager.GetComponentObject<LossWalletView>(entity).Value.transform.position;
             var lossWalletView = EntityManager.GetComponentObject<LossWalletView>(entity).Value;
             DOTween.KillAll(lossWalletView.gameObject);
-
-            const float offsetY = 0.5f;
             
-            profitUiPosition.y += offsetY;
+            profitUiPosition.y += BreakdownObjectConstants.PickUpLossWalletOffsetY;
             
             var spawnProfitUiEntity = EntityManager.CreateEntity();
             EntityManager.AddComponentObject(spawnProfitUiEntity,
-                new SpawnProfitUi { Type = ProfitUiType.Profit, Point = profitUiPosition, Text = "+" + lossWalletEntity.Coins });
+                new SpawnProfitUi
+                {
+                    Profit = true,
+                    Point = profitUiPosition,
+                    Text = "+" + lossWalletEntity.Coins
+                });
+            
             bank.Coins += lossWalletEntity.Coins;
             _bankQuery.SetSingleton(bank);
             EntityManager.AddComponent<Destroyed>(entity);
-            
         }
-
-
+        
         private void EnableClearArrow(Entity entity)
         {
             var movementArrows =
                 EntityManager.GetComponentObject<ClearMovementArrowView>(entity).Arrow;
             movementArrows.EnableArrow();
         }
-        
     }
 }

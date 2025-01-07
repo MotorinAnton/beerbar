@@ -14,7 +14,7 @@ namespace Core.Authoring.Banks.Systems
         {
             using var bankBuilder = new EntityQueryBuilder(Allocator.Persistent);
             _bankQuery = bankBuilder.WithAllRW<Bank>().Build(this);
-            
+
             using var spendCoinsBuilder = new EntityQueryBuilder(Allocator.Persistent);
             _spendCoinsQuery = spendCoinsBuilder.WithAllRW<SpendCoins>().Build(this);
 
@@ -23,7 +23,7 @@ namespace Core.Authoring.Banks.Systems
         protected override void OnUpdate()
         {
             var spendCoinsArray = _spendCoinsQuery.ToComponentDataArray<SpendCoins>(Allocator.Temp);
-            
+
             foreach (var spendCoins in spendCoinsArray)
             {
                 var bank = _bankQuery.GetSingletonRW<Bank>();

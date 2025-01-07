@@ -9,6 +9,7 @@ using Core.Authoring.TVs;
 using Core.Components;
 using Core.Components.Wait;
 using Core.Constants;
+using Core.Utilities;
 using DG.Tweening;
 using Unity.Collections;
 using Unity.Entities;
@@ -100,7 +101,6 @@ namespace Core.Authoring.Repairmans.Systems
                 var animator = EntityManager.GetComponentObject<AnimatorView>(repairmanEntity).Value;
                 var orders = EntityManager.GetComponentObject<OrderRepairman>(repairmanEntity).RepairObjectList;
                 var repairPoints = _repairPointsQuery.ToComponentDataArray<RepairPoints>(Allocator.Temp)[0];
-
                 var orderPoint = new Vector3();
                 var animationName = "";
 
@@ -134,8 +134,9 @@ namespace Core.Authoring.Repairmans.Systems
                     EntityManager.GetComponentObject<RepairmanView>(repairmanEntity).Value.PivotHand[0].gameObject
                         .SetActive(true);
                     EntityManager.AddComponent<RepairsRepairman>(repairmanEntity);
+                    
                     EntityManager.AddComponentData(repairmanEntity,
-                        new WaitTime { Current = AnimationLength(animator, animationName) });
+                        new WaitTime { Current = AnimationUtilities.AnimationLength(animator, animationName) });
                     EntityManager.RemoveComponent<MoveRepairsRepairman>(repairmanEntity);
                     EntityManager.RemoveComponent<MoveCharacterCompleted>(repairmanEntity);
                 }
@@ -251,15 +252,13 @@ namespace Core.Authoring.Repairmans.Systems
                 
                 orders.Remove(orders[0]);
 
-                switch (orders.Count)
+                if (orders.Count > 0)
                 {
-                    case > 0:
-                        EntityManager.AddComponent<MoveRepairsRepairman>(repairmanEntity);
-                        break;
-                    
-                    case 0:
-                        EntityManager.AddComponent<MoveExitRepairman>(repairmanEntity);
-                        break;
+                    EntityManager.AddComponent<MoveRepairsRepairman>(repairmanEntity);
+                }
+                else
+                {
+                    EntityManager.AddComponent<MoveExitRepairman>(repairmanEntity);
                 }
 
                 EntityManager.RemoveComponent<RepairsRepairman>(repairmanEntity);
@@ -331,13 +330,13 @@ namespace Core.Authoring.Repairmans.Systems
         {
             var profitUiPosition = repairmanPosition;
 
-            profitUiPosition.y += 2f;
+            profitUiPosition.y += RepairmanAnimationConstants.ProfitOffsetY;
 
             var spawnProfitUiEntity = EntityManager.CreateEntity();
             EntityManager.AddComponentObject(spawnProfitUiEntity,
                 new SpawnProfitUi
                 {
-                    Type = ProfitUiType.Profit,
+                    Profit = false,
                     Point = profitUiPosition,
                     Text = "-" + 10
                 });
@@ -345,21 +344,6 @@ namespace Core.Authoring.Repairmans.Systems
             var bank = _bankQuery.GetSingleton<Bank>();
             bank.Coins -= 10;
             _bankQuery.SetSingleton(bank);
-        }
-        
-        private float AnimationLength(Animator animator, string name)
-        {
-            var ac = animator.runtimeAnimatorController;
-
-            foreach (var animation in ac.animationClips)
-            {
-                if(animation.name == name)
-                {
-                    return animation.length;
-                }
-            }
-
-            return default;
         }
     }
 }

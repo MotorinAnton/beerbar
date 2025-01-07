@@ -15,7 +15,8 @@ namespace Core.Authoring.UpgradeAndEventButtonsUi.Systems
         protected override void OnCreate()
         {
             using var upgradeAndEventButtonViewEntityBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _upgradeAndEventButtonViewEntityQuery = upgradeAndEventButtonViewEntityBuilder.WithAll<UpgradeAndEvenButtonUiView>()
+            _upgradeAndEventButtonViewEntityQuery = upgradeAndEventButtonViewEntityBuilder
+                .WithAll<UpgradeAndEvenButtonUiView>()
                 .Build(this);
         }
 
@@ -25,18 +26,17 @@ namespace Core.Authoring.UpgradeAndEventButtonsUi.Systems
                 (Entity entity) =>
                 {
                     var buttons = EntityManager.GetComponentData<UpgradeAndEventButtonUi>(entity).Entity;
-                    
                     var upgradeAndEventButtonView =
                         EntityManager.GetComponentObject<UpgradeAndEvenButtonUiView>(buttons);
 
                     upgradeAndEventButtonView.EnableUpgradeAndEventButton();
                     upgradeAndEventButtonView.UpgradeAndEventButton.CreateFadeInSequence();
-                    
+
                     if (EntityManager.HasComponent<Spill>(entity))
                     {
-                        upgradeAndEventButtonView.UpgradeAndEventButton.UpgradeButton.gameObject.SetActive(false); 
+                        upgradeAndEventButtonView.UpgradeAndEventButton.UpgradeButton.gameObject.SetActive(false);
                     }
-                    
+
 
                     if (EntityManager.HasComponent<WaitTime>(entity))
                     {
@@ -46,19 +46,20 @@ namespace Core.Authoring.UpgradeAndEventButtonsUi.Systems
                     }
                     else
                     {
-                        EntityManager.AddComponentData(entity, new WaitTime { Current = ButtonsConstants.EnableDelayButtons });
+                        EntityManager.AddComponentData(entity,
+                            new WaitTime { Current = ButtonsConstants.EnableDelayButtons });
                     }
 
                     var upgradeAndEventButtonArray =
                         _upgradeAndEventButtonViewEntityQuery.ToEntityArray(Allocator.Temp);
-                    
+
                     foreach (var buttonsEntity in upgradeAndEventButtonArray)
                     {
                         if (buttonsEntity == buttons)
                         {
                             continue;
                         }
-                        
+
                         var upgradeAndEventButtonViewDeselect =
                             EntityManager.GetComponentObject<UpgradeAndEvenButtonUiView>(buttonsEntity);
 
@@ -74,7 +75,7 @@ namespace Core.Authoring.UpgradeAndEventButtonsUi.Systems
                     }
 
                     EntityManager.RemoveComponent<Clicked>(entity);
-                    
+
                 }).WithStructuralChanges().Run();
         }
     }

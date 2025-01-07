@@ -45,8 +45,6 @@ namespace Core.Components.Purchase.Systems
         private void AttemptToBuy(Entity barmanEntity, BarmanIndex barmanIndex, OrderBarman order)
         {
             var storeRating = _storeRatingQuery.GetSingleton<StoreRating>();
-            var customerProducts = EntityManager.GetComponentObject<CustomerProduct>(order.CustomerEntity);
-            var orderProduct = order.CompletedProduct;
             var audioSource = EntityManager.GetComponentObject<AudioSourceView>(barmanEntity).Value;
             var score = 0;
             var purchaseStore = 0;
@@ -59,16 +57,13 @@ namespace Core.Components.Purchase.Systems
             }
 
             var customerUiEntity = EntityManager.GetComponentObject<CustomerView>(order.CustomerEntity).UiEntity;
-            var customerUiView = EntityManager.GetComponentObject<CustomerUiView>(customerUiEntity).Value;
 
             switch (purchaseStore)
             {
                 case 0:
                     if (storeRating.CurrentValue > 0)
                     {
-                        //storeRating.CurrentValue -= 1;
                         storeRating.SuccessPoints -= 1;
-                        //customerUiView.FaceEmotionImage.overrideSprite = customerUiView.FaceEmotionSprites.Displeased;
                     }
 
                     break;
@@ -81,22 +76,28 @@ namespace Core.Components.Purchase.Systems
                     var barmanTransformPosition =
                         EntityManager.GetComponentObject<TransformView>(barmanEntity).Value.position;
                     var profitUiPosition = barmanTransformPosition;
-                    profitUiPosition.y += 2f;
-                    profitUiPosition.x -= 1f;
+                    
+                    profitUiPosition.y += CustomerAnimationConstants.ProfitOffsetY;
+                    profitUiPosition.x -= CustomerAnimationConstants.ProfitOffsetX;
 
                     var spawnProfitUiEntity = EntityManager.CreateEntity();
                     EntityManager.AddComponentObject(spawnProfitUiEntity,
-                        new SpawnProfitUi { Type = ProfitUiType.Profit, Point = profitUiPosition, Text = "+" + score });
+                        new SpawnProfitUi
+                        {
+                            Profit = true,
+                            Point = profitUiPosition,
+                            Text = "+" + score
+                        });
 
                     var bank = _bankQuery.GetSingleton<Bank>();
                     bank.Coins += score;
                     _bankQuery.SetSingleton(bank);
-                 
-                    EntityManager.AddComponent<PleasedEmotionCustomer>(customerUiEntity);
                     
                     var coinsAudio = EntityUtilities.GetGameConfig().AudioConfig.Coins;
                     var randomCoinsAudio = Random.Range(0, coinsAudio.Length);
+                    
                     audioSource.PlayOneShot(coinsAudio[randomCoinsAudio]);
+                    EntityManager.AddComponent<PleasedEmotionCustomer>(customerUiEntity);
                     break;
                 }
             }
@@ -115,25 +116,8 @@ namespace Core.Components.Purchase.Systems
                         
                 var phraseUiManagerView =
                     EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity);
-                        
-                var phraseUiManager =
-                    EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity).PhraseCustomerUiManager;
-
-                phraseUiManagerView.CustomerList.Remove(order.CustomerEntity);
-
-                //EntityManager.RemoveComponent<StartTweenPhraseCustomerUi>(phraseUiManagerEntity);
-                //EntityManager.RemoveComponent<TweenProcessing>(phraseUiManagerEntity);
-              
                 
-                // foreach (var panel in phraseUiManager.PhrasePanels)
-                // {
-                //     if (panel.Customer == order.CustomerEntity)
-                //     {
-                //         // phraseUiManager.PanelFadeOut(panel); 
-                //         // EntityManager.AddComponent<StartTweenPhraseCustomerUi>(phraseUiManagerEntity);
-                //         phraseUiManagerView.CustomerList.Remove(order.CustomerEntity);
-                //     }
-                // }
+                phraseUiManagerView.CustomerList.Remove(order.CustomerEntity);
             }
             
             if (EntityManager.HasComponent<PhraseSayCustomer>(order.CustomerEntity))

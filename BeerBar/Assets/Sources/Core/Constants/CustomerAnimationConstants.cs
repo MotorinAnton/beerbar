@@ -40,7 +40,6 @@ namespace Core.Constants
         public const int QuantityRandomAnimation = 3;
         public const float FadeEmotionDelay = 0.2f;
         public const float FadeEmotionDuration = 3f;
-
-
+        public const float MinDistanceBreakBottleCustomer = 1.5f;
     }
 }

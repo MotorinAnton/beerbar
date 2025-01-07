@@ -27,7 +27,7 @@ namespace Core.Authoring.ProfitUi
     {
         public string Text;
         public Vector3 Point;
-        public ProfitUiType Type;
+        public bool Profit;
     }
     
     public enum ProfitUiType

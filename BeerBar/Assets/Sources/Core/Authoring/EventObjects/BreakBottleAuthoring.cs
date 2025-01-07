@@ -25,5 +25,4 @@ namespace Core.Authoring.EventObjects
     }
     
     public struct RandomEventEntity : IComponentData { }
-    
 }

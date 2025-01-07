@@ -19,18 +19,17 @@ namespace Core.Authoring.ParametersButtonUi.Systems
         private void SpawnParametersButtonUi(Entity entity, in SpawnParametersButtonUi spawnParametersButtonUi)
         {
             var parametersButtonUi = EntityManager.CreateSingleton<ParametersButtonUi>();
-            EntityManager.SetName(parametersButtonUi, EntityConstants.ParametersButtonUiName);
-
             var parametersButtonUiView = Object.Instantiate(spawnParametersButtonUi.ParametersButtonUiPrefab);
-            parametersButtonUiView.Initialize(EntityManager, parametersButtonUi);
-
+            
             EntityManager.AddComponentObject(parametersButtonUi,
                 new SpawnRootCanvasChild
                 {
                     Transform = parametersButtonUiView.transform,
                     SortingOrder = parametersButtonUiView.SortingOrder
                 });
-
+            
+            EntityManager.SetName(parametersButtonUi, EntityConstants.ParametersButtonUiName);
+            parametersButtonUiView.Initialize(EntityManager, parametersButtonUi);
             EntityManager.DestroyEntity(entity);
         }
     }

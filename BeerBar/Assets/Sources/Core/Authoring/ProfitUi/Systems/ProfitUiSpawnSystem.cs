@@ -32,34 +32,29 @@ namespace Core.Authoring.ProfitUi.System
             var mainCamera = EntityManager.GetComponentObject<CameraView>(cameraEntity);
             var profitCoinUiPrefab = EntityUtilities.GetGameConfig().UIConfig.ProfitCoinPrefab;
             var profitUiCoin = Object.Instantiate(profitCoinUiPrefab);
+            var transform = profitUiCoin.transform;
             
-            switch (spawnProfitUi.Type)
+            if (spawnProfitUi.Profit)
             {
-                // TODO переделать spawnProfitUi.Type на бульку
-                case ProfitUiType.Profit:
-                    profitUiCoin.CoinImage.gameObject.SetActive(true);
-                    profitUiCoin.DispleasedImage.gameObject.SetActive(false);
-                    break;
-                
-                case ProfitUiType.Displase:
-                    profitUiCoin.DispleasedImage.gameObject.SetActive(true);
-                    profitUiCoin.CoinImage.gameObject.SetActive(false);
-                    profitUiCoin.Text.color = Color.red;
-                    break;
+                profitUiCoin.CoinImage.gameObject.SetActive(true);
+                profitUiCoin.DispleasedImage.gameObject.SetActive(false);
+            }
+            else
+            {
+                profitUiCoin.DispleasedImage.gameObject.SetActive(true);
+                profitUiCoin.CoinImage.gameObject.SetActive(false);
+                profitUiCoin.Text.color = Color.red;
             }
 
-            // добавить скейл в зависимости от расстояния камеры
-            
-            
             profitUiCoin.Text.text = spawnProfitUi.Text;
-            var transform = profitUiCoin.transform;
-            transform.position = spawnProfitUi.Point; ;
+            transform.position = spawnProfitUi.Point;
+            
             profitUiCoin.transform.LookAt(
                 transform.position + mainCamera.Value.transform.rotation * Vector3.forward,
                 mainCamera.Value.gameObject.transform.rotation * Vector3.up);
             profitUiCoin.transform.DOMoveY(spawnProfitUi.Point.y + 1f, 0.99f);
             profitUiCoin.CanvasGroup.DOFade(0, 1f).SetDelay(0.3f).OnComplete(profitUiCoin.DestroyProfitObject);
-            
+
             EntityManager.DestroyEntity(entity);
         }
     }

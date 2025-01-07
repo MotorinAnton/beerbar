@@ -18,4 +18,5 @@ namespace Core.Authoring.Bartenders.AddBarmanFX
     }
     
     public struct AddBarmanFX : IComponentData { }
+    
 }
