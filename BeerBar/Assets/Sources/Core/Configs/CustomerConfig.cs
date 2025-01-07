@@ -19,6 +19,7 @@ namespace Core.Configs
         public float Ratio;
         public float MaxWaitTimeInPurchaseQueue;
         public float DrinkAtTheTableTime;
+        public float RespawnTime;
         [InfoBox("Runtime variables")]
         [NonSerialized, ShowInInspector, ReadOnly]
         public int CurrentMaxCustomers;

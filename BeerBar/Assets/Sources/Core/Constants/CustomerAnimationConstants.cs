@@ -38,6 +38,8 @@ namespace Core.Constants
         public const float MoveQueueDelay = 0.2f;
         public const float RandomRange = 3f;
         public const int QuantityRandomAnimation = 3;
+        public const float FadeEmotionDelay = 0.2f;
+        public const float FadeEmotionDuration = 3f;
 
 
     }

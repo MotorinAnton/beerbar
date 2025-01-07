@@ -107,7 +107,7 @@ namespace Core.Components.Purchase.Systems
             EntityManager.AddComponentData(order.CustomerEntity,
              new UpdatePurchaseQueuePosition { UpdateRow = barmanIndex.Value });
             EntityManager.AddComponentData(order.CustomerEntity,
-                               new WaitTime { Current = EntityConstants.ServiceTime });
+                               new WaitTime { Current = BarmanAnimationConstants.ServiceTime });
             
             if (!_phraseUiManager.IsEmpty)
             {

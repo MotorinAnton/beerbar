@@ -50,8 +50,7 @@ namespace Core.Authoring.UpgradeAndEventButtonsUi
             gameObject.SetActive(true);
         }
         public void CreateFadeInSequence()
-        {
-            gameObject.SetActive(true);
+        { 
             UpgradeButton.gameObject.SetActive(true);
             EventButton.gameObject.SetActive(true);
             

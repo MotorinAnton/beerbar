@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using Core.Authoring.StoreRatings.Systems;
+﻿using Core.Authoring.StoreRatings.Systems;
 using Core.Configs;
 using Core.Constants;
 using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
-using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -26,6 +24,8 @@ namespace Core.Editor.Windows
         
         public RepairmanConfig Repairman;
 
+        public CleanerConfig Cleaner;
+        
         private StoreRatingSystem _storeRatingSystem;
         
         public RandomEventConfig RandomEventConfig;
@@ -53,6 +53,7 @@ namespace Core.Editor.Windows
             window.Barmans = Resources.Load<BarmanConfig>(ResourceConstants.BarmanConfig);
             window.ProductKeeper = Resources.Load<ProductKeeperConfig>(ResourceConstants.ProductKeeperConfig);
             window.Repairman = Resources.Load<RepairmanConfig>(ResourceConstants.RepairmanConfig);
+            window.Cleaner = Resources.Load<CleanerConfig>(ResourceConstants.CleanerConfig);
             window.RandomEventConfig = Resources.Load<RandomEventConfig>(ResourceConstants.RandomEventConfig);
             //window._storeRatingSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<StoreRatingSystem>();
             

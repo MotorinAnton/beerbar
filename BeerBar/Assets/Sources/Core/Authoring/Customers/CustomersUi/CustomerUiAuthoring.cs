@@ -55,18 +55,12 @@ namespace Core.Authoring.Customers.CustomersUi
         
         public void DisableProduct2() => Product2Image.gameObject.SetActive(false);
     }
-    
-    public struct CustomerUi : IComponentData { }
-    
+
     public struct SwearEmotionCustomer : IComponentData { }
     
     public struct PleasedEmotionCustomer : IComponentData { }
     
     public struct ShowProductImage : IComponentData { }
-    
-    public struct SnackImageTweenProcessing : IComponentData { }
-    
-    public struct SpillImageTweenProcessing : IComponentData { }
     
     public struct SwearEmotionAnimation : IComponentData { }
     

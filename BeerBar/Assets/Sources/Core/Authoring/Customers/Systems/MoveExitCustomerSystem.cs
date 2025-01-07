@@ -172,12 +172,12 @@ namespace Core.Authoring.Customers.Systems
                     var customerPos = EntityManager.GetComponentObject<TransformView>(customerEntity).Value.transform
                         .position;
 
-                    var vector = customerPos;
-                    vector.x -= CustomerAnimationConstants.UpdateQueueOffsetPosition;
-                    vector.z -= CustomerAnimationConstants.UpdateQueueOffsetPosition;
-                    vector.y = 0f;
+                    var queueOffsetPosition = customerPos;
+                    queueOffsetPosition.x -= CustomerAnimationConstants.UpdateQueueOffsetPosition;
+                    queueOffsetPosition.z -= CustomerAnimationConstants.UpdateQueueOffsetPosition;
+                    queueOffsetPosition.y = 0f;
                     
-                    EntityManager.AddComponentData(customerEntity, new MoveCharacter { TargetPoint = vector });
+                    EntityManager.AddComponentData(customerEntity, new MoveCharacter { TargetPoint = queueOffsetPosition });
                 }
                 
                 if (!EntityManager.HasComponent<UpdatePurchaseQueuePosition>(customerEntity) &&
@@ -272,7 +272,6 @@ namespace Core.Authoring.Customers.Systems
             foreach (var customerEntity in movePointUpdateIndexQueueCustomerArray)
             {
                 var animator = EntityManager.GetComponentObject<AnimatorView>(customerEntity).Value;
-
                 var indexPoint = EntityManager.GetComponentData<UpdatePurchaseQueuePosition>(customerEntity)
                     .UpdateRow;
                 EntityManager.AddComponentData(customerEntity,
@@ -482,7 +481,7 @@ namespace Core.Authoring.Customers.Systems
                         var storeRating = _storeRatingQuery.GetSingleton<StoreRating>();
 
                         StarDirtTableEmotionEventPanel(customerEntity);
-                        SpawnDisplaseEmotion(customerEntity);
+                        SpawnDispleaseEmotion(customerEntity);
 
                         if (!customerUiView.FaceEmotionImage.IsActive())
                         {
@@ -507,9 +506,9 @@ namespace Core.Authoring.Customers.Systems
 
                         var randomDrinkAnimation = Random.Range(0, CustomerAnimationConstants.QuantityRandomAnimation);
                         var drinkAtTheTableTime = EntityUtilities.GetCustomerConfig().DrinkAtTheTableTime;
+                        var nextTransitionTime = drinkAtTheTableTime - CustomerAnimationConstants.DrinkAnimationTime;
                         animator.SetFloat(CustomerAnimationConstants.RandomDrink, randomDrinkAnimation);
                         EntityManager.AddComponentData(customerEntity, new WaitTime { Current = drinkAtTheTableTime });
-                        var nextTransitionTime = drinkAtTheTableTime - CustomerAnimationConstants.DrinkAnimationTime;
                         EntityManager.AddComponentData(customerEntity,
                             new RandomAnimation
                             {
@@ -562,7 +561,7 @@ namespace Core.Authoring.Customers.Systems
             phraseUiManager.StartEventPanelTween();
         }
         
-        private void SpawnDisplaseEmotion(Entity customerEntity)
+        private void SpawnDispleaseEmotion(Entity customerEntity)
         {
             var customerTransform = EntityManager.GetComponentObject<TransformView>(customerEntity);
             var profitUiPosition = customerTransform.Value.position;

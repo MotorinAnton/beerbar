@@ -183,6 +183,8 @@ namespace Core.Authoring.EventObjects.Systems
                 return;
             }
 
+            EntityManager.AddComponent<Breakdown>(entity);
+            
             if (EntityManager.HasComponent<ElectricityView>(entity))
             {
                 var electricityView = EntityManager.GetComponentObject<ElectricityView>(entity).Value;
@@ -198,6 +200,7 @@ namespace Core.Authoring.EventObjects.Systems
                 electricityView.Animation.Play();
                 RenderSettings.sun.DOIntensity(0, BreakdownObjectConstants.ElectricityFlashDuration)
                     .SetEase(Ease.InOutElastic).SetLoops(BreakdownObjectConstants.ElectricityFlashLoop);
+                return;
             }
 
             if (EntityManager.HasComponent<TubeView>(entity))
@@ -211,7 +214,6 @@ namespace Core.Authoring.EventObjects.Systems
                 
                 if (EntityManager.HasComponent<WaitTime>(entity))
                 {
-                    var progress = tubeView.ProgressMeshRenderers[0].material.GetFloat(BreakdownObjectConstants.PipeLeak);
                     var waitTime = EntityManager.GetComponentData<WaitTime>(entity);
                     var startWaitTime = EntityManager.GetComponentData<StartWaitTime>(entity).Start;
                     waitTime.Current = startWaitTime - waitTime.Current;
@@ -221,26 +223,27 @@ namespace Core.Authoring.EventObjects.Systems
                 {
                      EntityManager.AddComponentData(entity, new WaitTime { Current = BreakdownObjectConstants.FlowTime });
                 }
-                
+                return;
             }
 
             if (EntityManager.HasComponent<TVView>(entity))
             {
                 var tvView = EntityManager.GetComponentObject<TVView>(entity).Value;
                 tvView.OnRenderer.gameObject.SetActive(false);
+                return;
             }
 
-            if (EntityManager.HasComponent<TableView>(entity))
+            if (!EntityManager.HasComponent<TableView>(entity))
             {
-                var tableView = EntityManager.GetComponentObject<TableView>(entity);
-                
-                foreach (var pointEntity in tableView.AtTablePointsEntity)
-                {
-                    EntityManager.AddComponent<PointDirtTable>(pointEntity);
-                }
+                return;
             }
 
-            EntityManager.AddComponent<Breakdown>(entity);
+            var tableView = EntityManager.GetComponentObject<TableView>(entity);
+
+            foreach (var pointEntity in tableView.AtTablePointsEntity)
+            {
+                EntityManager.AddComponent<PointDirtTable>(pointEntity);
+            }
         }
     }
 }

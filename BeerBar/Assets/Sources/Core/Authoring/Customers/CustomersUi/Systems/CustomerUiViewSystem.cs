@@ -18,14 +18,14 @@ using Container = Core.Authoring.Containers.Container;
 
 namespace Core.Authoring.Customers.CustomersUi.Systems
 {
+    [RequireMatchingQueriesForUpdate]
     public partial class CustomerUiViewSystem : SystemBase
     {
         private EntityQuery _bankQuery;
         private EntityQuery _mainCameraQuery;
         private EntityQuery _storeRatingQuery;
         private EntityQuery _containerProductQuery;
-       
-
+        
         protected override void OnCreate()
         {
             using var mainCameraBuilder = new EntityQueryBuilder(Allocator.Temp);
@@ -36,53 +36,46 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
             
             using var containerBuilder = new EntityQueryBuilder(Allocator.Temp);
             _containerProductQuery = containerBuilder.WithAll<Container, ContainerProduct>().Build(this);
-            
         }
 
         protected override void OnUpdate()
         {
-            Entities.WithAll<CustomerUiView>().ForEach((Entity entity, in CustomerUiView customerUiView) =>
-                {
-                    ChangeCustomerUiPosition(entity, customerUiView);
-                    
-                }).WithoutBurst().WithStructuralChanges().Run();
-            
+            Entities.WithAll<CustomerUiView>().ForEach((in CustomerUiView customerUiView) =>
+            {
+                ChangeCustomerUiPosition(customerUiView);
+            }).WithoutBurst().WithStructuralChanges().Run();
+
             Entities.WithAll<CustomerUiView, WaitTime, StartWaitTime>().WithNone<WaitTimer>()
-                .ForEach((Entity entity) =>
-                {
-                    EntityManager.AddComponent<WaitTimer>(entity);
-                    
-                }).WithoutBurst().WithStructuralChanges().Run();
-            
+                .ForEach((Entity entity) => { EntityManager.AddComponent<WaitTimer>(entity); }).WithoutBurst()
+                .WithStructuralChanges().Run();
+
             Entities.WithAll<CustomerUiView, WaitTime, StartWaitTime>().WithAll<WaitTimer>()
                 .ForEach((Entity entity, in CustomerUiView customerUiView, in StartWaitTime startWaitTime,
                     in WaitTime waitTime) =>
                 {
-                    ChangeCustomerUi(entity, customerUiView, startWaitTime, waitTime);
-                    
+                    ChangeCustomerUi(entity, customerUiView, waitTime);
                 }).WithoutBurst().WithStructuralChanges().Run();
-            
-            Entities.WithAll<SwearEmotionCustomer, CustomerUiView>().WithNone<SwearEmotionAnimation>().ForEach((Entity entity, in CustomerUiView customerUiView) =>
-            {
-                FadeInEmotionCustomerUi(entity, customerUiView);
-                    
-            }).WithoutBurst().WithStructuralChanges().Run();
-            
-            Entities.WithAll<PleasedEmotionCustomer, CustomerUiView>().WithNone<PleasedEmotionAnimation>().ForEach((Entity entity, in CustomerUiView customerUiView) =>
-            {
-                FadeInEmotionCustomerUi(entity, customerUiView);
-                    
-            }).WithoutBurst().WithStructuralChanges().Run();
-            
+
+            Entities.WithAll<SwearEmotionCustomer, CustomerUiView>().WithNone<SwearEmotionAnimation>()
+                .ForEach((Entity entity, in CustomerUiView customerUiView) =>
+                {
+                    FadeInEmotionCustomerUi(entity, customerUiView);
+                }).WithoutBurst().WithStructuralChanges().Run();
+
+            Entities.WithAll<PleasedEmotionCustomer, CustomerUiView>().WithNone<PleasedEmotionAnimation>()
+                .ForEach((Entity entity, in CustomerUiView customerUiView) =>
+                {
+                    FadeInEmotionCustomerUi(entity, customerUiView);
+                }).WithoutBurst().WithStructuralChanges().Run();
+
             Entities.WithAll<CustomerUiView, WaitTimer>().WithNone<WaitTime>()
                 .ForEach((Entity entity, in CustomerUiView customerUiView) =>
                 {
-                    StopWaitTimer( entity, customerUiView );
-                    
+                    StopWaitTimer(entity, customerUiView);
                 }).WithoutBurst().WithStructuralChanges().Run();
         }
 
-        private void StopWaitTimer(Entity entity, in CustomerUiView customerUiView )
+        private void StopWaitTimer(Entity entity, in CustomerUiView customerUiView)
         {
             if (EntityManager.HasComponent<DissatisfiedCustomer>(customerUiView.CustomerEntity))
             {
@@ -92,46 +85,39 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
             var animator = EntityManager.GetComponentObject<AnimatorView>(customerUiView.CustomerEntity).Value;
 
             animator.SetBool(CustomerAnimationConstants.CashIdle, false);
-            
-            var storeRating = _storeRatingQuery.GetSingleton<StoreRating>();        
-            
+
+            var storeRating = _storeRatingQuery.GetSingleton<StoreRating>();
+
             if (storeRating.SuccessPoints > -10)
             {
                 storeRating.SuccessPoints -= 1;
-                var customerPos = EntityManager.GetComponentObject<TransformView>(customerUiView.CustomerEntity).Value.position;
+                var customerPos = EntityManager.GetComponentObject<TransformView>(customerUiView.CustomerEntity).Value
+                    .position;
                 var profitUiPosition = customerPos;
 
-                profitUiPosition.y += 2f;
-                
+                profitUiPosition.y += CustomerAnimationConstants.ProfitOffsetY;
+
                 var spawnProfitUiEntity = EntityManager.CreateEntity();
-                
+
                 EntityManager.AddComponentObject(spawnProfitUiEntity,
                     new SpawnProfitUi
-                    { 
-                        Type = ProfitUiType.Displase, 
-                        Point = profitUiPosition, 
-                        Text = "-" + 1 
+                    {
+                        Type = ProfitUiType.Displase,
+                        Point = profitUiPosition,
+                        Text = "-" + 1
                     });
-
             }
-                        
+
             _storeRatingQuery.SetSingleton(storeRating);
-                        
-            EntityManager.AddComponent<SwearEmotionCustomer>(entity);
-                        
-            EntityManager.AddComponent<DissatisfiedCustomer>(customerUiView.CustomerEntity); 
 
-            /*if (EntityManager.HasComponent<WaitTime>(customerUiView.CustomerEntity))
-            {
-                EntityManager.RemoveComponent<WaitTime>(customerUiView.CustomerEntity);
-            }
-            */
-                        
+            EntityManager.AddComponent<SwearEmotionCustomer>(entity);
+            EntityManager.AddComponent<DissatisfiedCustomer>(customerUiView.CustomerEntity);
+
             if (EntityManager.HasComponent<WaitingCustomer>(customerUiView.CustomerEntity))
             {
                 EntityManager.RemoveComponent<WaitingCustomer>(customerUiView.CustomerEntity);
             }
-                        
+
             EntityManager.AddComponentData(customerUiView.CustomerEntity,
                 new WaitTime { Current = CustomerAnimationConstants.AnimationSwearTime });
             EntityManager.RemoveComponent<WaitTimer>(entity);
@@ -140,24 +126,24 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
         private void FadeInEmotionCustomerUi(Entity entity, in CustomerUiView customerUiView)
         {
             customerUiView.Value.EnableFaceEmotion();
-
             var customerTransform =
                 EntityManager.GetComponentObject<TransformView>(customerUiView.CustomerEntity).Value;
             var customerPos = customerTransform.position;
             var vector = customerPos;
-
-            vector.y += 6f;
-            customerPos.y += 2.2f;
+            const float fadeEmotionDelay = CustomerAnimationConstants.FadeEmotionDelay;
+            
+            vector.y += CustomerAnimationConstants.CustomerProductImageOffsetY;
+            customerPos.y += CustomerAnimationConstants.ProfitOffsetY;
             customerUiView.Value.FaceEmotionImage.rectTransform.position = customerPos;
             customerUiView.Value.CanvasGroupFaceEmotion.alpha = 1f;
             customerUiView.Value.FaceEmotionImage.fillAmount = 1f;
-            customerUiView.Value.FaceEmotionImage.rectTransform.DOMove(vector, 3f).SetDelay(.2f);
+            customerUiView.Value.FaceEmotionImage.rectTransform.DOMove(vector, CustomerAnimationConstants.FadeEmotionDuration).SetDelay(fadeEmotionDelay);
 
             if (EntityManager.HasComponent<SwearEmotionCustomer>(entity))
             {
                 customerUiView.Value.FaceEmotionImage.overrideSprite =
                     customerUiView.Value.FaceEmotionSprites.Swears;
-                customerUiView.Value.CanvasGroupFaceEmotion.DOFade(0f, 1f).SetDelay(.2f)
+                customerUiView.Value.CanvasGroupFaceEmotion.DOFade(0f, 1f).SetDelay(fadeEmotionDelay)
                     .OnComplete(customerUiView.RemoveSwearCustomerAnimation);
                 EntityManager.AddComponent<SwearEmotionAnimation>(entity);
             }
@@ -169,13 +155,12 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
 
             customerUiView.Value.FaceEmotionImage.overrideSprite =
                 customerUiView.Value.FaceEmotionSprites.Pleased;
-            customerUiView.Value.CanvasGroupFaceEmotion.DOFade(0f, 1f).SetDelay(.2f)
+            customerUiView.Value.CanvasGroupFaceEmotion.DOFade(0f, 1f).SetDelay(fadeEmotionDelay)
                 .OnComplete(customerUiView.RemovePleasedCustomerAnimation);
             EntityManager.AddComponent<PleasedEmotionAnimation>(entity);
         }
-
-
-        private void ChangeCustomerUiPosition(Entity entity , CustomerUiView customerUiView)
+        
+        private void ChangeCustomerUiPosition(CustomerUiView customerUiView)
         {
             var cameraEntity = _mainCameraQuery.ToEntityArray(Allocator.Temp)[0];
             var mainCamera = EntityManager.GetComponentObject<CameraView>(cameraEntity);
@@ -183,29 +168,30 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
             customerUiView.Value.transform.LookAt(
                 customerUiView.Value.transform.position + mainCamera.Value.transform.rotation * Vector3.forward,
                 mainCamera.Value.gameObject.transform.rotation * Vector3.up);
-
-
+            
             var isShowProduct1 = customerUiView.Value.Product1Image.IsActive();
             var isShowProduct2 = customerUiView.Value.Product2Image.IsActive();
             var isShowEmotion = customerUiView.Value.FaceEmotionImage.IsActive();
-
             var product1Transform = customerUiView.Value.Product1Image.rectTransform;
             var product2Transform = customerUiView.Value.Product2Image.rectTransform;
             var emotionTransform = customerUiView.Value.FaceEmotionImage.rectTransform;
 
-            if (isShowProduct1 && !isShowProduct2 && !isShowEmotion)
+            switch (isShowProduct1)
             {
-                if (customerUiView.Value.Product1Image.sprite.packed)
+                case true when !isShowProduct2 && !isShowEmotion:
                 {
-                    product1Transform.anchoredPosition = new Vector3(0f, 0f, 0f);
-                    product1Transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-                }
-            }
+                    if (customerUiView.Value.Product1Image.sprite.packed)
+                    {
+                        product1Transform.anchoredPosition = new Vector3(0f, 0f, 0f);
+                        product1Transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+                    }
 
-            if (!isShowProduct1 && isShowProduct2 && !isShowEmotion)
-            {
-                product2Transform.anchoredPosition = new Vector3(0, 0, 0);
-                product2Transform.localScale = new Vector3(1f, 1f, 1f);
+                    break;
+                }
+                case false when isShowProduct2 && !isShowEmotion:
+                    product2Transform.anchoredPosition = new Vector3(0, 0, 0);
+                    product2Transform.localScale = new Vector3(1f, 1f, 1f);
+                    break;
             }
 
             if (isShowProduct1 && isShowProduct2 && !isShowEmotion)
@@ -216,54 +202,59 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
                 product2Transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
             }
 
-            if (isShowProduct1 && isShowProduct2 && isShowEmotion)
+            switch (isShowProduct1)
             {
-                emotionTransform.anchoredPosition = new Vector3(1.4f, 20.87f, 0f);
-                emotionTransform.localScale = new Vector3(1f, 1f, 1f);
-                product1Transform.anchoredPosition = new Vector3(27.6f, 0, 0);
-                product1Transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-                product2Transform.anchoredPosition = new Vector3(-26.33f, -2.5f, 0);
-                product2Transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+                case true when isShowProduct2 && isShowEmotion:
+                    emotionTransform.anchoredPosition = new Vector3(1.4f, 20.87f, 0f);
+                    emotionTransform.localScale = new Vector3(1f, 1f, 1f);
+                    product1Transform.anchoredPosition = new Vector3(27.6f, 0, 0);
+                    product1Transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+                    product2Transform.anchoredPosition = new Vector3(-26.33f, -2.5f, 0);
+                    product2Transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+                    break;
+                case false when isShowProduct2 &&
+                                isShowEmotion:
+                    emotionTransform.anchoredPosition = new Vector3(-8.1f, 20.87f, 0f);
+                    emotionTransform.localScale = new Vector3(1f, 1f, 1f);
+                    product2Transform.anchoredPosition = new Vector3(23.72f, -2.5f, 0);
+                    product2Transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+                    break;
             }
 
-            if (!isShowProduct1 && isShowProduct2 &&
-                isShowEmotion)
+            if (!isShowProduct1 || isShowProduct2 ||
+                !isShowEmotion)
             {
-                emotionTransform.anchoredPosition = new Vector3(-8.1f, 20.87f, 0f);
-                emotionTransform.localScale = new Vector3(1f, 1f, 1f);
-                product2Transform.anchoredPosition = new Vector3(23.72f, -2.5f, 0);
-                product2Transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+                return;
             }
 
-            if (isShowProduct1 && !isShowProduct2 &&
-                isShowEmotion)
-            {
-                emotionTransform.anchoredPosition = new Vector3(-8.1f, 20.87f, 0f);
-                emotionTransform.localScale = new Vector3(1f, 1f, 1f);
-                product1Transform.anchoredPosition = new Vector3(22.39f, 0f, 0);
-                product1Transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-            }
+            emotionTransform.anchoredPosition = new Vector3(-8.1f, 20.87f, 0f);
+            emotionTransform.localScale = new Vector3(1f, 1f, 1f);
+            product1Transform.anchoredPosition = new Vector3(22.39f, 0f, 0);
+            product1Transform.localScale = new Vector3(0.7f, 0.7f, 1f);
         }
 
-        private void ChangeCustomerUi(Entity entity, in CustomerUiView customerUiView,in StartWaitTime startWaitTime,
-            in WaitTime waitTime)
+        private void ChangeCustomerUi(Entity entity, in CustomerUiView customerUiView, in WaitTime waitTime)
         {
             var cameraEntity = _mainCameraQuery.ToEntityArray(Allocator.Temp)[0];
             var mainCamera = EntityManager.GetComponentObject<CameraView>(cameraEntity);
             var customerAnimator = EntityManager.GetComponentObject<AnimatorView>(customerUiView.CustomerEntity).Value;
 
-            customerUiView.Value.transform.LookAt(customerUiView.Value.transform.position + mainCamera.Value.transform.rotation * Vector3.forward, mainCamera.Value.gameObject.transform.rotation * Vector3.up);
+            var randomIdle = CustomerAnimationConstants.RandomIdle;
+            const float transitionIdleAnimationSpeed = CustomerAnimationConstants.TransitionIdleAnimationSpeed;
             
+            customerUiView.Value.transform.LookAt(
+                customerUiView.Value.transform.position + mainCamera.Value.transform.rotation * Vector3.forward,
+                mainCamera.Value.gameObject.transform.rotation * Vector3.up);
+
             switch (waitTime.Current)
             {
                 case <= 5:
                 {
-                    
-                    var currentIdle = customerAnimator.GetFloat(CustomerAnimationConstants.RandomIdle);
+                    var currentIdle = customerAnimator.GetFloat(randomIdle);
                     var transitionAnimation = Mathf.Lerp(currentIdle, CustomerAnimationConstants.Idle4,
-                        CustomerAnimationConstants.TransitionIdleAnimationSpeed * World.Time.DeltaTime);
-                        
-                    customerAnimator.SetFloat(CustomerAnimationConstants.RandomIdle, transitionAnimation);
+                        transitionIdleAnimationSpeed * World.Time.DeltaTime);
+
+                    customerAnimator.SetFloat(randomIdle, transitionAnimation);
 
                     if (EntityManager.HasComponent<ShowProductImage>(entity))
                     {
@@ -272,13 +263,13 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
 
                     var customerOrderProducts =
                         EntityManager.GetComponentObject<CustomerProduct>(customerUiView.CustomerEntity).Products;
-                    
 
-                    if (!CheckProductStock(customerOrderProducts, out HashSet<ProductType> missingProducts))
+
+                    if (!CheckProductStock(customerOrderProducts, out var missingProducts))
                     {
                         return;
                     }
-                        
+
                     var missingProductList = missingProducts.ToList();
 
                     if (missingProducts.Count > 0)
@@ -289,35 +280,40 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
                             SetImage(customerUiView, product, i);
                         }
                     }
+
                     EntityManager.AddComponent<ShowProductImage>(entity);
                     return;
                 }
+
                 case <= 10:
                 {
-                    var currentIdle = customerAnimator.GetFloat(CustomerAnimationConstants.RandomIdle);
+                    var currentIdle = customerAnimator.GetFloat(randomIdle);
                     var transitionAnimation = Mathf.Lerp(currentIdle, CustomerAnimationConstants.Idle3,
-                        CustomerAnimationConstants.TransitionIdleAnimationSpeed * World.Time.DeltaTime);
-                    customerAnimator.SetFloat(CustomerAnimationConstants.RandomIdle, transitionAnimation);
+                        transitionIdleAnimationSpeed * World.Time.DeltaTime);
+                    customerAnimator.SetFloat(randomIdle, transitionAnimation);
                     return;
                 }
+
                 case <= 15:
                 {
-                    var currentIdle = customerAnimator.GetFloat(CustomerAnimationConstants.RandomIdle);
+                    var currentIdle = customerAnimator.GetFloat(randomIdle);
                     var transitionAnimation = Mathf.Lerp(currentIdle, CustomerAnimationConstants.Idle2,
-                        CustomerAnimationConstants.TransitionIdleAnimationSpeed * World.Time.DeltaTime);
-                    customerAnimator.SetFloat(CustomerAnimationConstants.RandomIdle, transitionAnimation);
+                        transitionIdleAnimationSpeed * World.Time.DeltaTime);
+                    customerAnimator.SetFloat(randomIdle, transitionAnimation);
                     return;
                 }
+
                 case <= 20:
                 {
-                    var currentIdle = customerAnimator.GetFloat(CustomerAnimationConstants.RandomIdle);
+                    var currentIdle = customerAnimator.GetFloat(randomIdle);
                     var transitionAnimation = Mathf.Lerp(currentIdle, CustomerAnimationConstants.Idle1,
-                        CustomerAnimationConstants.TransitionIdleAnimationSpeed * World.Time.DeltaTime);
-                    customerAnimator.SetFloat(CustomerAnimationConstants.RandomIdle, transitionAnimation);
+                        transitionIdleAnimationSpeed * World.Time.DeltaTime);
+                    customerAnimator.SetFloat(randomIdle, transitionAnimation);
                     return;
                 }
+
                 default:
-                    customerAnimator.SetFloat(CustomerAnimationConstants.RandomIdle, CustomerAnimationConstants.Idle0);
+                    customerAnimator.SetFloat(randomIdle, CustomerAnimationConstants.Idle0);
                     break;
             }
         }
@@ -325,7 +321,6 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
         private void SetImage(CustomerUiView customerUiView, ProductType product, int numberProduct)
         {
             var productsConfig = EntityUtilities.GetProductConfig().Products;
-            
             var productSprite = productsConfig.FirstOrDefault(sprite =>
                 sprite.ProductType == product ).Visual;
 
@@ -348,6 +343,7 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
                     break;
             }
         }
+        
         private void StartProductImageAnimation(Graphic image, CanvasGroup canvasGroup)
         {
             var targetPosition = image.rectTransform.position; ;

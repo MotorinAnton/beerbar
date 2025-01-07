@@ -188,10 +188,8 @@ namespace Core.Authoring.Customers.Systems
 
             if (freePurchasePoints.Count > 0)
             {
-                
                 result = freePurchasePoints.Min();
                 return true;
-
             }
             
             result = result = customerIndex.Value;
