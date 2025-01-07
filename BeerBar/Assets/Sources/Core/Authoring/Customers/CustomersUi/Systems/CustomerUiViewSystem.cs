@@ -102,7 +102,7 @@ namespace Core.Authoring.Customers.CustomersUi.Systems
                 EntityManager.AddComponentObject(spawnProfitUiEntity,
                     new SpawnProfitUi
                     {
-                        Type = ProfitUiType.Displase,
+                        Profit = false,
                         Point = profitUiPosition,
                         Text = "-" + 1
                     });

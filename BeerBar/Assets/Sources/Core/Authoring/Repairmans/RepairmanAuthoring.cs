@@ -37,6 +37,5 @@ namespace Core.Authoring.Repairmans
     public class OrderRepairman : IComponentData 
     {
         public List<Entity> RepairObjectList;
-        
     }
 }

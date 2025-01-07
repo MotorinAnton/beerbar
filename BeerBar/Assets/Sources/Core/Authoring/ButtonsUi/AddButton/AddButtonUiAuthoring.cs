@@ -9,11 +9,10 @@ namespace Core.Authoring.ButtonsUi.AddButton
 {
     public class AddButtonUiAuthoring : EntityBehaviour
     {
-        [SerializeField]
-        private Button _addButton;
+        [SerializeField] private Button _addButton;
         public Button AddButton => _addButton;
-        
-        
+
+
         private void Start()
         {
             _addButton.onClick.AddListener(AddButtonClicked);
@@ -24,7 +23,7 @@ namespace Core.Authoring.ButtonsUi.AddButton
             EntityUtilities.AddOneFrameComponent<Clicked>(Entity);
         }
     }
-    
+
     public class SpawnAddButtonUi : IComponentData
     {
         public AddButtonUiAuthoring AddButtonUiPrefab;
@@ -32,7 +31,7 @@ namespace Core.Authoring.ButtonsUi.AddButton
         public Up UpData;
         public int IndexLevelUpFX;
     }
-    
+
     public class AddButtonUiView : IComponentData
     {
         public AddButtonUiAuthoring AddButtonUiAuthoring;

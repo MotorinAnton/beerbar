@@ -17,7 +17,7 @@ using Container = Core.Authoring.Containers.Container;
 namespace Core.Authoring.ButtonsUi.AddButton.Systems
 {
     [RequireMatchingQueriesForUpdate]
-    
+
     public partial class AddButtonUiViewSystem : SystemBase
     {
         private EntityQuery _bankQuery;
@@ -39,25 +39,22 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
 
         protected override void OnUpdate()
         {
-            Entities.WithAll< AddButtonUiView>()
+            Entities.WithAll<AddButtonUiView>()
                 .ForEach((Entity entity, in AddButtonUiView addButtonUiView) =>
                 {
-                    CheckAvailableAddButton(entity ,addButtonUiView);
-                    
+                    CheckAvailableAddButton(entity, addButtonUiView);
                 }).WithoutBurst().WithStructuralChanges().Run();
-            
+
             Entities.WithAll<Container, AddButtonUiView>().WithAll<Clicked>()
                 .ForEach((Entity entity, in AddButtonUiView addButtonUiView) =>
                 {
                     SpawnContainer(entity, addButtonUiView, 1);
-                    
                 }).WithoutBurst().WithStructuralChanges().Run();
 
             Entities.WithAll<Table, AddButtonUiView>().WithAll<Clicked>()
                 .ForEach((Entity entity, in AddButtonUiView addButtonUiView) =>
                 {
                     SpawnTable(entity, addButtonUiView, 1);
-                    
                 }).WithoutBurst().WithStructuralChanges().Run();
         }
 
@@ -73,10 +70,10 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
                 var container =
                     config.ContainersData.FirstOrDefault(container =>
                         container.Level == 1 && container.Type == spawnPointData.Type);
-                
+
                 price = container.Price;
             }
-            
+
             if (EntityManager.HasComponent<Table>(entity))
             {
                 var config = EntityUtilities.GetTableConfig();
@@ -85,10 +82,10 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
                         container.Level == 1);
                 price = table.Price;
             }
-            
+
             AddButtonAvailability(addButtonUiView, price);
         }
-        
+
 
         private void SpawnContainer(Entity entity, AddButtonUiView addButtonUiView, int level)
         {
@@ -101,7 +98,7 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
             {
                 level = EntityManager.GetComponentData<SpillLevelContainer>(entity).Value;
             }
-            
+
             var container =
                 config.ContainersData.First(container =>
                     container.Level == level && container.Type == spawnPointData.Type);
@@ -111,16 +108,16 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
                 EntityManager.RemoveComponent<Clicked>(entity);
                 return;
             }
-            
+
             var spawnPoint = spawnPointData.SpawnPoint;
             var customerPoints = EntityManager.GetBuffer<CustomerContainerPoint>(addButtonUiView.SpawnPointEntity)
                 .ToNativeArray(Allocator.Temp);
             var barmanPoints = EntityManager.GetBuffer<BarmanContainerPoint>(addButtonUiView.SpawnPointEntity)
                 .ToNativeArray(Allocator.Temp);
             var spawnContainerEntity = EntityManager.CreateEntity();
-                
+
             bank.ValueRW.Coins -= container.Price;
-            
+
             EntityManager.AddComponentObject(spawnContainerEntity, new SpawnContainer
             {
                 Prefab = container.Prefab,
@@ -131,18 +128,15 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
                 CustomerContainerPoints = customerPoints,
                 BarmanContainerPoints = barmanPoints
             });
-                
-            AddCompletedUp(addButtonUiView.UpData);
-                
-            var warehouseProduct = _warehouseProductQuery.ToEntityArray(Allocator.Temp);
-                
-            var productConfig = EntityUtilities.GetGameConfig().ProductConfig.Products;
 
+            AddCompletedUp(addButtonUiView.UpData);
+
+            var warehouseProduct = _warehouseProductQuery.ToEntityArray(Allocator.Temp);
+            var productConfig = EntityUtilities.GetGameConfig().ProductConfig.Products;
             var newProduct = productConfig.FirstOrDefault(product =>
                 product.ProductType == container.Type && product.Level == container.Level);
-
             var availableInStock = false;
-                
+
             foreach (var productEntity in warehouseProduct)
             {
                 var product = EntityManager.GetComponentData<WarehouseProduct>(productEntity).ProductData;
@@ -154,11 +148,11 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
 
             if (!availableInStock)
             {
-                AddProduct(new ProductData 
+                AddProduct(new ProductData
                 {
                     ProductType = container.Type,
                     Level = container.Level,
-                    Count = 1000 ,
+                    Count = 1000,
                     PurchaseCost = newProduct.PurchaseCost,
                     SellPrice = newProduct.SellPrice
                 });
@@ -166,7 +160,7 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
 
             EntityManager.AddComponent<Destroyed>(entity);
         }
-        
+
         private void SpawnTable(Entity entity, AddButtonUiView addButtonUiView, int level)
         {
             var bank = _bankQuery.GetSingletonRW<Bank>();
@@ -175,12 +169,13 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
             var table =
                 tableConfig.TablesData.First(configTable =>
                     configTable.Level == level);
-            
+
             if (bank.ValueRW.Coins < table.Price)
             {
                 EntityManager.RemoveComponent<Clicked>(entity);
                 return;
             }
+
             var spawnPointData =
                 EntityManager.GetComponentData<SpawnPointTable>(addButtonUiView.SpawnPointEntity);
             var spawnPoint = spawnPointData.SpawnPoint;
@@ -195,14 +190,14 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
             bank.ValueRW.Coins -= table.Price;
             EntityManager.AddComponentObject(spawnTableEntity, new SpawnTable
             {
-                Prefab = table.Prefab, 
-                Level = table.Level, 
-                SpawnPoint = spawnPoint, 
+                Prefab = table.Prefab,
+                Level = table.Level,
+                SpawnPoint = spawnPoint,
                 CleanTablePoint = cleanTablePoint,
                 AtTablePoints = atTablePoints,
-                OnTablePoints = onTablePoints, 
+                OnTablePoints = onTablePoints,
                 QuantityAtTablePoints = table.QuantityAtTablePoints,
-                IndexLevelUpFx = addButtonUiView.IndexLevelUpFX, 
+                IndexLevelUpFx = addButtonUiView.IndexLevelUpFX,
                 ClearArrow = gameConfig.ClearArrow,
                 RepairArrow = gameConfig.RepairArrow
             });
@@ -215,14 +210,14 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
         private void AddButtonAvailability(AddButtonUiView addButtonUiView, int tablePrise)
         {
             var bank = _bankQuery.GetSingleton<Bank>();
-           
-            if(bank.Coins < tablePrise)
+
+            if (bank.Coins < tablePrise)
             {
                 addButtonUiView.AddButtonUiAuthoring.AddButton.image.color = Color.gray;
                 addButtonUiView.AddButtonUiAuthoring.AddButton.enabled = false;
                 return;
             }
-            
+
             addButtonUiView.AddButtonUiAuthoring.AddButton.image.color = Color.cyan;
             addButtonUiView.AddButtonUiAuthoring.AddButton.enabled = true;
         }
@@ -235,7 +230,7 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
             completedUp.Add(upData);
             availableUp.Remove(upData);
         }
-        
+
         private void AddProduct(ProductData productData)
         {
             var warehouseProductEntity = EntityManager.CreateEntity();
@@ -244,7 +239,6 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
                 ProductData = productData
             });
 
-            //TODO: Refactor name
             EntityManager.SetName(warehouseProductEntity,
                 $"WarehouseProduct {productData.ProductType} {productData.Level}");
         }

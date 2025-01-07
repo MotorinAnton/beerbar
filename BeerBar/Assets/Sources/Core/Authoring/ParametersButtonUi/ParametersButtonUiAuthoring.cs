@@ -21,7 +21,7 @@ namespace Core.Authoring.ParametersButtonUi
             _button.onClick.AddListener(() => EntityUtilities.AddOneFrameComponent<Clicked>(Entity));
         }
     }
-
+    
     public struct ParametersButtonUi : IComponentData { }
 
     public class SpawnParametersButtonUi : IComponentData

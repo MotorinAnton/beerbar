@@ -32,7 +32,6 @@ namespace Core.Authoring.Repairmans
                         Electricity = authoring._repairPointElectrocity.position,
                         Tube = authoring._repairPointTube.position
                     });
-
             }
         }
     }

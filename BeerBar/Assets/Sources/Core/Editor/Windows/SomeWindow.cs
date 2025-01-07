@@ -61,10 +61,10 @@ namespace Core.Editor.Windows
 
         // Invokes on CurrentRating value changing.
         // ReSharper disable once UnusedMember.Global
-        private void UpdateCurrentRating()
-        {
-            _storeRatingSystem.SetRating(CurrentRating);
-        }
+        // private void UpdateCurrentRating()
+        // {
+        //     _storeRatingSystem.SetRating(CurrentRating);
+        // }
     }
 
     public class SomeType

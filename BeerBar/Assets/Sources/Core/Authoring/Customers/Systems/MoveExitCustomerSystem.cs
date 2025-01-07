@@ -572,7 +572,7 @@ namespace Core.Authoring.Customers.Systems
             var spawnProfitUiEntity = EntityManager.CreateEntity();
             EntityManager.AddComponentObject(spawnProfitUiEntity,
                 new SpawnProfitUi
-                    { Type = ProfitUiType.Displase, Point = profitUiPosition, Text = "-" + 1 });
+                    { Profit = false, Point = profitUiPosition, Text = "-" + 1 });
         }
         
 
@@ -621,7 +621,7 @@ namespace Core.Authoring.Customers.Systems
                     var spawnProfitUiEntity = EntityManager.CreateEntity();
                     EntityManager.AddComponentObject(spawnProfitUiEntity,
                         new SpawnProfitUi
-                            { Type = ProfitUiType.Profit, Point = profitUiPosition, Text = "+" + 1 * tableLevel });
+                            { Profit = true, Point = profitUiPosition, Text = "+" + 1 * tableLevel });
                  
                     var bank = _bankQuery.GetSingleton<Bank>();
                     bank.Coins += 1 * tableLevel ;

@@ -17,16 +17,11 @@ namespace Core.Authoring.EventObjects.Systems
     [RequireMatchingQueriesForUpdate]
     public partial class BreakdownEventObjectSystem : SystemBase
     {
-        private EntityQuery _electricityQuery;
         private EntityQuery _repairmanQuery;
         private EntityQuery _breakdownPointsQuery;
-
-
+        
         protected override void OnCreate()
         {
-            using var electricityBuilder = new EntityQueryBuilder(Allocator.Persistent);
-            _electricityQuery = electricityBuilder.WithAll<Electricity>().WithNone<ElectricityView>().Build(this);
-
             using var repairmanBuilder = new EntityQueryBuilder(Allocator.Persistent);
             _repairmanQuery = repairmanBuilder.WithAll<Repairman, RepairmanView>().Build(this);
 
@@ -37,25 +32,17 @@ namespace Core.Authoring.EventObjects.Systems
         protected override void OnUpdate()
         {
             Entities.WithAll<Tube, Clicked>().WithNone<Breakdown>().ForEach(
-                (Entity entity) =>
-                {
-                    EntityManager.RemoveComponent<Clicked>(entity);
+                    (Entity entity) => { EntityManager.RemoveComponent<Clicked>(entity); }).WithoutBurst()
+                .WithStructuralChanges().Run();
 
-                }).WithoutBurst().WithStructuralChanges().Run();
-
-            
             Entities.WithAll<Electricity, Clicked>().WithNone<Breakdown>().ForEach(
-                (Entity entity) =>
-                {
-                    EntityManager.RemoveComponent<Clicked>(entity);
+                    (Entity entity) => { EntityManager.RemoveComponent<Clicked>(entity); }).WithoutBurst()
+                .WithStructuralChanges().Run();
 
-                }).WithoutBurst().WithStructuralChanges().Run();
-            
             Entities.WithAll<Breakdown, Clicked>().WithNone<BreakBottleEntity, LossWalletEntity, Table>()
                 .ForEach((Entity entity) =>
                 {
                     CreateRepairOrder(entity);
-                    
                 }).WithoutBurst().WithStructuralChanges()
                 .Run();
 
@@ -64,25 +51,26 @@ namespace Core.Authoring.EventObjects.Systems
                 {
                     SetProgressPipeLeak(entity, tubeView, waitTime, startWaitTime);
                 }).WithoutBurst().WithStructuralChanges().Run();
-
-
+            
             Entities.WithAll<Table, UpgradeAndEvenButtonUiView>().WithAll<EventButtonClicked>().ForEach(
-                (Entity entity, in UpgradeAndEvenButtonUiView upgradeAndEvenButtonUiView) =>
+                (in UpgradeAndEvenButtonUiView upgradeAndEvenButtonUiView) =>
                 {
                     if (EntityManager.HasComponent<Breakdown>(upgradeAndEvenButtonUiView.ObjectEntity))
                     {
                         CreateRepairOrder(upgradeAndEvenButtonUiView.ObjectEntity);
                     }
-
+                    
                 }).WithoutBurst().WithStructuralChanges().Run();
-            
-            Entities.WithAll<Tube>().WithNone<TubeView>().ForEach((Entity entity) => { SpawnBreakdownTube(entity); })
+
+            Entities.WithAll<Tube>().WithNone<TubeView>().ForEach((Entity entity) =>
+                {
+                    SpawnBreakdownTube(entity);
+                })
                 .WithoutBurst().WithStructuralChanges().Run();
-            
+
             Entities.WithAll<Electricity>().WithNone<ElectricityView>().ForEach((Entity entity) =>
             {
                 SpawnBreakdownElectricity(entity);
-                
             }).WithoutBurst().WithStructuralChanges().Run();
         }
 
@@ -97,10 +85,9 @@ namespace Core.Authoring.EventObjects.Systems
 
             var repairmanEntity = _repairmanQuery.ToEntityArray(Allocator.Temp)[0];
             var orders = EntityManager.GetComponentObject<OrderRepairman>(repairmanEntity);
-            
             var repairArrow = EntityManager.GetComponentObject<RepairMovementArrowView>(breakdownEntity).Arrow;
-                        repairArrow.EnableArrow();
-            
+            repairArrow.EnableArrow();
+
             EntityManager.RemoveComponent<Clicked>(breakdownEntity);
 
             if (orders.RepairObjectList.Contains(breakdownEntity))
@@ -130,14 +117,14 @@ namespace Core.Authoring.EventObjects.Systems
                 breakdownPoints.Electricity.Rotation);
 
             EntityManager.AddComponentObject(entity, new ElectricityView { Value = electricityView });
-            
+
             foreach (var particle in electricityView.Particles)
             {
                 particle.Stop();
             }
 
             AddRepairMovementArrow(electricityView.transform, entity);
-            
+
             electricityView.Initialize(EntityManager, entity);
         }
 
@@ -148,8 +135,6 @@ namespace Core.Authoring.EventObjects.Systems
             var eventObject = config.EventObjectConfig.TubePrefab;
             var tubeView =
                 Object.Instantiate(eventObject, breakdownPoints.Tube.Position, breakdownPoints.Tube.Rotation);
-            
-            EntityManager.AddComponentObject(entity, new TubeView { Value = tubeView });
 
             tubeView.ProgressMeshRenderers[0].gameObject.SetActive(true);
             tubeView.ProgressMeshRenderers[0].material.SetFloat(BreakdownObjectConstants.PipeLeak, 0f);
@@ -160,50 +145,52 @@ namespace Core.Authoring.EventObjects.Systems
                 particle.Stop();
             }
 
+            EntityManager.AddComponentObject(entity, new TubeView { Value = tubeView });
             AddRepairMovementArrow(tubeView.transform, entity);
 
             tubeView.Initialize(EntityManager, entity);
         }
-        
-        private void SetProgressPipeLeak(Entity entity ,TubeView tubeView, in WaitTime waitTime, in StartWaitTime startWaitTime)
+
+        private void SetProgressPipeLeak(Entity entity, TubeView tubeView, in WaitTime waitTime,
+            in StartWaitTime startWaitTime)
         {
             float progress;
-            
+
             if (EntityManager.HasComponent<Breakdown>(entity))
-            { 
+            {
                 var step = waitTime.Current / startWaitTime.Start;
                 progress = 1f - step;
                 tubeView.Value.ProgressMeshRenderers[0].material.SetFloat(BreakdownObjectConstants.PipeLeak, progress);
                 return;
             }
-            
+
             progress = waitTime.Current / startWaitTime.Start;
             tubeView.Value.ProgressMeshRenderers[0].material.SetFloat(BreakdownObjectConstants.PipeLeak, progress);
         }
-        
+
         private void AddRepairMovementArrow(Transform parentTransform, Entity entity)
         {
             var config = EntityUtilities.GetGameConfig();
             var arrowPoint = parentTransform.position;
-      
+
             arrowPoint.y += BreakdownObjectConstants.MovementArrowTubeOffset;
 
             if (EntityManager.HasComponent<Tube>(entity))
             {
                 arrowPoint.x -= BreakdownObjectConstants.MovementArrowTubeOffset;
             }
-            
+
             if (EntityManager.HasComponent<Electricity>(entity))
             {
-                
+
                 arrowPoint.y += BreakdownObjectConstants.MovementArrowElectricityOffset;
                 arrowPoint.z += BreakdownObjectConstants.MovementArrowElectricityOffset;
             }
 
-            var repairArrow = Object.Instantiate(config.RepairArrow, arrowPoint, parentTransform.rotation, parentTransform);
-            //repairArrow.transform.SetParent(parentTransform);
+            var repairArrow =
+                Object.Instantiate(config.RepairArrow, arrowPoint, parentTransform.rotation, parentTransform);
             repairArrow.gameObject.SetActive(false);
-            EntityManager.AddComponentObject(entity, new RepairMovementArrowView { Arrow = repairArrow});
+            EntityManager.AddComponentObject(entity, new RepairMovementArrowView { Arrow = repairArrow });
         }
     }
 }

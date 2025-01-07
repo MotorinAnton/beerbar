@@ -32,15 +32,17 @@ namespace Core.Authoring.Products
         public ContainerUiAuthoring IndicatorQuantityProduct2;
 
 
-        public void CurrentProductIndicatorQuantity(ContainerUiAuthoring indicatorQuantityUi, int productCount, int lowCount)
+        public static void CurrentProductIndicatorQuantity(ContainerUiAuthoring indicatorQuantityUi, int productCount, int lowCount)
         {
             if (productCount == 0)
             {
                 indicatorQuantityUi.gameObject.SetActive(true);
+                
                 if (indicatorQuantityUi.LowImage.gameObject.activeInHierarchy)
                 {
                     indicatorQuantityUi.LowImage.gameObject.SetActive(false);
                 }
+                
                 indicatorQuantityUi.ItsOverImage.gameObject.SetActive(true);
                 return;
             }
@@ -48,10 +50,12 @@ namespace Core.Authoring.Products
             if (productCount <= lowCount)
             {
                 indicatorQuantityUi.gameObject.SetActive(true);
+                
                 if (indicatorQuantityUi.ItsOverImage.gameObject.activeInHierarchy)
                 {
                     indicatorQuantityUi.ItsOverImage.gameObject.SetActive(false);
                 }
+                
                 indicatorQuantityUi.LowImage.gameObject.SetActive(true);
                 return;
             }
