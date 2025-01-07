@@ -123,13 +123,11 @@ namespace Core.Authoring.Customers.Systems
             foreach (var customerEntity in waitingFreePointCustomerEntityArray)
             {
                 var customerView = EntityManager.GetComponentObject<CustomerView>(customerEntity).Value;
-                var transform = EntityManager.GetComponentObject<TransformView>(customerEntity).Value;
                 var animator = EntityManager.GetComponentObject<AnimatorView>(customerEntity).Value;
-                var audioSource = EntityManager.GetComponentObject<AudioSourceView>(customerEntity).Value;
                 var indexCustomer = EntityManager.GetComponentData<IndexMovePoint>(customerEntity).Value;
                 var rowCount = purchaseQueuePoints.Select(point => point.Row).ToHashSet().Count;
-                var column = indexCustomer / rowCount; // column
-                var row = indexCustomer % rowCount; // row
+                var column = indexCustomer / rowCount;
+                var row = indexCustomer % rowCount;
                 var targetRotationPoint = barmanCashPoints[row].Position;
                 
                 customerView.TurningCharacterToPoint(targetRotationPoint);
@@ -138,6 +136,7 @@ namespace Core.Authoring.Customers.Systems
                 {
                     continue;
                 }
+                
                 EntityManager.AddComponent<PhraseSayCustomer>(customerEntity);
                 animator.SetBool(CustomerAnimationConstants.CashIdle, true);
                 
@@ -201,7 +200,6 @@ namespace Core.Authoring.Customers.Systems
                 var randomPhrase = Random.Range(0, customerView.Dialogs.SwearsQueue.Length);
                 
                 phraseUiManager.EventPanel.SetPhrasePanelUiComponent(customerView.Dialogs.SwearsQueue[randomPhrase], customerView.Avatar);
-                        
                 phraseUiManager.StartEventPanelTween();
             } 
         }
@@ -236,25 +234,7 @@ namespace Core.Authoring.Customers.Systems
                 var phraseUiManagerEntity = _phraseUiManager.ToEntityArray(Allocator.Temp)[0];
                 var phraseUiManagerView =
                     EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity);
-                var phraseUiManager =
-                    EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity)
-                        .PhraseCustomerUiManager;
-
                 phraseUiManagerView.CustomerList.Remove(customerEntity);
-                
-        
-                /*foreach (var panel in phraseUiManager.PhrasePanels)
-                {
-                    if (panel.Customer != customerEntity)
-                    {
-                        continue;
-                    }
-
-                    phraseUiManager.PanelFadeOut(panel);
-                    EntityManager.AddComponent<StartTweenPhraseCustomerUi>(phraseUiManagerEntity);
-                    phraseUiManagerView.CustomerList.Remove(customerEntity);
-                    return;
-                }*/
             }
         }
     }

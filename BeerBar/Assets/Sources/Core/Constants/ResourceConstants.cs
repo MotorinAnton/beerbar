@@ -8,6 +8,7 @@
         public const string CustomerConfig = nameof(CustomerConfig);
         public const string ProductKeeperConfig = nameof(ProductKeeperConfig);
         public const string RepairmanConfig = nameof(RepairmanConfig);
+        public const string CleanerConfig = nameof(CleanerConfig);
         public const string RandomEventConfig = nameof(RandomEventConfig);
         public const string ContainerConfig = nameof(ContainerConfig);
         public const string TableConfig = nameof(TableConfig);

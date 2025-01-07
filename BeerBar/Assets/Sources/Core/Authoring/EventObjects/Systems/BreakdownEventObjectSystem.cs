@@ -32,21 +32,32 @@ namespace Core.Authoring.EventObjects.Systems
 
             using var breakdownPointsBuilder = new EntityQueryBuilder(Allocator.Persistent);
             _breakdownPointsQuery = breakdownPointsBuilder.WithAll<BreakdownPoints>().Build(this);
-
         }
 
         protected override void OnUpdate()
         {
-            Entities.WithAll<Electricity>().WithNone<ElectricityView>().ForEach((Entity entity) =>
-            {
-                SpawnBreakdownElectricity(entity);
-            }).WithoutBurst().WithStructuralChanges().Run();
-
-            Entities.WithAll<Tube>().WithNone<TubeView>().ForEach((Entity entity) =>
+            Entities.WithAll<Tube, Clicked>().WithNone<Breakdown>().ForEach(
+                (Entity entity) =>
                 {
-                    SpawnBreakdownTube(entity);
-                })
-                .WithoutBurst().WithStructuralChanges().Run();
+                    EntityManager.RemoveComponent<Clicked>(entity);
+
+                }).WithoutBurst().WithStructuralChanges().Run();
+
+            
+            Entities.WithAll<Electricity, Clicked>().WithNone<Breakdown>().ForEach(
+                (Entity entity) =>
+                {
+                    EntityManager.RemoveComponent<Clicked>(entity);
+
+                }).WithoutBurst().WithStructuralChanges().Run();
+            
+            Entities.WithAll<Breakdown, Clicked>().WithNone<BreakBottleEntity, LossWalletEntity, Table>()
+                .ForEach((Entity entity) =>
+                {
+                    CreateRepairOrder(entity);
+                    
+                }).WithoutBurst().WithStructuralChanges()
+                .Run();
 
             Entities.WithAll<Tube, TubeView>().WithAll<StartWaitTime, WaitTime>().ForEach(
                 (Entity entity, in TubeView tubeView, in WaitTime waitTime, in StartWaitTime startWaitTime) =>
@@ -54,12 +65,6 @@ namespace Core.Authoring.EventObjects.Systems
                     SetProgressPipeLeak(entity, tubeView, waitTime, startWaitTime);
                 }).WithoutBurst().WithStructuralChanges().Run();
 
-            Entities.WithAll<Breakdown, Clicked>().WithNone<BreakBottleEntity, LossWalletEntity, Table>()
-                .ForEach((Entity entity) =>
-                {
-                    CreateRepairOrder(entity);
-                }).WithoutBurst().WithStructuralChanges()
-                .Run();
 
             Entities.WithAll<Table, UpgradeAndEvenButtonUiView>().WithAll<EventButtonClicked>().ForEach(
                 (Entity entity, in UpgradeAndEvenButtonUiView upgradeAndEvenButtonUiView) =>
@@ -70,6 +75,15 @@ namespace Core.Authoring.EventObjects.Systems
                     }
 
                 }).WithoutBurst().WithStructuralChanges().Run();
+            
+            Entities.WithAll<Tube>().WithNone<TubeView>().ForEach((Entity entity) => { SpawnBreakdownTube(entity); })
+                .WithoutBurst().WithStructuralChanges().Run();
+            
+            Entities.WithAll<Electricity>().WithNone<ElectricityView>().ForEach((Entity entity) =>
+            {
+                SpawnBreakdownElectricity(entity);
+                
+            }).WithoutBurst().WithStructuralChanges().Run();
         }
 
 

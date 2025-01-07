@@ -43,10 +43,7 @@ namespace Core.Constants
         public static FixedString64Bytes RootCanvasName = "RootCanvas";
         public static FixedString64Bytes TextProductTableUiName = "TextProductTableUi";
         public static FixedString64Bytes TVName = "TV";
-        public const float ServiceTime = 1f;
-        public const float TimeBeforeQueuing = 0.3f;
         public const float StoppingDistance = 0.5f;
-        public const float StoppingDistanceLookShowcase = 2f;
         public const int LevelUpRatingValue = 7;
     }
 }

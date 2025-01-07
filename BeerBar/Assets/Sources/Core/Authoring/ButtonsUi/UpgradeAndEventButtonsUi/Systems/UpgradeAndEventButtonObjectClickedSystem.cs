@@ -1,4 +1,5 @@
-﻿using Core.Authoring.SelectGameObjects;
+﻿using Core.Authoring.Containers;
+using Core.Authoring.SelectGameObjects;
 using Core.Components.Wait;
 using Core.Constants;
 using Unity.Collections;
@@ -30,6 +31,12 @@ namespace Core.Authoring.UpgradeAndEventButtonsUi.Systems
 
                     upgradeAndEventButtonView.EnableUpgradeAndEventButton();
                     upgradeAndEventButtonView.UpgradeAndEventButton.CreateFadeInSequence();
+                    
+                    if (EntityManager.HasComponent<Spill>(entity))
+                    {
+                        upgradeAndEventButtonView.UpgradeAndEventButton.UpgradeButton.gameObject.SetActive(false); 
+                    }
+                    
 
                     if (EntityManager.HasComponent<WaitTime>(entity))
                     {

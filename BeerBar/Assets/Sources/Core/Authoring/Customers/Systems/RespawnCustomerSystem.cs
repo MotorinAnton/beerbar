@@ -22,7 +22,7 @@ namespace Core.Authoring.Customers.Systems
         private EntityQuery _upCompletedQuery;
         
         private float _time;
-        private HashSet<CustomerConfigData> _usedConfigs = new ();
+        private readonly HashSet<CustomerConfigData> _usedConfigs = new ();
         
         protected override void OnCreate()
         {
@@ -59,7 +59,7 @@ namespace Core.Authoring.Customers.Systems
 
             _time += World.Time.DeltaTime;
 
-            if (!(_time >= 1f) || customerCount >= maxCustomers)
+            if (!(_time >= customerConfig.RespawnTime) || customerCount >= maxCustomers)
             {
                 return;
             }
@@ -76,30 +76,19 @@ namespace Core.Authoring.Customers.Systems
             var spawnPointEntity = spawnArray[0];
             var spawnPoint = EntityManager.GetComponentData<SpawnPointCustomer>(spawnPointEntity);
             var customerConfigs = config.CustomerConfig.Customers;
-            var result = SelectCustomers(customerConfigs, storeRating.CurrentValue);
+            var selectCustomers = SelectCustomers(customerConfigs, storeRating.CurrentValue);
 
-            if (result.Count == 0)
+            if (selectCustomers.Count == 0)
             {
-                // _usedConfigs.Clear();
-                // result = SelectCustomers(customerConfigs, storeRating.CurrentValue);
-                //
-                // if (result.Count == 0)
-                // {
-                //     return;
-                // }
                 return;
             }
             
             var upCompletedEntity = _upCompletedQuery.ToEntityArray(Allocator.Temp)[0];
             var productToBay = EntityManager.GetComponentObject<ProductToBay>(upCompletedEntity).Products.ToArray();
-            
-            var random = Random.Range(0, result.Count);
-            var customerData = result[random];
-            
+            var random = Random.Range(0, selectCustomers.Count);
+            var customerData = selectCustomers[random];
             var customerEntity = EntityManager.CreateEntity();
-
             var customerUi = config.UIConfig.CustomerUiPrefab;
-
             var randomCountProduct = Random.Range(1, 3);
             var productToBayCustomer = new List<ProductData>();
 

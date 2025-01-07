@@ -123,12 +123,7 @@ namespace Core.Authoring.SelectGameObjects.Systems
                         NewRendererArray(tvView.Value.Select, false);
                     }
                     
-                    if (EntityManager.HasComponent<TubeView>(entity))
-                    {
-                        var containerView = EntityManager.GetComponentObject<TubeView>(entity);
-                        NewRendererArray(containerView.Value.Select, false);
-                    }
-                    
+                   
                     if (EntityManager.HasComponent<ElectricityView>(entity))
                     {
                         var containerView = EntityManager.GetComponentObject<ElectricityView>(entity);
@@ -168,6 +163,12 @@ namespace Core.Authoring.SelectGameObjects.Systems
                         var breakBottleView = EntityManager.GetComponentObject<BreakBottleView>(entity);
 
                         NewRendererArray(breakBottleView.Value.Select, false);
+                    }
+
+                    if (EntityManager.HasComponent<TubeView>(entity))
+                    {
+                        var containerView = EntityManager.GetComponentObject<TubeView>(entity);
+                        NewRendererArray(containerView.Value.Select, false);
                     }
 
                     EntityManager.RemoveComponent<DeselectObject>(entity);
@@ -250,8 +251,7 @@ namespace Core.Authoring.SelectGameObjects.Systems
                     {
                         particle.sharedMaterial = particleSelectMaterial.ParticleSprayRendererObject[0];
                     }
-                    
-                    if (!select)
+                    else
                     {
                         particle.sharedMaterial = particleSelectMaterial.ParticleSprayRendererObject[1];
                     }
@@ -259,7 +259,7 @@ namespace Core.Authoring.SelectGameObjects.Systems
                     for (var index = 0; index < rendererAndParticleSelectObject.Renderers.Length; index++)
                     {
                         var renderer = rendererAndParticleSelectObject.Renderers[index];
-                        renderer.sharedMaterials = SelectedMaterial(renderer.sharedMaterials, select);
+                        rendererAndParticleSelectObject.Renderers[index].sharedMaterials = SelectedMaterial(renderer.sharedMaterials, select);
                     }
                     
                     break;
