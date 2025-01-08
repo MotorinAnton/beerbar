@@ -1,5 +1,4 @@
 ﻿using System;
-using Core.Authoring.Products;
 using Core.Constants;
 using UnityEngine;
 
@@ -35,18 +34,6 @@ namespace Core.Configs
         AddTable,
         UpBarman,
         AddBarman
-    }
-    [Serializable]
-    public class UpData
-    {
-        public UpType UpType;
-        public int Level;
-    }
-    
-    [Serializable]
-    public class ContainerUp : UpData
-    {
-        public ProductType ProductType;
     }
     
     [Serializable]

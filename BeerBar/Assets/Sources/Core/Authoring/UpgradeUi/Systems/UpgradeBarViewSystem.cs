@@ -1,4 +1,5 @@
 ﻿using Core.Authoring.StoreRatings;
+using Core.Utilities;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -23,16 +24,19 @@ namespace Core.Authoring.UpgradeUi.Systems
         protected override void OnUpdate()
         {
             var currentStoreRating = _storeRatingQuery.GetSingleton<StoreRating>();
-
-            Entities
-                .WithAll<UpgradeBarUiView>()
-                .ForEach((Entity entity, in UpgradeBarUiView upgradeBarUiView) =>
-                {
-                    upgradeBarUiView.SetRating((int)currentStoreRating.CurrentValue);
-                }).WithoutBurst().Run();
-            
             var upCompletedEntity = _completedUpQuery.ToEntityArray(Allocator.Temp)[0];
             var completedUp = EntityManager.GetComponentObject<CompletedUp>(upCompletedEntity).CompleteUp;
+            var availableUp = EntityManager.GetComponentObject<AvailableUp>(upCompletedEntity).AvailableUps;
+            Entities.WithAll<UpgradeBarUiView>()
+                .ForEach((Entity entity, in UpgradeBarUiView upgradeBarUiView) =>
+                {
+                    var upLine = EntityUtilities.GetGameConfig().UpConfig.UpLine;
+                    var maxValue = upgradeBarUiView.UpgradeBarUiAuthoring.RatingSlider.maxValue;
+                    var s = ((int)maxValue / upLine.Length) * (completedUp.Count  + availableUp.Count);
+                    
+                    upgradeBarUiView.SetRating(s);
+                    
+                }).WithoutBurst().Run();
 
             Entities
                 .WithAll<UpgradeElementUiView>()

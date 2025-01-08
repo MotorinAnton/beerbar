@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using DG.Tweening;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,26 +21,41 @@ namespace Core.Authoring.UpgradeUi
 
         public Button ArrowRight => _arrowRight;
 
-        [SerializeField]
-        private int _sortingOrder;
+        [SerializeField] private int _sortingOrder;
 
-        [SerializeField]
-        private RectTransform _iconsParentRectTransform;
+        [SerializeField] private RectTransform _iconsParentRectTransform;
 
-        [SerializeField]
-        private RectTransform _contentRectTransform;
+        [SerializeField] private RectTransform _contentRectTransform;
 
-        [SerializeField]
-        private ScrollRect _scrollRect;
+        [SerializeField] private ScrollRect _scrollRect;
 
-        [SerializeField]
-        private Slider _ratingSlider;
+        [SerializeField] private Slider _ratingSlider;
 
-        [SerializeField]
-        private Button _arrowLeft;
+        [SerializeField] private Button _arrowLeft;
 
-        [SerializeField]
-        private Button _arrowRight;
+        [SerializeField] private Button _arrowRight;
+
+    
+
+
+
+        private void Start()
+        {
+            _arrowLeft.onClick.AddListener(ArrowLeftButtonClicked);
+            _arrowRight.onClick.AddListener(ArrowRightButtonClicked);
+        }
+
+        private void ArrowLeftButtonClicked()
+        {
+            _scrollRect.DOKill();
+            _scrollRect.DOHorizontalNormalizedPos(_scrollRect.horizontalNormalizedPosition - 0.1f, 0.3f);
+        }
+
+        private void ArrowRightButtonClicked()
+        {
+            _scrollRect.DOKill();
+            _scrollRect.DOHorizontalNormalizedPos(_scrollRect.horizontalNormalizedPosition + 0.1f, 0.3f);
+        }
 
         public void SetMaximumRating(int value)
         {
@@ -58,8 +74,18 @@ namespace Core.Authoring.UpgradeUi
             _contentRectTransform.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Horizontal, _iconsParentRectTransform.rect.width);
 
-            _scrollRect.horizontalNormalizedPosition = 1f - _ratingSlider.value / _ratingSlider.maxValue;
+            //_scrollRect.horizontalNormalizedPosition = 1f - _ratingSlider.value / _ratingSlider.maxValue;
+            _scrollRect.horizontalNormalizedPosition = 0f;
         }
+
+        // private void RefreshTween()
+        // {
+        //     if (_arrowTween != null)
+        //     {
+        //         _arrowTween.Kill();
+        //         _arrowTween = null;
+        //     }
+        // }
     }
 
     public struct UpgradeBarUi : IComponentData { }
