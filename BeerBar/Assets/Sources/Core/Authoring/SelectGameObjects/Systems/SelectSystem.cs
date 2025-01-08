@@ -121,13 +121,7 @@ namespace Core.Authoring.SelectGameObjects.Systems
                         var tvView = EntityManager.GetComponentObject<TVView>(entity);
                         NewRendererArray(tvView.Value.Select, false);
                     }
-<<<<<<< HEAD
-
-
-=======
                     
-                   
->>>>>>> 49f2a3300ba51f3e884ae3090d0aebe813a54864
                     if (EntityManager.HasComponent<ElectricityView>(entity))
                     {
                         var containerView = EntityManager.GetComponentObject<ElectricityView>(entity);
@@ -256,14 +250,12 @@ namespace Core.Authoring.SelectGameObjects.Systems
                     for (var index = 0; index < rendererAndParticleSelectObject.Renderers.Length; index++)
                     {
                         var renderer = rendererAndParticleSelectObject.Renderers[index];
-<<<<<<< HEAD
+
                         rendererAndParticleSelectObject.Renderers[index].sharedMaterials =
                             SelectedMaterial(renderer.sharedMaterials, select);
-=======
-                        rendererAndParticleSelectObject.Renderers[index].sharedMaterials = SelectedMaterial(renderer.sharedMaterials, select);
->>>>>>> 49f2a3300ba51f3e884ae3090d0aebe813a54864
-                    }
 
+                        rendererAndParticleSelectObject.Renderers[index].sharedMaterials = SelectedMaterial(renderer.sharedMaterials, select);
+                    }
                     break;
 
                 default:

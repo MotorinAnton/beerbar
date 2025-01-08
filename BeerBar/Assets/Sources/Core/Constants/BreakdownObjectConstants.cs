@@ -7,11 +7,6 @@ namespace Core.Constants
     {
         public static FixedString64Bytes ElectricalDoorOpen = "Electrical_door_open";
         public static FixedString64Bytes ElectricalDoorClose = "Electrical_door_close";
-<<<<<<< HEAD
-=======
-        
-        
->>>>>>> 49f2a3300ba51f3e884ae3090d0aebe813a54864
         public static readonly int PipeLeak = Shader.PropertyToID("_Progress");
         public const float IntensityEndValue = 4f;
         public const float IntensityTweenDuration = 0.08f;
@@ -33,9 +28,5 @@ namespace Core.Constants
         public const float LossWalletPositionY = 0.1f;
         public const float StartPositionLossWalletOffset = 0.6f;
         public const float PickUpLossWalletOffsetY = 0.5f;
-<<<<<<< HEAD
-=======
-        
->>>>>>> 49f2a3300ba51f3e884ae3090d0aebe813a54864
     }
 }

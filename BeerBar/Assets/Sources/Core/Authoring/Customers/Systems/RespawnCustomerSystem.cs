@@ -22,7 +22,7 @@ namespace Core.Authoring.Customers.Systems
         private EntityQuery _upCompletedQuery;
         
         private float _time;
-        private readonly HashSet<CustomerConfigData> _usedConfigs = new ();
+        private HashSet<CustomerConfigData> _usedConfigs = new ();
         
         protected override void OnCreate()
         {
@@ -85,6 +85,12 @@ namespace Core.Authoring.Customers.Systems
             
             var upCompletedEntity = _upCompletedQuery.ToEntityArray(Allocator.Temp)[0];
             var productToBay = EntityManager.GetComponentObject<ProductToBay>(upCompletedEntity).Products.ToArray();
+            
+            if (productToBay.Length == 0)
+            {
+                return;
+            }
+            
             var random = Random.Range(0, selectCustomers.Count);
             var customerData = selectCustomers[random];
             var customerEntity = EntityManager.CreateEntity();
@@ -95,15 +101,15 @@ namespace Core.Authoring.Customers.Systems
             while (productToBayCustomer.Count < randomCountProduct)
             {
                 var randomProduct = Random.Range(0, productToBay.Length);
-                var prod = productToBay[randomProduct];
+                var product = productToBay[randomProduct];
 
-                if (productToBayCustomer.Contains(prod))
+                if (productToBayCustomer.Contains(product))
                 {
                     continue;
                 }
 
-                prod.Count = Random.Range(1, 3);
-                productToBayCustomer.Add(prod);
+                product.Count = Random.Range(1, 3);
+                productToBayCustomer.Add(product);
             }
 
             EntityManager.AddComponentObject(customerEntity, new SpawnCustomer

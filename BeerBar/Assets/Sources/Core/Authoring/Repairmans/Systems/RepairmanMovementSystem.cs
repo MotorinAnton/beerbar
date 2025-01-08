@@ -138,11 +138,6 @@ namespace Core.Authoring.Repairmans.Systems
                     EntityManager.GetComponentObject<RepairmanView>(repairmanEntity).Value.PivotHand[0].gameObject
                         .SetActive(true);
                     EntityManager.AddComponent<RepairsRepairman>(repairmanEntity);
-<<<<<<< HEAD
-
-=======
-                    
->>>>>>> 49f2a3300ba51f3e884ae3090d0aebe813a54864
                     EntityManager.AddComponentData(repairmanEntity,
                         new WaitTime { Current = AnimationUtilities.AnimationLength(animator, animationName) });
                     EntityManager.RemoveComponent<MoveRepairsRepairman>(repairmanEntity);
