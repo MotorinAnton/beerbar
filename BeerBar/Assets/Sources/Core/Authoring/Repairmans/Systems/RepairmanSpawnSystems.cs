@@ -34,9 +34,14 @@ namespace Core.Authoring.Repairmans.Systems
             EntityManager.AddComponentObject(repairmanEntity, new RepairmanView { Value = repairmanView });
             EntityManager.AddComponentObject(repairmanEntity, new TransformView { Value = repairmanView.transform });
             EntityManager.AddComponentObject(repairmanEntity, new AnimatorView { Value = repairmanView.Animator });
+<<<<<<< HEAD
             EntityManager.AddComponentObject(repairmanEntity,
                 new OrderRepairman { RepairObjectList = new List<Entity>() });
 
+=======
+            EntityManager.AddComponentObject(repairmanEntity, new OrderRepairman{ RepairObjectList = new List<Entity>()});
+            
+>>>>>>> 49f2a3300ba51f3e884ae3090d0aebe813a54864
             var randomEventEntity = EntityManager.CreateEntity();
             EntityManager.AddComponent<RandomEventEntity>(randomEventEntity);
             repairmanView.Initialize(EntityManager, repairmanEntity);

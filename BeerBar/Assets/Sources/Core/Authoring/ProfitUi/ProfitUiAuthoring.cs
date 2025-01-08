@@ -29,10 +29,4 @@ namespace Core.Authoring.ProfitUi
         public Vector3 Point;
         public bool Profit;
     }
-    
-    public enum ProfitUiType
-    {
-        Profit,
-        Displase
-    }
 }

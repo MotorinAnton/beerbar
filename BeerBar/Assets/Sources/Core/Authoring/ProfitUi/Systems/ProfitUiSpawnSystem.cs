@@ -33,7 +33,11 @@ namespace Core.Authoring.ProfitUi.System
             var profitCoinUiPrefab = EntityUtilities.GetGameConfig().UIConfig.ProfitCoinPrefab;
             var profitUiCoin = Object.Instantiate(profitCoinUiPrefab);
             var transform = profitUiCoin.transform;
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 49f2a3300ba51f3e884ae3090d0aebe813a54864
             if (spawnProfitUi.Profit)
             {
                 profitUiCoin.CoinImage.gameObject.SetActive(true);
@@ -48,7 +52,11 @@ namespace Core.Authoring.ProfitUi.System
 
             profitUiCoin.Text.text = spawnProfitUi.Text;
             transform.position = spawnProfitUi.Point;
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 49f2a3300ba51f3e884ae3090d0aebe813a54864
             profitUiCoin.transform.LookAt(
                 transform.position + mainCamera.Value.transform.rotation * Vector3.forward,
                 mainCamera.Value.gameObject.transform.rotation * Vector3.up);
