@@ -1,8 +1,10 @@
 ﻿using Core.Authoring.Customers;
 using Core.Authoring.Points;
 using Core.Authoring.SelectGameObjects;
+using Core.Authoring.StoreRatings;
 using Core.Components.Destroyed;
 using Core.Components.Wait;
+using Core.Configs;
 using Core.Utilities;
 using Unity.Collections;
 using Unity.Entities;
@@ -15,6 +17,7 @@ namespace Core.Authoring.Bartenders.AddBarmanFX.Systems
         private EntityQuery _purchaseQueueCustomerQuery;
         private EntityQuery _spawnPointBarmanQuery;
         private EntityQuery _barmanQuery;
+        private EntityQuery _completedUpQuery;
 
         protected override void OnCreate()
         {
@@ -27,6 +30,9 @@ namespace Core.Authoring.Bartenders.AddBarmanFX.Systems
             using var purchaseQueueCustomerBuilder = new EntityQueryBuilder(Allocator.Temp);
             _purchaseQueueCustomerQuery =
                 purchaseQueueCustomerBuilder.WithAll<Customer, PurchaseQueueCustomer>().Build(this);
+            
+            using var completedUpBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _completedUpQuery = completedUpBuilder.WithAll<CompletedUp>().Build(this);
         }
 
         protected override void OnUpdate()
@@ -35,6 +41,7 @@ namespace Core.Authoring.Bartenders.AddBarmanFX.Systems
                 .ForEach((Entity entity, in AddBarmanFXView addBarmanFXView) =>
                 {
                     CreateBarman();
+                    AddCompletedUp(addBarmanFXView.UpData);
                     EntityManager.AddComponent<Destroyed>(entity);
 
                 }).WithoutBurst().WithStructuralChanges().Run();
@@ -72,6 +79,14 @@ namespace Core.Authoring.Bartenders.AddBarmanFX.Systems
                 EntityManager.RemoveComponent<WaitTime>(customerEntity);
                 EntityManager.RemoveComponent<StartWaitTime>(customerEntity);
             }
+        }
+        private void AddCompletedUp(Up upData)
+        {
+            var upCompletedEntity = _completedUpQuery.ToEntityArray(Allocator.Temp)[0];
+            var availableUp = EntityManager.GetComponentObject<AvailableUp>(upCompletedEntity).AvailableUps;
+            var completedUp = EntityManager.GetComponentObject<CompletedUp>(upCompletedEntity).CompleteUp;
+            completedUp.Add(upData);
+            availableUp.Remove(upData);
         }
     }
 }

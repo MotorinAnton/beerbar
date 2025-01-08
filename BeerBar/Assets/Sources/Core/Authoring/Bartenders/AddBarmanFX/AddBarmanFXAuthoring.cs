@@ -1,7 +1,7 @@
 using Core.Authoring.SelectGameObjects;
 using Core.Authoring.SelectGameObjects.Types;
+using Core.Configs;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Core.Authoring.Bartenders.AddBarmanFX
 {
@@ -15,6 +15,7 @@ namespace Core.Authoring.Bartenders.AddBarmanFX
     public class AddBarmanFXView : IComponentData
     {
         public AddBarmanFXAuthoring Value;
+        public Up UpData;
     }
     
     public struct AddBarmanFX : IComponentData { }

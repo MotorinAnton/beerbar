@@ -284,7 +284,7 @@ namespace Core.Authoring.StoreRatings.Systems
 
                         case UpType.AddBarman:
 
-                            SpawnAddBarmanFX();
+                            SpawnAddBarmanFX(upData);
                             availableUp.Add(upData);
 
                             break;
@@ -327,7 +327,7 @@ namespace Core.Authoring.StoreRatings.Systems
             });
         }
 
-        private void SpawnAddBarmanFX()
+        private void SpawnAddBarmanFX( Up upData)
         {
             var config = EntityUtilities.GetBarmanConfig();
             var barmanArray = _barmanQuery.ToEntityArray(Allocator.Temp);
@@ -339,7 +339,11 @@ namespace Core.Authoring.StoreRatings.Systems
             var addBarmanFXView = Object.Instantiate(config.AddBarmanFX, spawnPoint.Position, spawnPoint.Rotation);
             var addBarmanFXEntity = EntityManager.CreateEntity();
 
-            EntityManager.AddComponentObject(addBarmanFXEntity, new AddBarmanFXView { Value = addBarmanFXView });
+            EntityManager.AddComponentObject(addBarmanFXEntity, new AddBarmanFXView
+            {
+                Value = addBarmanFXView,
+                UpData = upData
+            });
             addBarmanFXView.Initialize(EntityManager, addBarmanFXEntity);
         }
 

@@ -70,7 +70,9 @@ namespace Core.Authoring.UpgradeUi.Systems
         private void SpawnUpgradeElementsUi(Transform elementParent, in SpawnUpgradeUi spawnUpgradeUi,
             UpConfig upConfig)
         {
-            foreach (var up in upConfig.UpLine)
+            var sortedRaringUpArray = upConfig.UpLine.OrderBy(up => up.Rating).ToArray();
+            
+            foreach (var up in sortedRaringUpArray)
             {
                 var upgradeElementUi = EntityManager.CreateEntity();
                 var prefab = up.UpVisualType switch

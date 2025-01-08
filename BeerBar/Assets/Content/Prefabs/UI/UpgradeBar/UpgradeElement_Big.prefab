@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1954933374039253586, guid: 2555dad3204cf7e429cb2bb0873bf108, type: 3}
       propertyPath: m_Name
-      value: UpgradeIcon_Big
+      value: UpgradeElement_Big
       objectReference: {fileID: 0}
     - target: {fileID: 2729262929981981422, guid: 2555dad3204cf7e429cb2bb0873bf108, type: 3}
       propertyPath: m_Pivot.x
@@ -90,6 +90,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2729262929981981422, guid: 2555dad3204cf7e429cb2bb0873bf108, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781948348641059610, guid: 2555dad3204cf7e429cb2bb0873bf108, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
