@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Core.Authoring.RootCanvas;
 using Core.Configs;
 using Core.Constants;
@@ -71,6 +72,8 @@ namespace Core.Authoring.UpgradeUi.Systems
             UpConfig upConfig)
         {
             var sortedRaringUpArray = upConfig.UpLine.OrderBy(up => up.Rating).ToArray();
+
+            var addedList = new HashSet<UpType>();
             
             foreach (var up in sortedRaringUpArray)
             {
@@ -80,9 +83,19 @@ namespace Core.Authoring.UpgradeUi.Systems
                     UpVisualType.Small => spawnUpgradeUi.UpgradeElementUiSmallPrefab,
                     UpVisualType.Big => spawnUpgradeUi.UpgradeElementUiBigPrefab
                 };
-
+                
                 var upgradeElementUiView =
                     Object.Instantiate(prefab, elementParent, false);
+                
+                if(addedList.Contains(up.UpType) || up.UpType == UpType.UpTable )
+                {
+                    if (up.UpType != UpType.AddTable)
+                    {
+                       upgradeElementUiView.EnableUpgradeIcon(); 
+                    }
+                }
+                
+                addedList.Add(up.UpType);
                 upgradeElementUiView.Initialize(EntityManager, upgradeElementUi);
                 upgradeElementUiView.SetIcon(up.Icon);
                 upgradeElementUiView.SetRating(up.Rating);

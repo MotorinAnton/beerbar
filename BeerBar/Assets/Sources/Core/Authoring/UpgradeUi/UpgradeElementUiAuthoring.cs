@@ -1,8 +1,6 @@
-﻿using Core.Authoring.Products;
-using Core.Configs;
+﻿using Core.Configs;
 using Core.Utilities;
 using TMPro;
-using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -68,6 +66,13 @@ namespace Core.Authoring.UpgradeUi
         public void EnableCompletedIcon()
         {
             _completed.gameObject.SetActive(true);
+        }
+        
+        // TODO включать upgrade Icon
+        
+        public void EnableUpgradeIcon()
+        {
+            _upgrade.gameObject.SetActive(true);
         }
     }
 
