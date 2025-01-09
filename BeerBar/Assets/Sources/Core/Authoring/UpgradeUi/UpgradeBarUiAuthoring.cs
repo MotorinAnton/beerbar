@@ -34,11 +34,7 @@ namespace Core.Authoring.UpgradeUi
         [SerializeField] private Button _arrowLeft;
 
         [SerializeField] private Button _arrowRight;
-
-    
-
-
-
+        
         private void Start()
         {
             _arrowLeft.onClick.AddListener(ArrowLeftButtonClicked);
@@ -77,15 +73,6 @@ namespace Core.Authoring.UpgradeUi
             //_scrollRect.horizontalNormalizedPosition = 1f - _ratingSlider.value / _ratingSlider.maxValue;
             _scrollRect.horizontalNormalizedPosition = 0f;
         }
-
-        // private void RefreshTween()
-        // {
-        //     if (_arrowTween != null)
-        //     {
-        //         _arrowTween.Kill();
-        //         _arrowTween = null;
-        //     }
-        // }
     }
 
     public struct UpgradeBarUi : IComponentData { }

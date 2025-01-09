@@ -25,3 +25,5 @@ MonoBehaviour:
     Level: 3
     Price: 60
     QuantityAtTablePoints: 4
+  CleanSprite: {fileID: 21300000, guid: bc7c2f3228c805b43bbdf0189ba6d78b, type: 3}
+  RepairSprite: {fileID: 21300000, guid: b9c6ee2dc45b9f346831dc55ed9e2c1f, type: 3}

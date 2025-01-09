@@ -10,6 +10,8 @@ namespace Core.Configs
     public sealed class TableConfig : ScriptableObject
     {
         public TableDates[] TablesData;
+        public Sprite CleanSprite;
+        public Sprite RepairSprite;
     }
     
     public class TableConfigData : IComponentData

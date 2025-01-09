@@ -150,7 +150,7 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
             var rotation = mainCamera.Value.transform.rotation;
             var transform = gameObject.transform;
 
-            transform.LookAt(transform.position + rotation * Vector3.forward,
+            gameObject.transform.LookAt(transform.position + rotation * Vector3.forward,
                 rotation * Vector3.up);
 
             gameObject.GetComponent<Canvas>().worldCamera = mainCamera.Value;

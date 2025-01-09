@@ -11,6 +11,9 @@ namespace Core.Authoring.ButtonsUi.AddButton
     {
         [SerializeField] private Button _addButton;
         public Button AddButton => _addButton;
+        
+        [SerializeField] private Image _image;
+        public Image Image => _image;
 
 
         private void Start()

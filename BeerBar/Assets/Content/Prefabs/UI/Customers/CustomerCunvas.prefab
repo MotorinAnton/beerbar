@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7f5d3767938cefb4c89cb16d4353cc0e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7298d716de6bc9a42a2ac3aa83adf664, type: 3}
   m_Type: 3
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &5874644224176413250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,12 +207,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _componentBehaviours: []
   _faceEmotions:
-    Displeased: {fileID: 21300000, guid: 7f5d3767938cefb4c89cb16d4353cc0e, type: 3}
-    Pleased: {fileID: 21300000, guid: 7ff2f21acae9ce744b66694ecb26c8fd, type: 3}
-    Thinks: {fileID: 21300000, guid: 59ae522ba576f834b92d01c116bcd02b, type: 3}
-    Swears: {fileID: 21300000, guid: 53753f462ad9e7c4597e48bcd9d8a24d, type: 3}
+    Displeased: {fileID: 21300000, guid: 9a074a8054ff2404684856281212c24f, type: 3}
+    Pleased: {fileID: 21300000, guid: b3ac6e40f7273a44a85b45a56b39984f, type: 3}
+    Thinks: {fileID: 21300000, guid: 87ea8ca8e310e8d48a435e2b1fd77126, type: 3}
+    Swears: {fileID: 21300000, guid: 62d0971cb2a285c44bef2631bfa6ddd7, type: 3}
     Hourglass: {fileID: 21300000, guid: c6d659e5401295d4587fb98418acd6d9, type: 3}
     DrinkBeer: {fileID: 21300000, guid: 40f1277dc04eb1e488cb3907b60019ca, type: 3}
+  _productSprites:
+    Bottle: {fileID: 21300000, guid: 1c79d2062b4c74344b7a298e94a8f686, type: 3}
+    Fish: {fileID: 21300000, guid: 90fc7e4095753644799869a1d0a28ba1, type: 3}
+    Nuts: {fileID: 21300000, guid: 61b4ddca9cc4b0b4b8ec880ff836714e, type: 3}
   _dialogImage: {fileID: 1728395910821226310}
   _product1Image: {fileID: 8105709551740544613}
   _canvasGroupProduct1: {fileID: 4834445939033174600}
@@ -450,7 +454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2524681852429077294
 RectTransform:
   m_ObjectHideFlags: 0

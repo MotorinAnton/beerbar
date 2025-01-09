@@ -35,6 +35,7 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
         private EntityQuery _bankQuery;
         private EntityQuery _upCompletedQuery;
         private EntityQuery _mainCameraQuery;
+        private EntityQuery _warehouseProductQuery;
 
         protected override void OnCreate()
         {
@@ -62,6 +63,9 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
 
             using var mainCameraBuilder = new EntityQueryBuilder(Allocator.Temp);
             _mainCameraQuery = mainCameraBuilder.WithAll<MainCamera>().Build(this);
+            
+            using var warehouseProductBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _warehouseProductQuery = warehouseProductBuilder.WithAll<WarehouseProduct>().Build(this);
         }
 
         protected override void OnUpdate()
@@ -87,6 +91,8 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
             Entities.WithAll<Container, UpgradeAndEvenButtonUiView>().WithAll<EventButtonClicked>().ForEach(
                 (in UpgradeAndEvenButtonUiView upgradeAndEvenButtonUiView) =>
                 {
+                    
+                    
                     EntityManager.AddComponent<AddNewProducts>(upgradeAndEvenButtonUiView
                         .ObjectEntity);
                     upgradeAndEvenButtonUiView.DisableUpgradeAndEvenButtons();
@@ -115,12 +121,12 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
                         else
                         {
                             EntityManager.AddComponent<CleanTable>(upgradeAndEvenButtonUiView.ObjectEntity);
-                            var movementArrows =
+                            var cleanArrow =
                                 EntityManager
                                     .GetComponentObject<ClearMovementArrowView>(upgradeAndEvenButtonUiView.ObjectEntity)
                                     .Arrow;
 
-                            movementArrows.EnableArrow();
+                            cleanArrow.EnableArrow();
                         }
 
                     }).WithoutBurst().WithStructuralChanges().Run();
@@ -128,13 +134,15 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
             Entities.WithAll<Table, UpgradeAndEvenButtonUiView>().ForEach(
                 (in UpgradeAndEvenButtonUiView upgradeAndEvenButtonUiView) =>
                 {
+                    var tableConfig = EntityUtilities.GetTableConfig();
+                    
                     if (EntityManager.HasComponent<Breakdown>(upgradeAndEvenButtonUiView.ObjectEntity))
                     {
-                        upgradeAndEvenButtonUiView.SetTextRepairsEventButton();
+                        upgradeAndEvenButtonUiView.SetSpriteEventButton(tableConfig.RepairSprite);
                     }
                     else
                     {
-                        upgradeAndEvenButtonUiView.SetTextClearEventButton();
+                        upgradeAndEvenButtonUiView.SetSpriteEventButton(tableConfig.CleanSprite);
                     }
                 }).WithoutBurst().WithStructuralChanges().Run();
         }
@@ -145,15 +153,8 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
             {
                 return;
             }
-
-            if (!EntityManager.HasComponent<UpButtonAvailable>(entity))
-            {
-                upgradeAndEvenButtonUiView.UpgradeAndEventButton.UpgradeButton.enabled = false;
-                return;
-            }
-
+            
             var bank = _bankQuery.GetSingleton<Bank>();
-
             var price = 0;
 
             if (EntityManager.HasComponent<Container>(entity))
@@ -162,13 +163,39 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
                 var containerDescription =
                     EntityManager.GetComponentData<ContainerDescription>(
                         upgradeAndEvenButtonUiView.ObjectEntity);
+                
+                var containerProductCount = EntityManager.GetBuffer<ContainerProduct>(upgradeAndEvenButtonUiView.ObjectEntity)[0].Value.Count;
+                
                 var nextContainer =
                     config.ContainersData.FirstOrDefault(containerNext =>
                         containerNext.Level == containerDescription.Level + 1 &&
                         containerNext.Type == containerDescription.Type);
-
-
+                
                 price = nextContainer.Price;
+
+                if (nextContainer.Prefab == default || bank.Coins < price)
+                {
+                    upgradeAndEvenButtonUiView.DisableUpgrade();
+                }
+                else
+                {
+                    upgradeAndEvenButtonUiView.EnableUpgrade();
+                }
+
+                var warehouseProducts = _warehouseProductQuery.ToComponentDataArray<WarehouseProduct>(Allocator.Temp);
+
+                var product = warehouseProducts.FirstOrDefault(product =>
+                    product.ProductData.ProductType == containerDescription.Type &&
+                    product.ProductData.Level == containerDescription.Level && product.ProductData.Count > 0);
+
+                if (product.ProductData.Count == default || containerProductCount == containerDescription.Capacity)
+                {
+                    upgradeAndEvenButtonUiView.DisableEvent();
+                }
+                else
+                {
+                    upgradeAndEvenButtonUiView.EnableEvent();
+                }
             }
 
             if (EntityManager.HasComponent<Table>(entity))
@@ -180,15 +207,21 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
                     tableConfig.TablesData.FirstOrDefault(containerNext =>
                         containerNext.Level == tableDescription.Level + 1);
                 price = nextTable.Price;
+                
+                if (nextTable.Prefab == default || bank.Coins < price )
+                {
+                    upgradeAndEvenButtonUiView.DisableUpgrade();
+                }
+                else
+                {
+                    upgradeAndEvenButtonUiView.EnableUpgrade();
+                }
             }
-
-            if (bank.Coins >= price)
+            
+            if (!EntityManager.HasComponent<UpButtonAvailable>(entity))
             {
-                upgradeAndEvenButtonUiView.UpgradeAndEventButton.UpgradeButton.enabled = true;
-                return;
+                upgradeAndEvenButtonUiView.DisableUpgrade();
             }
-
-            upgradeAndEvenButtonUiView.UpgradeAndEventButton.UpgradeButton.enabled = false;
         }
 
 
@@ -542,7 +575,7 @@ namespace Core.Authoring.ButtonsUi.UpgradeAndEventButtonsUi.Systems
             var transform = upgradeAndEvenButtonUiView.UpgradeAndEventButton.transform;
             var rotation = mainCamera.Value.transform.rotation;
 
-            transform.LookAt(transform.position + rotation * Vector3.forward,
+            upgradeAndEvenButtonUiView.UpgradeAndEventButton.transform.LookAt(transform.position + rotation * Vector3.forward,
                 rotation * Vector3.up);
         }
 

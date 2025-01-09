@@ -80,7 +80,7 @@ namespace Core.Authoring.UpgradeAndEventButtonsUi.Systems
 
             var buttonPrefab = EntityUtilities.GetUIConfig().UpgradeAndEventButtonUiPrefab;
             var upgradeAndEvenButtonUi = Object.Instantiate(buttonPrefab, position, transform.rotation, transform);
-
+            
             upgradeAndEvenButtonUi.gameObject.GetComponent<Canvas>().worldCamera = mainCamera.Value;
 
             var upgradeAndEventButtonUiView = new UpgradeAndEvenButtonUiView

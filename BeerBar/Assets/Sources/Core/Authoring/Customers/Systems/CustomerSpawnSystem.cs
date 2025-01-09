@@ -104,7 +104,6 @@ namespace Core.Authoring.Customers.Systems
             customerView.Initialize(EntityManager, entity);
             customerUiView.Initialize(EntityManager, customerUiViewEntity);
             
-            
             EntityManager.RemoveComponent<SpawnCustomer>(entity);
         }
         private bool FreeIndexPoint(out int freeIndex)

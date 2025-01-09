@@ -2,7 +2,6 @@
 using Core.Configs;
 using Core.Utilities;
 using DG.Tweening;
-using TMPro;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,13 +12,14 @@ namespace Core.Authoring.UpgradeAndEventButtonsUi
     public class UpgradeAndEvenButtonUiAuthoring : EntityBehaviour
     {
         [SerializeField] private Button _upgradeButton;
-        
         public Button UpgradeButton => _upgradeButton;
-        
+
         [SerializeField] private Button _eventButton;
-        
         public Button EventButton => _eventButton;
-        private bool _isPointerEnter;
+        
+        [SerializeField] private Image _eventButtonImage;
+        public Image EventButtonImage => _eventButtonImage;
+        
         private List<Sequence> _sequence;
         private Vector3 _upgradeButtonPosition;
         private Vector3 _eventButtonPosition;
@@ -95,12 +95,34 @@ namespace Core.Authoring.UpgradeAndEventButtonsUi
         public UpgradeAndEvenButtonUiAuthoring UpgradeAndEventButton;
         public Entity ObjectEntity;
 
-        public void SetTextRepairsEventButton() => UpgradeAndEventButton.EventButton.GetComponentInChildren<TMP_Text>().text = "Repairs";
-        public void SetTextClearEventButton() => UpgradeAndEventButton.EventButton.GetComponentInChildren<TMP_Text>().text = "Clear";
-        
-        public void SetTextReplenishEventButton() => UpgradeAndEventButton.EventButton.GetComponentInChildren<TMP_Text>().text = "Replenish";
+        public void SetSpriteEventButton(Sprite sprite) => UpgradeAndEventButton.EventButtonImage.sprite = sprite;
         
         public void EnableUpgradeAndEventButton() => UpgradeAndEventButton.Select();
+        
+        public void DisableUpgrade()
+        {
+            UpgradeAndEventButton.UpgradeButton.enabled = false;
+            UpgradeAndEventButton.UpgradeButton.image.color = Color.gray;
+        }
+
+        public void EnableUpgrade()
+        {
+            UpgradeAndEventButton.UpgradeButton.enabled = true;
+            UpgradeAndEventButton.UpgradeButton.image.color = Color.white;
+        }
+
+        public void DisableEvent()
+        {
+            UpgradeAndEventButton.EventButton.enabled = false;
+            UpgradeAndEventButton.EventButton.image.color = Color.gray;
+        }
+
+        public void EnableEvent()
+        {
+            UpgradeAndEventButton.EventButton.enabled = true;
+            UpgradeAndEventButton.EventButton.image.color = Color.white;
+        }
+
 
         public void DisableUpgradeAndEvenButtons()
         {

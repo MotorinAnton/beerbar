@@ -119,6 +119,7 @@ MonoBehaviour:
   _componentBehaviours: []
   _upgradeButton: {fileID: 8431653128601153886}
   _eventButton: {fileID: 8153582974610061671}
+  _eventButtonImage: {fileID: 4931659451555083086}
 --- !u!1 &4313501601023119336
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,7 +187,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c13be1668028d9e468e3bb8c74e7c02a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e77ee5b4f37f4e541a6c28dabaa8c6af, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -305,7 +306,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: UP
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -439,7 +440,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: REPLENISH
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -575,7 +576,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c13be1668028d9e468e3bb8c74e7c02a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0185dc00ff6dc7b448d887f8105be64a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

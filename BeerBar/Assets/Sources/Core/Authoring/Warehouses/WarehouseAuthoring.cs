@@ -31,12 +31,7 @@ namespace Core.Authoring.Warehouses
     {
         public WarehouseAuthoring WarehouseAuthoring;
     }
-
-    public struct AddProduct : IComponentData
-    {
-        public int Level;
-    }
-
+    
     public struct WarehouseProduct : IComponentData
     {
         public ProductData ProductData;

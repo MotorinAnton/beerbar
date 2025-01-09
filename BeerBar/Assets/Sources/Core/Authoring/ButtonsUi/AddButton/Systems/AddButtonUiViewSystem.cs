@@ -152,7 +152,7 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
                 {
                     ProductType = container.Type,
                     Level = container.Level,
-                    Count = 1000,
+                    Count = 0,
                     PurchaseCost = newProduct.PurchaseCost,
                     SellPrice = newProduct.SellPrice
                 });
@@ -218,7 +218,7 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
                 return;
             }
 
-            addButtonUiView.AddButtonUiAuthoring.AddButton.image.color = Color.cyan;
+            addButtonUiView.AddButtonUiAuthoring.AddButton.image.color = Color.white;
             addButtonUiView.AddButtonUiAuthoring.AddButton.enabled = true;
         }
 

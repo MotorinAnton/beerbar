@@ -111,7 +111,6 @@ namespace Core.Scenes.Systems
             CreateMainCamera(config);
             CreateStoreRating();
             CreateBank();
-            
             CreateProductKeeper(config);
             CreateRepairman(config);
             CreateCleaner(config);
