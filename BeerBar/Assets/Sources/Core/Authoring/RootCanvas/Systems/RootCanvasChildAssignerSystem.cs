@@ -4,6 +4,7 @@ using Unity.Entities;
 
 namespace Core.Authoring.RootCanvas.Systems
 {
+    [RequireMatchingQueriesForUpdate]
     public partial class RootCanvasChildAssignerSystem : SystemBase
     {
         private EntityQuery _rootCanvasQuery;

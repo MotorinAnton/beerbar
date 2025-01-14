@@ -11,15 +11,14 @@ namespace Core.Scripts
         {
             public override void Bake(StartupHookAuthoring authoring)
             {
-                if (World.DefaultGameObjectInjectionWorld.EntityManager.HasSingleton<StartupAwake>())
-                {
-                    return;
-                }
+                 if (World.DefaultGameObjectInjectionWorld.EntityManager.HasSingleton<StartupAwake>())
+                 {
+                     return;
+                 }
                 
-                Startup.Initialize();
-                var entity = GetEntity(TransformUsageFlags.None);
-                AddComponent<SceneLoaded>(entity);
-                //AddComponent<GameLevelScene>(entity);
+                 Startup.Initialize();
+                 var entity = GetEntity(TransformUsageFlags.None);
+                 AddComponent<SceneLoaded>(entity);
             }
         }
     }

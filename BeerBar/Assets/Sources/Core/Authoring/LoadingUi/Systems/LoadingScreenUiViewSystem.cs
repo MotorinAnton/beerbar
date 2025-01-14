@@ -1,4 +1,6 @@
-﻿using Unity.Collections;
+﻿using Core.Scenes.Components;
+using DG.Tweening;
+using Unity.Collections;
 using Unity.Entities;
 
 namespace Core.Authoring.LoadingUi.Systems
@@ -6,6 +8,8 @@ namespace Core.Authoring.LoadingUi.Systems
     public partial class LoadingScreenUiViewSystem : SystemBase
     {
         private EntityQuery _loadingScreenUiQuery;
+        private EntityQuery _loadingSceneQuery;
+        private EntityQuery _loadingCompletedQuery;
 
         private Entity _loadingScreenUiEntity;
         private LoadingScreenUiView _loadingScreenUiView;
@@ -15,6 +19,12 @@ namespace Core.Authoring.LoadingUi.Systems
         {
             using var loadingScreenUiBuilder = new EntityQueryBuilder(Allocator.Persistent);
             _loadingScreenUiQuery = loadingScreenUiBuilder.WithAll<LoadingScreenUi, LoadingScreenUiView>().Build(this);
+            
+            using var loadingSceneBuilder = new EntityQueryBuilder(Allocator.Persistent);
+            _loadingSceneQuery = loadingSceneBuilder.WithAll<LoadScene>().WithNone<LoadingScreenAnimationShow, SceneLoaded>().Build(this);
+            
+            using var loadingCompletedBuilder = new EntityQueryBuilder(Allocator.Persistent);
+            _loadingCompletedQuery = loadingCompletedBuilder.WithAll<LoadScene, SceneLoaded, LoadingScreenAnimationShow>().Build(this);
         }
 
         protected override void OnUpdate()
@@ -23,11 +33,35 @@ namespace Core.Authoring.LoadingUi.Systems
             {
                 return;
             }
-
+            
             _loadingScreenUiEntity = _loadingScreenUiQuery.GetSingletonEntity();
             _loadingScreenUiView = EntityManager.GetComponentObject<LoadingScreenUiView>(_loadingScreenUiEntity);
             _currentProgress = EntityManager.GetComponentData<LoadingScreenProgress>(_loadingScreenUiEntity);
 
+            var loadSceneArray = _loadingSceneQuery.ToEntityArray(Allocator.Persistent);
+            
+            foreach (var entity in loadSceneArray)
+            {
+                var showLoadingScreen = new ShowLoadingScreen
+                {
+                    AutoHide = true
+                };
+
+                EntityManager.AddComponentObject(_loadingScreenUiEntity, showLoadingScreen);
+
+                DOVirtual.Float(0f, 0.9f, 2f, x => showLoadingScreen.ProgressAction?.Invoke(x));
+                EntityManager.AddComponent<LoadingScreenAnimationShow>(entity);
+            }
+            
+            var loadingCompletedArray = _loadingCompletedQuery.ToEntityArray(Allocator.Persistent);
+            
+            foreach (var entity in loadingCompletedArray)
+            {
+                var showLoadingScreen = EntityManager.GetComponentObject<ShowLoadingScreen>(_loadingScreenUiEntity);
+                DOVirtual.Float(0.9f, 1f, 1f, x => showLoadingScreen.ProgressAction?.Invoke(x));
+                EntityManager.RemoveComponent<LoadingScreenAnimationShow>(entity);
+            }
+            
             Entities.WithAll<ShowLoadingScreen>()
                 .ForEach((Entity entity, ShowLoadingScreen showLoadingScreen) =>
                 {

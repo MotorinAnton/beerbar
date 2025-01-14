@@ -5,6 +5,7 @@ using Unity.Entities;
 
 namespace Core.Authoring.WarehouseUi.Systems
 {
+    [RequireMatchingQueriesForUpdate]
     [UpdateInGroup(typeof(PresentationSystemGroup))]
     public partial class WarehouseUpdateProductUiSystem : SystemBase
     {

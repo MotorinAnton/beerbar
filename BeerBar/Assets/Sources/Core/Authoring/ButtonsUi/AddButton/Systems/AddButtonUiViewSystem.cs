@@ -152,7 +152,7 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
                 {
                     ProductType = container.Type,
                     Level = container.Level,
-                    Count = 0,
+                    Count = 1000,
                     PurchaseCost = newProduct.PurchaseCost,
                     SellPrice = newProduct.SellPrice
                 });

@@ -20,7 +20,7 @@ MonoBehaviour:
     - {fileID: 7652422964229294757, guid: 5787a412b2391f049a95b36dc992752e, type: 3}
     - {fileID: 1576758350275345557, guid: 55ce227143e92ce4eb53fc748cfb570d, type: 3}
     - {fileID: 2603586338370896315, guid: 8cc3acc5610a0724c91520a4583a0670, type: 3}
-    Visual: {fileID: 21300000, guid: ffab055551a16574583244301b0e6c58, type: 3}
+    Visual: {fileID: 21300000, guid: 1c79d2062b4c74344b7a298e94a8f686, type: 3}
     Level: 1
     PurchaseCost: 1
     SellPrice: 2
@@ -31,7 +31,7 @@ MonoBehaviour:
     - {fileID: 6511571012912692622, guid: b53b31b261ae60e49b8631b9b8a4c64a, type: 3}
     - {fileID: 5117145288720884664, guid: 2d53434542a5c9345ae44aca9aac38a3, type: 3}
     - {fileID: 5588633416104072449, guid: 84cffb3a5a3f3aa40a892e4f63395c2c, type: 3}
-    Visual: {fileID: 21300000, guid: ffab055551a16574583244301b0e6c58, type: 3}
+    Visual: {fileID: 21300000, guid: 1c79d2062b4c74344b7a298e94a8f686, type: 3}
     Level: 2
     PurchaseCost: 2
     SellPrice: 4
@@ -42,25 +42,25 @@ MonoBehaviour:
     - {fileID: 6135123347612391907, guid: 67eda0e66aa94064c85e7625eb46789e, type: 3}
     - {fileID: 2711702005767305438, guid: ff344d2315d96484bba6588967089fc5, type: 3}
     - {fileID: 1715956529134765859, guid: 32e8be11d3038944f977e11e50f7cd2b, type: 3}
-    Visual: {fileID: 21300000, guid: ffab055551a16574583244301b0e6c58, type: 3}
+    Visual: {fileID: 21300000, guid: 1c79d2062b4c74344b7a298e94a8f686, type: 3}
     Level: 3
     PurchaseCost: 1
     SellPrice: 2
   - ProductType: 1
     Prefabs: []
-    Visual: {fileID: 21300000, guid: b294d5fd1c5e7f248a16bf414ee03414, type: 3}
+    Visual: {fileID: 21300000, guid: 90fc7e4095753644799869a1d0a28ba1, type: 3}
     Level: 2
     PurchaseCost: 2
     SellPrice: 4
   - ProductType: 1
     Prefabs: []
-    Visual: {fileID: 21300000, guid: b294d5fd1c5e7f248a16bf414ee03414, type: 3}
+    Visual: {fileID: 21300000, guid: 90fc7e4095753644799869a1d0a28ba1, type: 3}
     Level: 3
     PurchaseCost: 4
     SellPrice: 8
   - ProductType: 1
     Prefabs: []
-    Visual: {fileID: 21300000, guid: b294d5fd1c5e7f248a16bf414ee03414, type: 3}
+    Visual: {fileID: 21300000, guid: 90fc7e4095753644799869a1d0a28ba1, type: 3}
     Level: 1
     PurchaseCost: 1
     SellPrice: 2
@@ -114,7 +114,7 @@ MonoBehaviour:
     SellPrice: 256
   - ProductType: 4
     Prefabs: []
-    Visual: {fileID: 21300000, guid: a89b25de0b655664f8ad7bcd94f9fda1, type: 3}
+    Visual: {fileID: 21300000, guid: 61b4ddca9cc4b0b4b8ec880ff836714e, type: 3}
     Level: 1
     PurchaseCost: 1
     SellPrice: 2

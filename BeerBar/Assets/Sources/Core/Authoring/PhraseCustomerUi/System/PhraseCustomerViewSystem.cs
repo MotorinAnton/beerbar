@@ -1,4 +1,4 @@
-﻿/*using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Core.Authoring.Customers;
 using Core.Utilities;
@@ -26,7 +26,7 @@ namespace Core.Authoring.PhraseCustomerUi.System
 
         protected override void OnUpdate()
         {
-            Entities.WithAll<PhraseCustomerUiManagerView>().WithNone<StartTweenPhraseCustomerUi, TweenProcessing>()
+            /*Entities.WithAll<PhraseCustomerUiManagerView>().WithNone<StartTweenPhraseCustomerUi, TweenProcessing>()
                 .ForEach(
                     (Entity entity, in PhraseCustomerUiManagerView phraseCustomerUiManagerView) =>
                     {
@@ -60,7 +60,7 @@ namespace Core.Authoring.PhraseCustomerUi.System
                                     
                                 panel.SetPhraseComponent(customerView.Dialogs.PurchaseRequest[randomPhrase], customerView.Avatar, imageProductArray,
                                     newCustomerList[i], i);
-                                phraseUiManager.PanelFadeIn(panel);
+                                phraseUiManager.PanelFadeIn(panel, i);
                             }
                         }
 
@@ -99,10 +99,10 @@ namespace Core.Authoring.PhraseCustomerUi.System
                             panel.IsShow = false;
                         }
                     }
+                }).WithoutBurst().WithStructuralChanges().Run();*/
 
-                }).WithoutBurst().WithStructuralChanges().Run();
             
-            Entities.WithAll<PhraseCustomerUiManagerView, StartTweenPhraseCustomerUi>().WithNone<TweenProcessing>()
+            /*Entities.WithAll<PhraseCustomerUiManagerView, StartTweenPhraseCustomerUi>().WithNone<TweenProcessing>()
                 .ForEach(
                     (Entity entity, in PhraseCustomerUiManagerView phraseCustomerUiManagerView) =>
                     {
@@ -121,7 +121,7 @@ namespace Core.Authoring.PhraseCustomerUi.System
                         EntityManager.RemoveComponent<TweenProcessing>(entity);
                         EntityManager.RemoveComponent<StartTweenPhraseCustomerUi>(entity);
 
-                    }).WithoutBurst().WithStructuralChanges().Run();
+                    }).WithoutBurst().WithStructuralChanges().Run()*/;
         }
 
         private  Sprite[] ImageProductArray(Entity customerEntity)
@@ -258,5 +258,5 @@ namespace Core.Authoring.PhraseCustomerUi.System
             return default;
         }
     }
-}*/
+}
 

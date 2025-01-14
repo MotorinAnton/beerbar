@@ -2,14 +2,12 @@
 using Core.Constants;
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Core.Configs
 {
     [CreateAssetMenu(menuName = AssetConstants.ConfigMenuPath + nameof(GameConfig))]
     public sealed class GameConfig : ScriptableObject
     {
-        public InputActionAsset Actions;
         public CameraConfig CameraConfig;
         public BarmanConfig BarmanConfig;
         public CustomerConfig CustomerConfig;

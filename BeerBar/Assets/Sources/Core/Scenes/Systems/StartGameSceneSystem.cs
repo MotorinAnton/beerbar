@@ -47,6 +47,7 @@ namespace Core.Scenes.Systems
         private EntityQuery _spawnPointCleanerQuery;
         private EntityQuery _spawnPointsContainerQuery;
         private EntityQuery _spawnPointsTableQuery;
+        private EntityQuery _mainCameraQuery;
 
         protected override void OnCreate()
         {
@@ -73,6 +74,9 @@ namespace Core.Scenes.Systems
             
             using var spawnPointsTableBuilder = new EntityQueryBuilder(Allocator.Temp);
             _spawnPointsTableQuery = spawnPointsTableBuilder.WithAll<SpawnPointTable, PointAtTheTable>().Build(this);
+            
+            using var mainCameraBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _mainCameraQuery = mainCameraBuilder.WithAll<MainCamera, CameraView>().Build(this);
         }
 
         protected override void OnUpdate()
@@ -135,8 +139,7 @@ namespace Core.Scenes.Systems
                 var spawnPoint = spawnPointBarmanEntity[index];
                 CreateBarman(config, spawnPoint, index);
             }
-
-            var array = _sceneQuery.ToEntityArray(WorldUpdateAllocator);
+            var array = _sceneQuery.ToEntityArray(Allocator.Temp);
             
             EntityManager.DestroyEntity(array[0]);
         }
@@ -155,7 +158,6 @@ namespace Core.Scenes.Systems
                 Point = spawnPoint, Type = container.Type, CustomerContainerPoints = customerPoints,
                 BarmanContainerPoints = barmanPoints
             });
-
         }
 
         private void CreateBank()
@@ -182,15 +184,32 @@ namespace Core.Scenes.Systems
 
         private void CreateMainCamera(GameConfig config)
         {
-            var cameraEntity = EntityManager.CreateEntity();
             var spawnPointCameraEntity = _spawnPointCameraQuery.ToEntityArray(Allocator.Temp)[0];
             var spawnPoint = EntityManager.GetBuffer<SpawnPointCamera>(spawnPointCameraEntity)[0];
-            var startCameraArray = Camera.FindObjectsOfType<Camera>();
             
-            foreach (var cam in startCameraArray)
+            if (!_mainCameraQuery.IsEmpty)
             {
-                Camera.Destroy(cam.gameObject);
+                var startCameraArray = Object.FindObjectsOfType<Camera>();
+                var mainCameraEntity = _mainCameraQuery.GetSingletonEntity();
+                var cameraView = EntityManager.GetComponentObject<CameraView>(mainCameraEntity);
+                
+                foreach (var cam in startCameraArray)
+                {
+                    if (cam.GetInstanceID() == cameraView.Value.GetInstanceID())
+                    {
+                        var transform = cameraView.Value.transform;
+                        transform.position = spawnPoint.Position;
+                        transform.rotation = spawnPoint.Rotation;
+                    }
+                    else
+                    {
+                        Object.Destroy(cam.gameObject);
+                    }
+                }
+                return;
             }
+            
+            var cameraEntity = EntityManager.CreateEntity();
             
             EntityManager.AddComponentObject(cameraEntity, new SpawnCamera
             {

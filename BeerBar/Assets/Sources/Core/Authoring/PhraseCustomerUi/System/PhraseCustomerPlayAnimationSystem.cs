@@ -1,4 +1,5 @@
-﻿/*using DG.Tweening;
+﻿/*
+using DG.Tweening;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -53,5 +54,6 @@ namespace Core.Authoring.PhraseCustomerUi.System
             }
         }
     }
-}*/
+}
+*/
 

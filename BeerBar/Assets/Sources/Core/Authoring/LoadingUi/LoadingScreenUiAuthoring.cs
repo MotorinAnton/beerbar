@@ -86,11 +86,13 @@ namespace Core.Authoring.LoadingUi
         public bool AutoHide;
         public Action<float> ProgressAction;
     }
-
+    
     public struct HideLoadingScreen : IComponentData { }
 
     public struct LoadingScreenProgress : IComponentData
     {
         public float Progress;
     }
+    
+    public struct LoadingScreenAnimationShow : IComponentData { }
 }

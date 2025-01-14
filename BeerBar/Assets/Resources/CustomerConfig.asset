@@ -317,5 +317,6 @@ MonoBehaviour:
   DrinkAtTheTableChance: 50
   StartCountCustomers: 4
   Ratio: 1
-  MaxWaitTimeInPurchaseQueue: 55
+  MaxWaitTimeInPurchaseQueue: 15
   DrinkAtTheTableTime: 20
+  RespawnTime: 0

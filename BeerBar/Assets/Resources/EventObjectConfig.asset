@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EventObjectConfig
   m_EditorClassIdentifier: 
   BreakBottlePrefab: {fileID: 4697694797404191890, guid: 39af1afbbe34fec49988e6bf7345b556, type: 3}
-  LossWalletPrefab: {fileID: 8134132903922778600, guid: 7cf066668c05a4d41a6124ef8aa3238e, type: 3}
+  LossWalletPrefab: {fileID: 3911088470624219213, guid: 4181ba0162fce934189c0ce3b76e5fc5, type: 3}
   TubePrefab: {fileID: 961928374192969798, guid: bf43073230433284692c6f39e134fedb, type: 3}
   ElectricityPrefab: {fileID: 5057544177017212021, guid: 6c856b59f5f0fbf468485b4bd3ab7fc1, type: 3}
   TVPrefab: {fileID: 5671165167514247596, guid: f3185ee1ee47c24479988b31e51a804a, type: 3}

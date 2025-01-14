@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Core.Authoring.ParametersButtonUi.Systems
 {
-    public partial class ParametersButtonUiSpawnSystem : SystemBase
+    public partial class MainMenuButtonUiSpawnSystem : SystemBase
     {
         protected override void OnUpdate()
         {
@@ -28,6 +28,7 @@ namespace Core.Authoring.ParametersButtonUi.Systems
                     SortingOrder = parametersButtonUiView.SortingOrder
                 });
             
+            EntityManager.SetName(parametersButtonUi, EntityConstants.ParametersButtonUiName);
             EntityManager.SetName(parametersButtonUi, EntityConstants.ParametersButtonUiName);
             parametersButtonUiView.Initialize(EntityManager, parametersButtonUi);
             EntityManager.DestroyEntity(entity);

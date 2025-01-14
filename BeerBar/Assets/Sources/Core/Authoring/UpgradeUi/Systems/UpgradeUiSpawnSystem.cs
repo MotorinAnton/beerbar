@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Core.Authoring.RootCanvas;
 using Core.Configs;
@@ -81,7 +82,8 @@ namespace Core.Authoring.UpgradeUi.Systems
                 var prefab = up.UpVisualType switch
                 {
                     UpVisualType.Small => spawnUpgradeUi.UpgradeElementUiSmallPrefab,
-                    UpVisualType.Big => spawnUpgradeUi.UpgradeElementUiBigPrefab
+                    UpVisualType.Big => spawnUpgradeUi.UpgradeElementUiBigPrefab,
+                    _ => throw new ArgumentOutOfRangeException()
                 };
                 
                 var upgradeElementUiView =

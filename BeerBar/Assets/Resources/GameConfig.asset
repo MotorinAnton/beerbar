@@ -12,7 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0e65eea0774ca9bbe9232e18922f9b, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  Actions: {fileID: -944628639613478452, guid: 610a8dbd51fd25e469a0b5265d930b50, type: 3}
+  GameScene:
+    Id:
+      GlobalId:
+        SceneObjectIdentifier0: 102900000
+        SceneObjectIdentifier1: 0
+        AssetGUID:
+          Value:
+            x: 3114465190
+            y: 1142853436
+            z: 2622650533
+            w: 1187852577
+        IdentifierType: 1
+      GenerationType: 3
   CameraConfig: {fileID: 11400000, guid: 6a823724026be874caa757fab8c6d4ff, type: 2}
   BarmanConfig: {fileID: 11400000, guid: 6bb686cd79d4d704d8574e56db53dea6, type: 2}
   CustomerConfig: {fileID: 11400000, guid: ca4b57e5ffff0de4c8556e9867cf887c, type: 2}

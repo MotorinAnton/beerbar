@@ -33,6 +33,7 @@ namespace Core.Scenes.Systems
                     {
                         loadSceneMode = LoadSceneMode.Single
                     });
+                
                 ecb.AddComponent(entity, new LoadSceneProcess{Scene = scene});
             }
 
@@ -42,9 +43,10 @@ namespace Core.Scenes.Systems
                 {
                     return;
                 }
-
+                
                 ecb.AddComponent<SceneLoaded>(entity);
             }
+            
             ecb.Playback(state.EntityManager);
             ecb.Dispose();
         }
