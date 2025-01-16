@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0e65eea0774ca9bbe9232e18922f9b, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  GameScene:
+  Scene:
     Id:
       GlobalId:
         SceneObjectIdentifier0: 102900000

@@ -59,9 +59,9 @@ namespace Core.Authoring.UpgradeUi
             _ratingText.text = value.ToString();
         }
 
-        public void ShowDescription() => EntityUtilities.AddOneFrameComponent<ShowDescription>(Entity);
+        private void ShowDescription() => EntityUtilities.AddOneFrameComponent<ShowDescription>(Entity);
 
-        public void HideDescription() => EntityUtilities.AddOneFrameComponent<HideDescription>(Entity);
+        private void HideDescription() => EntityUtilities.AddOneFrameComponent<HideDescription>(Entity);
 
         public void EnableCompletedIcon()
         {

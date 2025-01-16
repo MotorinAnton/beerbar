@@ -86,7 +86,6 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
             AddButtonAvailability(addButtonUiView, price);
         }
 
-
         private void SpawnContainer(Entity entity, AddButtonUiView addButtonUiView, int level)
         {
             var config = EntityUtilities.GetContainerConfig();
@@ -152,7 +151,7 @@ namespace Core.Authoring.ButtonsUi.AddButton.Systems
                 {
                     ProductType = container.Type,
                     Level = container.Level,
-                    Count = 1000,
+                    Count = 0,
                     PurchaseCost = newProduct.PurchaseCost,
                     SellPrice = newProduct.SellPrice
                 });

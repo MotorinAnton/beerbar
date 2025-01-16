@@ -1,5 +1,7 @@
 ﻿using Core.Authoring.Cameras;
 using Core.Authoring.LoadingUi;
+using Core.Authoring.MainMenu;
+using Core.Authoring.ParametersUi;
 using Core.Authoring.RootCanvas;
 using Core.Scenes.Components;
 using Core.Utilities;
@@ -27,14 +29,24 @@ namespace Core.Scripts
             
             manager.AddComponentObject(spawnRootCanvas, new SpawnRootCanvas { RootCanvasPrefab = config.UIConfig.RootCanvasPrefab });
             
+            var spawnMainMenuUi = manager.CreateEntity();
+                        
+            manager.AddComponentObject(spawnMainMenuUi, new SpawnMainMenuUi { MainMenuUiPrefab = config.UIConfig.MainMenuUiPrefab });
+            
+            var parametersUi = manager.CreateEntity();
+            
+            manager.AddComponentObject(parametersUi, new SpawnParametersUi
+            {
+                ParametersUiPrefab = config.UIConfig.ParametersUiPrefab
+            });
             var loadingSpawnEntity= manager.CreateEntity();
             
             manager.AddComponentObject(loadingSpawnEntity, new SpawnLoadingScreenUi { LoadingScreenUiAuthoring = config.UIConfig.LoadingScreenUiPrefab });
             
-            manager.CreateSingleton<StartupAwake>();
-            
-            var entity = manager.CreateEntity();
-            manager.AddComponentData(entity,  new LoadScene{Reference = _gameScene});
+            // manager.CreateSingleton<StartupAwake>();
+            //
+            // var entity = manager.CreateEntity();
+            // manager.AddComponentData(entity,  new LoadScene { Reference = _gameScene });
             
             Initialize();
         }

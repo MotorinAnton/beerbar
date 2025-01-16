@@ -4,9 +4,9 @@ using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.Authoring.ParametersButtonUi
+namespace Core.Authoring.PauseButtonUi
 {
-    public class ParametersButtonUiAuthoring : EntityBehaviour
+    public class PauseButtonUiAuthoring : EntityBehaviour
     {
         public int SortingOrder => _sortingOrder;
 
@@ -22,10 +22,10 @@ namespace Core.Authoring.ParametersButtonUi
         }
     }
     
-    public struct ParametersButtonUi : IComponentData { }
+    public struct PauseButtonUi : IComponentData { }
 
-    public class SpawnParametersButtonUi : IComponentData
+    public class SpawnPauseButtonUi : IComponentData
     {
-        public ParametersButtonUiAuthoring ParametersButtonUiPrefab;
+        public PauseButtonUiAuthoring PauseButtonUiPrefab;
     }
 }

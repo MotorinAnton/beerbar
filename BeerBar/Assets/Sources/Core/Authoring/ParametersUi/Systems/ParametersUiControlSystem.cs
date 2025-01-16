@@ -1,4 +1,5 @@
-﻿using Core.Authoring.SelectGameObjects;
+﻿using Core.Authoring.MainMenu;
+using Core.Authoring.SelectGameObjects;
 using Core.Services;
 using Unity.Collections;
 using Unity.Entities;
@@ -25,8 +26,7 @@ namespace Core.Authoring.ParametersUi.Systems
             var parametersUi = _parametersUiQuery.GetSingletonEntity();
             var parametersUiView = EntityManager.GetComponentObject<ParametersUiView>(parametersUi);
 
-            Entities.WithAll<ParametersButtonUi.ParametersButtonUi>().WithAll<Clicked>()
-                .ForEach((Entity entity) =>
+            Entities.WithAll<MainMenuUiView, SettingsClicked>().ForEach((Entity entity) =>
                 {
                     parametersUiView.ParametersUiAuthoring.OpenParametersWindow();
                 }).WithoutBurst().Run();

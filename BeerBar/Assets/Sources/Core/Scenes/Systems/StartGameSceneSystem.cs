@@ -9,8 +9,8 @@ using Core.Authoring.Cleaners;
 using Core.Authoring.CoinsUi;
 using Core.Authoring.Containers;
 using Core.Authoring.LoadingUi;
-using Core.Authoring.ParametersButtonUi;
 using Core.Authoring.ParametersUi;
+using Core.Authoring.PauseButtonUi;
 using Core.Authoring.PhraseCustomerUi;
 using Core.Authoring.Points;
 using Core.Authoring.ProductKeepers;
@@ -123,8 +123,8 @@ namespace Core.Scenes.Systems
             CreateStoreRatingUi(config);
             CreateWarehouseUi(config);
             CreatePhraseCustomerUi(config);
-            CreateParametersButtonUi(config);
-            CreateParametersUi(config);
+            CreatePauseButtonUi(config);
+            //CreateParametersUi(config);
             CreateLoadingScreenUi(config);
             CreateTextProductTableUI(config);
             CreateTV(config);
@@ -337,12 +337,12 @@ namespace Core.Scenes.Systems
             });
         }
 
-        private void CreateParametersButtonUi(GameConfig config)
+        private void CreatePauseButtonUi(GameConfig config)
         {
             var parametersButtonUi = EntityManager.CreateEntity();
-            EntityManager.AddComponentObject(parametersButtonUi, new SpawnParametersButtonUi
+            EntityManager.AddComponentObject(parametersButtonUi, new SpawnPauseButtonUi
             {
-                ParametersButtonUiPrefab = config.UIConfig.ParametersButtonUiPrefab
+                PauseButtonUiPrefab = config.UIConfig.PauseButtonUiPrefab
             });
         }
         

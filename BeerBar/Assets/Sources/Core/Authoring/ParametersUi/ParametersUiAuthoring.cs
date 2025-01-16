@@ -1,8 +1,6 @@
-﻿using Core.Authoring.LoadingUi;
-using Core.Save;
+﻿using Core.Save;
 using Core.Services;
 using Core.Utilities;
-using DG.Tweening;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,10 +22,7 @@ namespace Core.Authoring.ParametersUi
 
         [SerializeField]
         private Slider _masterVolumeSlider;
-
-        [SerializeField]
-        private Button _loadingScreenTest;
-
+        
         private void Start()
         {
             _masterVolumeSlider.onValueChanged.AddListener(value => GameServicesUtilities
@@ -35,8 +30,7 @@ namespace Core.Authoring.ParametersUi
 
             _closeButton.onClick.AddListener(AddClosedClicked);
             _blocker.onClick.AddListener(AddClosedClicked);
-
-            _loadingScreenTest.onClick.AddListener(TestLoadingScreen);
+            
         }
 
         public void OpenParametersWindow()
@@ -49,18 +43,6 @@ namespace Core.Authoring.ParametersUi
         public void CloseParametersWindow()
         {
             gameObject.SetActive(false);
-        }
-
-        public void TestLoadingScreen()
-        {
-            var showLoadingScreen = new ShowLoadingScreen
-            {
-                AutoHide = true
-            };
-
-            EntityManager.AddComponentObject(Entity, showLoadingScreen);
-
-            DOVirtual.Float(0f, 1f, 2f, x => showLoadingScreen.ProgressAction?.Invoke(x));
         }
 
         private void AddClosedClicked()

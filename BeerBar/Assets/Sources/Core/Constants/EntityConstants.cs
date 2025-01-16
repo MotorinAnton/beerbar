@@ -28,12 +28,13 @@ namespace Core.Constants
         public static FixedString64Bytes CustomerUiName = "CustomerUi";
         public static FixedString64Bytes DirtName = "Dirt";
         public static FixedString64Bytes CoinsUiName = "CoinsUi";
-        public static FixedString64Bytes ParametersButtonUiName = "ParametersButtonUi";
+        public static FixedString64Bytes ParametersButtonUiName = "PauseButtonUi";
         public static FixedString64Bytes ParametersUiName = "ParametersUi";
         public static FixedString64Bytes StoreRatingUiName = "StoreRatingUi";
         public static FixedString64Bytes PhraseCustomerUiName = "PhraseCustomerUi";
         public static FixedString64Bytes WarehouseUiName = "WarehouseUi";
         public static FixedString64Bytes LoadingScreenUiName = "LoadingScreenUi";
+        public static FixedString64Bytes MainMenuUiName = "MainMenuUi";
         public static FixedString64Bytes AddContainerButtonUiName = "AddContainerButtonUi";
         public static FixedString64Bytes SpeedXButtonUiName = "SpeedXButton";
         public static FixedString64Bytes UpgradeAndEventButtonUiName = "UpgradeAndEventButtonUi";

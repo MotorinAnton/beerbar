@@ -1,6 +1,7 @@
 ﻿using Core.Authoring.MovementArrows;
 using Core.Constants;
 using Unity.Entities;
+using Unity.Entities.Content;
 using UnityEngine;
 
 namespace Core.Configs
@@ -8,6 +9,7 @@ namespace Core.Configs
     [CreateAssetMenu(menuName = AssetConstants.ConfigMenuPath + nameof(GameConfig))]
     public sealed class GameConfig : ScriptableObject
     {
+        public WeakObjectSceneReference Scene;
         public CameraConfig CameraConfig;
         public BarmanConfig BarmanConfig;
         public CustomerConfig CustomerConfig;

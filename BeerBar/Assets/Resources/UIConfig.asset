@@ -22,9 +22,10 @@ MonoBehaviour:
   AddButtonUiPrefab: {fileID: 7081998914603917433, guid: 8158b2fd93704b34eb6d933365dfcf06, type: 3}
   UpgradeAndEventButtonUiPrefab: {fileID: -5145366520946625939, guid: 435a96f78f9864844b79619480e586dd, type: 3}
   CustomerUiPrefab: {fileID: 9207285423208006843, guid: 445b6b152fc11b646857c1301c2e7da9, type: 3}
-  ParametersButtonUiPrefab: {fileID: 3452191550957788835, guid: 0d98d85721be1cf459a0ab89353d07d5, type: 3}
+  PauseButtonUiPrefab: {fileID: 3452191550957788835, guid: 0d98d85721be1cf459a0ab89353d07d5, type: 3}
   ParametersUiPrefab: {fileID: 7878523023369837526, guid: 7fc8ebfe154c404418f79bfed0ec01a8, type: 3}
   LoadingScreenUiPrefab: {fileID: 1535897410239079732, guid: db019b89333d50f4bb4322f7ebc188a2, type: 3}
+  MainMenuUiPrefab: {fileID: 6911360314811643784, guid: 00bb91d1741be3a49a4f9bfe7544d06e, type: 3}
   UpgradeBarUiPrefab: {fileID: 3428549840901654382, guid: 64b83c03adcfb5c49949af2df857ef39, type: 3}
   UpgradeElementUiSmallPrefab: {fileID: 514488136803596681, guid: 2555dad3204cf7e429cb2bb0873bf108, type: 3}
   UpgradeElementUiBigPrefab: {fileID: 4483936485409714045, guid: 4212ec2cc8d18a343826caf845037d8a, type: 3}
