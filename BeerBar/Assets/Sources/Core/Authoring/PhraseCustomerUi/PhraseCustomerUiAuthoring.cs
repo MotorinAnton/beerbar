@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Core.Components.Destroyed;
 using DG.Tweening;
 using TMPro;
 using Unity.Entities;
@@ -44,18 +44,15 @@ namespace Core.Authoring.PhraseCustomerUi
 
         [SerializeField]
         private RectTransform _rectTransform;
-
-        public bool IsShow;
-        public int Index;
-        public Entity Customer;
-        public Sequence _showSequence;
-
-
-        public void SetPhrasePanelUiComponent(string text, Sprite avatar)
+        
+        public int _index;
+        public Entity _customer;
+        public Sequence _sequence;
+        
+        public void SetEventPanelUiComponent(string text, Sprite avatar)
         {
             Text.text = text;
             Avatar.sprite = avatar;
-            IsShow = true;
 
             foreach (var product in ProductCustomer)
             {
@@ -63,14 +60,12 @@ namespace Core.Authoring.PhraseCustomerUi
             }
         }
         
-        public void SetPhraseComponent(string text, Sprite avatar, Sprite[] products, Entity customerEntity, int index)
+        public void SetPhraseComponent(string text, Sprite avatar, Sprite[] products, Entity customerEntity, int index, int indexPosition)
         {
             Text.text = text;
             Avatar.sprite = avatar;
-            Index = index;
-            //IsShow = true;
-            //gameObject.SetActive(true);
-            Customer = customerEntity;
+            _index = index;
+            _customer = customerEntity;
             
             if (products.Length > 1)
             {
@@ -87,17 +82,12 @@ namespace Core.Authoring.PhraseCustomerUi
             
         }
         
-        public Sequence PanelFadeIn(Vector3 position)
+        public void PanelFadeIn(Vector3 position)
         {
-            RefreshTween();
-            EnablePanel();
-            
-            var startPosition = new Vector3();
-
-            CanvasGroup.alpha = 0;
-            startPosition = RectTransform.position;
+            gameObject.SetActive(true);
+            var startPosition = RectTransform.position;
             startPosition.y -= 30f;
-
+            CanvasGroup.alpha = 0;
             _rectTransform.position = startPosition;
 
             var newSequence = DOTween.Sequence();
@@ -106,91 +96,73 @@ namespace Core.Authoring.PhraseCustomerUi
             
             newSequence.Append(tweenPosition);
             newSequence.Join(tweenFade);
-            //newSequence.AppendCallback(TweenFinished);
-            newSequence.Pause();
-            _showSequence = newSequence;
-            return newSequence;
+            _sequence = newSequence;
         }
         
-        public Sequence PanelFadeOut()
+        public void PanelFadeOut()
         {
-            RefreshTween();
-            var targetPosition = new Vector3();
-            targetPosition = RectTransform.localPosition;
-            targetPosition.x += 20f;
-
+            RefreshSequence();
             var newSequence = DOTween.Sequence();
+            var targetPosition = RectTransform.localPosition;
+            targetPosition.x += 20f;
             var tweenPosition = RectTransform.DOAnchorPos3D(targetPosition, 0.2f).SetEase(Ease.Linear);
             var tweenFade = CanvasGroup.DOFade(0, 0.1f);
-
+            
             newSequence.Append(tweenPosition);
             newSequence.Join(tweenFade);
-            //newSequence.AppendCallback(TweenFinished);
-            newSequence.AppendCallback(DisablePanel);
-            newSequence.Pause();
-            _showSequence = newSequence;
-            return newSequence;
+            newSequence.AppendCallback(DestroyPanelEntity);
+            EntityManager.AddComponent<PanelFadeOut>(Entity);
         }
         
-        
-        
-        
-        public Sequence PanelMoveUp(Vector3 position , int index)
+        public void EventPanelFadeIn( Vector3 eventPanelPosition)
         {
-            RefreshTween();
-            var tween = RectTransform.DOAnchorPos3D(position, 0.2f).SetEase(Ease.OutQuint);
-            var tweenFade = CanvasGroup.DOFade(1, 0.1f).SetEase(Ease.Flash);
-            var newSequence = DOTween.Sequence();
-            newSequence.Append(tween);
-            newSequence.Join(tweenFade);
-            newSequence.AppendCallback(() => SetIndex(index));
-            newSequence.Pause();
-            _showSequence = newSequence;
-            return newSequence;
-        }
-        private void TweenFinished()
-        {
-            var manager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            manager.RemoveComponent<TweenProcessing>(Entity);
-        }
-        
-        private void SetIndex(int index)
-        {
-            Index = index;
-        }
-        
-        
-        private void RefreshTween()
-        {
-            if (_showSequence != null)
-            {
-                _showSequence.Kill();
-                _showSequence = null;
-            }
-        }
-        
-        public void DisablePanel()
-        {
-            RefreshTween();
-            IsShow = false;
-            Customer = default;
-            gameObject.SetActive(false);
-        }
-        
-        public void DeactivatedPanel()
-        {
-            IsShow = false;
-        }
-        
-        public void EnablePanel()
-        {
-            IsShow = true;
+            //RefreshSequence();
             gameObject.SetActive(true);
+            CanvasGroup.alpha = 0;
+            var startPosition = eventPanelPosition;
+            startPosition.x += 30f;
+            RectTransform.localPosition = startPosition;
+            var newSequence = DOTween.Sequence();
+            var tweenPosition = RectTransform.DOAnchorPos3D(eventPanelPosition, 0.7f).SetEase(Ease.OutQuint);
+            var tweenFade = CanvasGroup.DOFade(1, 0.4f);
+            newSequence.Append(tweenPosition);
+            newSequence.Join(tweenFade);
+            newSequence.AppendInterval(1f);
+            var tweenEndPosition = RectTransform.DOAnchorPos3D(startPosition, 0.2f).SetEase(Ease.OutQuint);
+            var tweenEndFade = CanvasGroup.DOFade(0, 0.2f);
+
+            newSequence.Append(tweenEndPosition);
+            newSequence.Join(tweenEndFade);
+            newSequence.AppendCallback(DestroyEventPanel);
+            _sequence = newSequence;
+        }
+        
+        private void RefreshSequence()
+        {
+            if (_sequence == null)
+            {
+                return;
+            }
+            
+            _sequence.Kill();
+            _sequence = null;
+        }
+        
+        private void DestroyEventPanel()
+        {
+            EntityManager.RemoveComponent<EventPanelCustomerIsShow>(_customer);
+            EntityManager.AddComponent<Destroyed>(Entity);
         }
 
+        private void DestroyPanelEntity()
+        {
+            EntityManager.AddComponent<Destroyed>(Entity);
+        }
     }
     
-    public struct PhraseCustomerUi : IComponentData { }
+    public struct PhrasePanelCustomerUi : IComponentData { }
+    
+    public struct EventPhrasePanelCustomerUi : IComponentData { }
     
     public struct StartTweenPhraseCustomerUi : IComponentData { }
     
@@ -199,22 +171,33 @@ namespace Core.Authoring.PhraseCustomerUi
     public struct MovePhrasePanels : IComponentData { }
 
     public struct TweenProcessing : IComponentData { }
-
-    public class SpawnPhraseCustomerUiManager : IComponentData
+    
+    public struct PanelFadeOut : IComponentData { }
+    
+    public struct PanelCustomerIsShow: IComponentData { }
+    
+    public struct EventPanelCustomerIsShow: IComponentData { }
+    
+    public class PhraseCustomerUiView : IComponentData
     {
-        public PhraseCustomerUiManager PhraseCustomerUiPrefab;
+        public PhraseCustomerUiAuthoring Value;
     }
-    public class PhraseCustomerUiManagerView : IComponentData
+    public class SpawnPhrasePanelCustomerUi : IComponentData
     {
-        public PhraseCustomerUiManager PhraseCustomerUiManager;
-        public List<Entity> CustomerList;
-
-
-        public void EnablePhrasePanelsUi() => PhraseCustomerUiManager.gameObject.SetActive(true);
-
-        public void DisablePhrasePanelsUi() => PhraseCustomerUiManager.gameObject.SetActive(false);
-
-        
+        public Entity Customer;
+        public int Index;
+    }
+ 
+    public class SpawnEventPhrasePanelCustomerUi : IComponentData
+    {
+        public Entity Customer;
+        public EventPhraseType Type;
     }
     
+    public enum EventPhraseType
+    {
+        Swear,
+        DirtyTable,
+        Displeased
+    }
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using Core.Authoring.Bartenders.AddBarmanFX;
 using Core.Authoring.Containers;
 using Core.Authoring.EventObjects;
+using Core.Authoring.NoteBookShops;
 using Core.Authoring.SelectGameObjects.Types;
 using Core.Authoring.Tables;
 using Core.Authoring.TVs;
@@ -52,14 +53,14 @@ namespace Core.Authoring.SelectGameObjects.Systems
 
                     if (EntityManager.HasComponent<TubeView>(entity))
                     {
-                        var containerView = EntityManager.GetComponentObject<TubeView>(entity);
-                        NewRendererArray(containerView.Value.Select, true);
+                        var tubeView = EntityManager.GetComponentObject<TubeView>(entity);
+                        NewRendererArray(tubeView.Value.Select, true);
                     }
 
                     if (EntityManager.HasComponent<ElectricityView>(entity))
                     {
-                        var containerView = EntityManager.GetComponentObject<ElectricityView>(entity);
-                        NewRendererArray(containerView.Value.Select, true);
+                        var electricityView = EntityManager.GetComponentObject<ElectricityView>(entity);
+                        NewRendererArray(electricityView.Value.Select, true);
                     }
 
                     if (EntityManager.HasComponent<TVView>(entity))
@@ -87,6 +88,12 @@ namespace Core.Authoring.SelectGameObjects.Systems
                         var addBarmanFXView = EntityManager.GetComponentObject<AddBarmanFXView>(entity);
 
                         NewRendererArray(addBarmanFXView.Value.Select, true);
+                    }
+                    
+                    if (EntityManager.HasComponent<NoteBookShopView>(entity))
+                    {
+                        var noteBookShopView = EntityManager.GetComponentObject<NoteBookShopView>(entity);
+                        NewRendererArray(noteBookShopView.Value.Select, true);
                     }
 
                     EntityManager.RemoveComponent<SelectObject>(entity);
@@ -141,7 +148,13 @@ namespace Core.Authoring.SelectGameObjects.Systems
 
                         NewRendererArray(addBarmanFXView.Value.Select, false);
                     }
-
+                    
+                    if (EntityManager.HasComponent<NoteBookShopView>(entity))
+                    {
+                        var noteBookShopView = EntityManager.GetComponentObject<NoteBookShopView>(entity);
+                        NewRendererArray(noteBookShopView.Value.Select, false);
+                    }
+                    
                     EntityManager.RemoveComponent<DeselectObject>(entity);
 
                 }).WithStructuralChanges().Run();
@@ -158,8 +171,8 @@ namespace Core.Authoring.SelectGameObjects.Systems
 
                     if (EntityManager.HasComponent<TubeView>(entity))
                     {
-                        var containerView = EntityManager.GetComponentObject<TubeView>(entity);
-                        NewRendererArray(containerView.Value.Select, false);
+                        var tubeView = EntityManager.GetComponentObject<TubeView>(entity);
+                        NewRendererArray(tubeView.Value.Select, false);
                     }
 
                     EntityManager.RemoveComponent<DeselectObject>(entity);
@@ -238,24 +251,35 @@ namespace Core.Authoring.SelectGameObjects.Systems
                     var rendererAndParticleSelectObject = (RendererAndParticleSelectAuthoring)selectAuthoring;
                     var particle = rendererAndParticleSelectObject.Particle;
 
-                    if (select)
-                    {
-                        particle.sharedMaterial = particleSelectMaterial.ParticleSprayRendererObject[0];
-                    }
-                    else
-                    {
-                        particle.sharedMaterial = particleSelectMaterial.ParticleSprayRendererObject[1];
-                    }
-
                     for (var index = 0; index < rendererAndParticleSelectObject.Renderers.Length; index++)
                     {
                         var renderer = rendererAndParticleSelectObject.Renderers[index];
 
-                        rendererAndParticleSelectObject.Renderers[index].sharedMaterials =
+                        renderer.sharedMaterials =
                             SelectedMaterial(renderer.sharedMaterials, select);
-
-                        rendererAndParticleSelectObject.Renderers[index].sharedMaterials = SelectedMaterial(renderer.sharedMaterials, select);
                     }
+
+                    if (particle.gameObject.activeSelf)
+                    {
+                        if (select)
+                        {
+                            particle.sharedMaterial = particleSelectMaterial.ParticleSprayRendererObject[0];
+                        }
+                        else
+                        {
+                            particle.sharedMaterial = particleSelectMaterial.ParticleSprayRendererObject[1];
+                        }
+                    }
+                    
+                    
+                    
+                    // for (var index = 0; index < rendererAndParticleSelectObject.Renderers.Length; index++)
+                    // {
+                    //     var renderer = rendererAndParticleSelectObject.Renderers[index];
+                    //     renderer.sharedMaterials = SelectedMaterial(renderer.sharedMaterials, select);
+                    // }
+
+                    
                     break;
 
                 default:

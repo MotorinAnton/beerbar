@@ -42,12 +42,7 @@ namespace Core.Scripts
             var loadingSpawnEntity= manager.CreateEntity();
             
             manager.AddComponentObject(loadingSpawnEntity, new SpawnLoadingScreenUi { LoadingScreenUiAuthoring = config.UIConfig.LoadingScreenUiPrefab });
-            
-            // manager.CreateSingleton<StartupAwake>();
-            //
-            // var entity = manager.CreateEntity();
-            // manager.AddComponentData(entity,  new LoadScene { Reference = _gameScene });
-            
+
             Initialize();
         }
 

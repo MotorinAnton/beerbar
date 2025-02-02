@@ -26,7 +26,7 @@ namespace Core.Authoring.ParametersUi.Systems
             var parametersUi = _parametersUiQuery.GetSingletonEntity();
             var parametersUiView = EntityManager.GetComponentObject<ParametersUiView>(parametersUi);
 
-            Entities.WithAll<MainMenuUiView, SettingsClicked>().ForEach((Entity entity) =>
+            Entities.WithAll<SettingsClicked>().ForEach((Entity entity) =>
                 {
                     parametersUiView.ParametersUiAuthoring.OpenParametersWindow();
                 }).WithoutBurst().Run();

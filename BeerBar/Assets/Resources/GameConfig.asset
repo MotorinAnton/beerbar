@@ -33,6 +33,7 @@ MonoBehaviour:
   CleanerConfig: {fileID: 11400000, guid: 15e454a39b2efe643b249834ce5c9e0b, type: 2}
   ContainerConfig: {fileID: 11400000, guid: 425b3e03ddaa813479d937bab8e66232, type: 2}
   ProductConfig: {fileID: 11400000, guid: c99ab09de5eaac741b487a95e51e5658, type: 2}
+  WarehouseConfig: {fileID: 11400000, guid: d1fdc96db44424242b9abbed96a61d98, type: 2}
   UIConfig: {fileID: 11400000, guid: e6a27a8036ce615438bf25dac5e0c30f, type: 2}
   TableConfig: {fileID: 11400000, guid: 81fb70984f403d3478b76592121534a7, type: 2}
   EventObjectConfig: {fileID: 11400000, guid: a84593a1f03b7994a968ac8cb02ac280, type: 2}

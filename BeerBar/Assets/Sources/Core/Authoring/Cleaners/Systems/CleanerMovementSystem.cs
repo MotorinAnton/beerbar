@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Core.Authoring.Characters;
+using Core.Authoring.CleanerDoor;
 using Core.Authoring.EventObjects;
 using Core.Authoring.MovementArrows;
 using Core.Authoring.Tables;
@@ -10,6 +11,7 @@ using Core.Constants;
 using Core.Utilities;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Core.Authoring.Cleaners.Systems
 {
@@ -27,6 +29,7 @@ namespace Core.Authoring.Cleaners.Systems
         private EntityQuery _spawnPointCleanerQuery;
         private EntityQuery _tablePointQuery;
         private EntityQuery _cleanerMopPointQuery;
+        private EntityQuery _cleanerDoorQuery;
 
         protected override void OnCreate()
         {
@@ -72,6 +75,10 @@ namespace Core.Authoring.Cleaners.Systems
             using var cleanerMopPointBuilder = new EntityQueryBuilder(Allocator.Temp);
             _cleanerMopPointQuery = cleanerMopPointBuilder.WithAll<CleanerMopPoint>()
                 .Build(this);
+            
+            using var cleanerDoorBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _cleanerDoorQuery = cleanerDoorBuilder.WithAll<DoorCleaner, CleanerDoorView>().WithNone<CleanerDoorIsOpen>()
+                .Build(this);
         }
 
         protected override void OnUpdate()
@@ -111,6 +118,8 @@ namespace Core.Authoring.Cleaners.Systems
                     EntityManager.AddComponentData(cleanerEntity,
                         new CleanTableCleaner { ClearTablePoint = cleanTablePoint, Table = tableEntity });
                     EntityManager.RemoveComponent<FreeCleaner>(cleanerEntity);
+
+                    CleanerDoor(CleanerAnimationConstants.OpenDoor);
                 }
 
                 if (!EntityManager.HasBuffer<OrderCleanBreakBottle>(cleanerEntity) ||
@@ -137,7 +146,17 @@ namespace Core.Authoring.Cleaners.Systems
                 EntityManager.AddComponentData(cleanerEntity,
                     new CleanBreakBottleCleaner { BreakBottlePosition = breakBottleTransform.position });
                 EntityManager.RemoveComponent<FreeCleaner>(cleanerEntity);
+                CleanerDoor(CleanerAnimationConstants.OpenDoor);
             }
+        }
+
+        private void CleanerDoor(FixedString64Bytes animationName)
+        {
+            var animation = _cleanerDoorQuery.GetSingleton<CleanerDoorView>().Value.DoorAnimation;
+            var doorAnimation =
+                animation.GetClip(animationName.Value);
+            animation.clip = doorAnimation;
+            animation.Play();
         }
 
         private void MoveCleaningTable()
@@ -395,6 +414,7 @@ namespace Core.Authoring.Cleaners.Systems
                     continue;
                 }
 
+                CleanerDoor(CleanerAnimationConstants.CloseDoor);
                 EntityManager.RemoveComponent<CleaningCompletedCleaner>(cleanerEntity);
                 EntityManager.RemoveComponent<MoveExitCleaner>(cleanerEntity);
                 EntityManager.RemoveComponent<MoveCharacterCompleted>(cleanerEntity);

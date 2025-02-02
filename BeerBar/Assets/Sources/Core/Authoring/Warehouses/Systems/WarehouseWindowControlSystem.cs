@@ -30,7 +30,8 @@ namespace Core.Authoring.Warehouses.Systems
                 .ForEach((Entity entity, in Warehouse warehouse) =>
                 {
                     warehouseUiView.EnableWarehouseWindow();
-                }).WithoutBurst().Run();
+                    EntityManager.RemoveComponent<Clicked>(entity);
+                }).WithoutBurst().WithStructuralChanges().Run();
 
             Entities.WithAll<WarehouseUi.WarehouseUi>().WithAll<CloseClicked>()
                 .ForEach((Entity entity) =>

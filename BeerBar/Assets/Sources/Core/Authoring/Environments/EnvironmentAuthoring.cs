@@ -14,6 +14,7 @@ namespace Core.Authoring.Environments
             }
         }
     }
+    
     public class EnvironmentView : IComponentData
     {
         public EnvironmentAuthoring Environment;

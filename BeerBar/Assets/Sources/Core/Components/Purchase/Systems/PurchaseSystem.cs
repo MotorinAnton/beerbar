@@ -1,13 +1,17 @@
-﻿using Core.Authoring.Banks;
+﻿using System.Linq;
+using Core.Authoring.Banks;
 using Core.Authoring.Bartenders;
 using Core.Authoring.Customers;
 using Core.Authoring.Customers.CustomersUi;
 using Core.Authoring.PhraseCustomerUi;
+using Core.Authoring.Points;
 using Core.Authoring.ProfitUi;
 using Core.Authoring.StoreRatings;
+using Core.Authoring.Tables;
 using Core.Components.Wait;
 using Core.Constants;
 using Core.Utilities;
+using DG.Tweening;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -20,6 +24,9 @@ namespace Core.Components.Purchase.Systems
         private EntityQuery _bankQuery;
         private EntityQuery _storeRatingQuery;
         private EntityQuery _phraseUiManager;
+        private EntityQuery _phrasePanelUi;
+        private EntityQuery _purchaseQueueCustomerQuery;
+        private EntityQuery _purchasePointsQuery;
         
         protected override void OnCreate()
         {
@@ -30,7 +37,17 @@ namespace Core.Components.Purchase.Systems
             _storeRatingQuery = storeRatingBuilder.WithAllRW<StoreRating>().Build(this);
             
             using var phraseUiManagerBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _phraseUiManager = phraseUiManagerBuilder.WithAll<PhraseCustomerUiManagerView>().Build(this);
+            _phraseUiManager = phraseUiManagerBuilder.WithAll<PhraseCustomerUiPositionView>().Build(this);
+            
+            using var phrasePanelUiBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _phrasePanelUi = phrasePanelUiBuilder.WithAll<PhrasePanelCustomerUi,PhraseCustomerUiView>().Build(this);
+            
+            using var purchaseQueueCustomerBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _purchaseQueueCustomerQuery = purchaseQueueCustomerBuilder
+                .WithAll<Customer, PurchaseQueueCustomer, IndexMovePoint>().Build(this);
+            
+            using var purchasePointsBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _purchasePointsQuery = purchasePointsBuilder.WithAll<PurchasePoint, MoveCustomerPoint>().WithNone<PointNotAvailable>().Build(this);
         }
 
         protected override void OnUpdate()
@@ -109,14 +126,14 @@ namespace Core.Components.Purchase.Systems
             EntityManager.AddComponentData(order.CustomerEntity,
                                new WaitTime { Current = BarmanAnimationConstants.ServiceTime });
             
-            if (!_phraseUiManager.IsEmpty)
+            var panelArray = _phrasePanelUi.ToComponentArray<PhraseCustomerUiView>();
+
+            foreach (var panel in panelArray)
             {
-                var phraseUiManagerEntity = _phraseUiManager.ToEntityArray(Allocator.Temp)[0];
-                        
-                var phraseUiManagerView =
-                    EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity);
-                
-                phraseUiManagerView.CustomerList.Remove(order.CustomerEntity);
+                if (panel.Value._customer == order.CustomerEntity)
+                {
+                    panel.Value.PanelFadeOut();
+                }
             }
             
             if (EntityManager.HasComponent<PhraseSayCustomer>(order.CustomerEntity))
@@ -127,6 +144,25 @@ namespace Core.Components.Purchase.Systems
             EntityManager.RemoveComponent<Purchase>(barmanEntity);
             EntityManager.RemoveComponent<OrderBarman>(barmanEntity);
             EntityManager.AddComponent<FreeBarman>(barmanEntity);
+        }
+
+        private bool CheckCustomerInQueueRow( int row )
+        {
+            var purchaseCustomerArray = _purchaseQueueCustomerQuery.ToComponentDataArray<IndexMovePoint>(Allocator.Temp);
+            var purchaseQueuePoints = _purchasePointsQuery.ToComponentDataArray<MoveCustomerPoint>(Allocator.Temp);
+            var rowCount = purchaseQueuePoints.Select(point => point.Row).ToHashSet().Count;
+            
+            foreach (var indexCustomer in purchaseCustomerArray)
+            {
+                var rowCustomer = indexCustomer.Value % rowCount;
+                
+                if (rowCustomer == row)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

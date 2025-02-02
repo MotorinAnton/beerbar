@@ -5,10 +5,13 @@ using Core.Authoring.Bartenders;
 using Core.Authoring.ButtonsUi.AddButton;
 using Core.Authoring.ButtonsUi.SpeedXButton;
 using Core.Authoring.Cameras;
+using Core.Authoring.CleanerDoor;
 using Core.Authoring.Cleaners;
 using Core.Authoring.CoinsUi;
 using Core.Authoring.Containers;
 using Core.Authoring.LoadingUi;
+using Core.Authoring.MainMenu;
+using Core.Authoring.NoteBookShops;
 using Core.Authoring.ParametersUi;
 using Core.Authoring.PauseButtonUi;
 using Core.Authoring.PhraseCustomerUi;
@@ -23,6 +26,7 @@ using Core.Authoring.Tables;
 using Core.Authoring.TextProductTablesUI;
 using Core.Authoring.TVs;
 using Core.Authoring.UpgradeUi;
+using Core.Authoring.Warehouses;
 using Core.Authoring.WarehouseUi;
 using Core.Configs;
 using Core.Constants;
@@ -117,14 +121,16 @@ namespace Core.Scenes.Systems
             CreateBank();
             CreateProductKeeper(config);
             CreateRepairman(config);
+            CreateCleanerDoor(config);
             CreateCleaner(config);
             CreateRootCanvas(config);
             CreateCoinsUi(config);
             CreateStoreRatingUi(config);
             CreateWarehouseUi(config);
+            CreateShopNoteBook(config);
             CreatePhraseCustomerUi(config);
             CreatePauseButtonUi(config);
-            //CreateParametersUi(config);
+            CreatePauseMenuUi(config);
             CreateLoadingScreenUi(config);
             CreateTextProductTableUI(config);
             CreateTV(config);
@@ -250,6 +256,16 @@ namespace Core.Scenes.Systems
             });
         }
         
+        private void CreateCleanerDoor(GameConfig config)
+        {
+            var spawnCleanerDoorEntity = EntityManager.CreateEntity();
+            
+            EntityManager.AddComponentObject(spawnCleanerDoorEntity, new SpawnCleanerDoor
+            {
+                DoorPrefab = config.CleanerDoorPrefab
+            });
+        }
+        
         private void CreateCleaner(GameConfig config)
         {
             var spawnPointEntity = _spawnPointCleanerQuery.ToEntityArray(Allocator.Temp)[0];
@@ -308,12 +324,21 @@ namespace Core.Scenes.Systems
             });
         }
         
+        private void CreateShopNoteBook(GameConfig config)
+        {
+            var shopNoteBook = EntityManager.CreateEntity();
+            EntityManager.AddComponentObject(shopNoteBook, new SpawnNoteBookShop
+            {
+                NoteBookShopPrefab = config.WarehouseConfig.NoteBookShopPrefab
+            });
+        }
+        
         private void CreatePhraseCustomerUi(GameConfig config)
         {
             var phraseCustomerUi = EntityManager.CreateEntity();
             EntityManager.AddComponentObject(phraseCustomerUi, new SpawnPhraseCustomerUiManager
             {
-                PhraseCustomerUiPrefab = config.UIConfig.PhraseCustomerUiPrefab
+                PhraseCustomerUiPrefab = config.UIConfig.PhraseCustomerUiManagerPrefab
             });
         }
         
@@ -346,12 +371,12 @@ namespace Core.Scenes.Systems
             });
         }
         
-        private void CreateParametersUi(GameConfig config)
+        private void CreatePauseMenuUi(GameConfig config)
         {
-            var parametersUi = EntityManager.CreateEntity();
-            EntityManager.AddComponentObject(parametersUi, new SpawnParametersUi
+            var pauseMenuUi = EntityManager.CreateEntity();
+            EntityManager.AddComponentObject(pauseMenuUi, new SpawnPauseMenuUi
             {
-                ParametersUiPrefab = config.UIConfig.ParametersUiPrefab
+                PauseMenuUiPrefab = config.UIConfig.PauseMenuUiPrefab
             });
         }
 

@@ -25,7 +25,7 @@ namespace Core.Authoring.EventObjects.Systems
         private EntityQuery _bankQuery;
         private EntityQuery _cleanerQuery;
         private EntityQuery _customerQuery;
-        private EntityQuery _phraseUiManager;
+        private EntityQuery _eventPhrasePanelUi;
 
         protected override void OnCreate()
         {
@@ -41,7 +41,7 @@ namespace Core.Authoring.EventObjects.Systems
                 .Build(this);
             
             using var phraseUiManagerBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _phraseUiManager = phraseUiManagerBuilder.WithAll<PhraseCustomerUiManagerView>().Build(this);
+            _eventPhrasePanelUi = phraseUiManagerBuilder.WithAll<EventPhrasePanelCustomerUi>().Build(this);
         }
 
         protected override void OnUpdate()
@@ -86,18 +86,16 @@ namespace Core.Authoring.EventObjects.Systems
                 var customerUiEntity = EntityManager.GetComponentData<CustomerUIEntity>(customerEntity).UiEntity;
                 var customerUiView = EntityManager.GetComponentObject<CustomerUiView>(customerUiEntity);
 
-                if (!_phraseUiManager.IsEmpty)
+                
+                if (_eventPhrasePanelUi.IsEmpty && !EntityManager.HasComponent<EventPanelCustomerIsShow>(customerEntity))
                 {
-                    var customerView = EntityManager.GetComponentObject<CustomerView>(customerEntity);
-                    var randomPhrase = Random.Range(0, customerView.Dialogs.DirtyTable.Length);
-                    var phraseUiManagerEntity = _phraseUiManager.ToEntityArray(Allocator.Temp)[0];
-                    var phraseUiManager =
-                        EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity)
-                            .PhraseCustomerUiManager;
-
-                    phraseUiManager.EventPanel.SetPhrasePanelUiComponent(
-                        customerView.Dialogs.DirtyTable[randomPhrase], customerView.Avatar);
-                    phraseUiManager.StartEventPanelTween();
+                    var eventPhraseEntity = EntityManager.CreateEntity();
+                    EntityManager.AddComponentObject(eventPhraseEntity, new SpawnEventPhrasePanelCustomerUi
+                    {
+                        Customer = customerEntity,
+                        Type = EventPhraseType.DirtyTable
+                    });
+                    EntityManager.AddComponent<EventPanelCustomerIsShow>(customerEntity);
                 }
 
                 if (!customerUiView.Value.FaceEmotionImage.IsActive())

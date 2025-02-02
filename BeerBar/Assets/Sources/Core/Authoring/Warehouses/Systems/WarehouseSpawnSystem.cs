@@ -1,5 +1,7 @@
-﻿using Core.Constants;
+﻿using Core.Authoring.NoteBookShops;
+using Core.Constants;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Core.Authoring.Warehouses.Systems
 {
@@ -19,19 +21,23 @@ namespace Core.Authoring.Warehouses.Systems
                 return;
             }
 
-            Entities.WithAll<BindWarehouse>().ForEach((Entity entity, in BindWarehouse spawnWarehouse) =>
+            Entities.WithAll<SpawnNoteBookShop>().ForEach((Entity entity, in SpawnNoteBookShop spawnNoteBookShop) =>
             {
-                CreateWarehouseEntity(entity, spawnWarehouse);
+                CreateWarehouseEntity(entity, spawnNoteBookShop);
             }).WithoutBurst().WithStructuralChanges().Run();
         }
 
-        private void CreateWarehouseEntity(Entity entity, BindWarehouse bindWarehouse)
+        private void CreateWarehouseEntity(Entity entity, SpawnNoteBookShop spawnNoteBookShop)
         {
             var warehouse = EntityManager.CreateSingleton<Warehouse>();
             EntityManager.SetName(warehouse, EntityConstants.WarehouseName);
 
-            var warehouseView = bindWarehouse.WarehouseAuthoring;
-            warehouseView.Initialize(EntityManager, warehouse);
+            var noteBookShop = Object.Instantiate(spawnNoteBookShop.NoteBookShopPrefab);
+            EntityManager.AddComponentObject(warehouse, new NoteBookShopView
+            {
+                Value = noteBookShop
+            });
+            noteBookShop.Initialize(EntityManager, warehouse);
         }
     }
 }

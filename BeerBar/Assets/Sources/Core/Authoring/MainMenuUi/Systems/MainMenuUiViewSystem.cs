@@ -14,27 +14,15 @@ namespace Core.Authoring.MainMenuUi.Systems
                 {
                     Play(entity, mainMenuUiView);
                 }).WithoutBurst().WithStructuralChanges().Run();
-            
-            Entities.WithAll<MainMenuUiView, PauseGame, PlayClicked>().ForEach(
-                (Entity entity, in MainMenuUiView mainMenuUiView) =>
-                {
-                    Resume(entity, mainMenuUiView);
-                }).WithoutBurst().WithStructuralChanges().Run();
         }
 
         private void Play (Entity entity, in MainMenuUiView mainMenuUiView)
         {
             var config = EntityUtilities.GetGameConfig();
             var loadScene = EntityManager.CreateEntity();
+            EntityManager.CreateSingleton<StartupAwake>();
             EntityManager.AddComponentData(loadScene,  new LoadScene { Reference = config.Scene });
             mainMenuUiView.Value.gameObject.SetActive(false);
-        }
-        
-        private void Resume (Entity entity, in MainMenuUiView mainMenuUiView)
-        {
-            EntityManager.RemoveComponent<PauseGame>(entity);
-            mainMenuUiView.Value.gameObject.SetActive(false);
-            UnityEngine.Time.timeScale = 1f;
         }
     }
 }

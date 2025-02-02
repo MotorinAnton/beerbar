@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb3857d7889d400db4d8f30ef0f4ca3c, type: 3}
   m_Name: WarehouseConfig
   m_EditorClassIdentifier: 
+  NoteBookShopPrefab: {fileID: -2538551092211982008, guid: 7035a344137e8e74a8403b978f46fa07, type: 3}
   OrderTime: 2

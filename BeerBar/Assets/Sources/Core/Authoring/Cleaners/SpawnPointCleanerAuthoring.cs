@@ -7,6 +7,7 @@ namespace Core.Authoring.Cleaners
     public class SpawnPointCleanerAuthoring : MonoBehaviour
     {
         [SerializeField] private Transform CleanerMopPoint;
+
         public class SpawnPointCleanerBaker : Baker<SpawnPointCleanerAuthoring>
         {
             
@@ -40,4 +41,6 @@ namespace Core.Authoring.Cleaners
     {
         public float3 Position;
     }
+    
+   
 }

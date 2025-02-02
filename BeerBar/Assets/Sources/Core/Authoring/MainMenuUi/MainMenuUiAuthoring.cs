@@ -10,30 +10,18 @@ namespace Core.Authoring.MainMenu
     {
         public int SortingOrder => -_sortingOrder;
         
-        [SerializeField]
-         private int _sortingOrder;
+        [SerializeField] private int _sortingOrder;
         
-        [SerializeField]
-        public Button _playButton;
+        [SerializeField] public Button _playButton;
+
+        [SerializeField] public Button _settingButton;
         
-        [SerializeField]
-        public TMP_Text _textButton;
-        
-        [SerializeField]
-        public Button _settingButton;
-        
-        [SerializeField]
-        public Image _backgroundImage;
-        
-        [SerializeField]
-        public Button _blocker;
-        
-        
+        [SerializeField] public Image _backgroundImage;
+
         private void Start()
         {
             _playButton.onClick.AddListener(PlayClicked);
             _settingButton.onClick.AddListener(SettingsClicked);
-            //_blocker.onClick.AddListener(PlayClicked);
         }
 
         private void PlayClicked()
@@ -44,20 +32,6 @@ namespace Core.Authoring.MainMenu
         private void SettingsClicked()
         {
             EntityUtilities.AddOneFrameComponent<SettingsClicked>(Entity);
-        }
-        
-        public void SetResumeMenu()
-        {
-            _textButton.text = "Resume";
-            _backgroundImage.gameObject.SetActive(false);
-            _blocker.gameObject.SetActive(true);
-        }
-
-        public void SetMainMenu()
-        {
-            _textButton.text = "Play";
-            _backgroundImage.gameObject.SetActive(true);
-            _blocker.gameObject.SetActive(false);
         }
     }
     

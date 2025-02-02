@@ -50,7 +50,6 @@ namespace Core.Authoring.MainMenuUi.Systems
             
             EntityManager.AddComponentObject(mainMenuUi,
                 new MainMenuUiView { Value = mainMenuUiView });
-            mainMenuUiView.SetMainMenu();
             mainMenuUiView.gameObject.SetActive(true);
             EntityManager.DestroyEntity(entity);
         }

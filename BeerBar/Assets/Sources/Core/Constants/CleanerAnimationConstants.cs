@@ -10,6 +10,8 @@ namespace Core.Constants
         public static FixedString64Bytes BarmanDraftEnd = "Barman_draft_end";
         public static FixedString64Bytes BarmanPickProduct = "Barman_pick_product";
         public static FixedString64Bytes WalkSpeed = "WalkSpeed";
+        public static FixedString64Bytes OpenDoor = "open_door";
+        public static FixedString64Bytes CloseDoor = "close_door";
         public static readonly int Walk = Animator.StringToHash("Walk");
         public static readonly int WalkMop = Animator.StringToHash("WalkMop");
         public static readonly int Mop = Animator.StringToHash("Mop");

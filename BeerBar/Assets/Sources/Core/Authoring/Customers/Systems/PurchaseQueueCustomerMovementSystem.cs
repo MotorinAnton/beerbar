@@ -29,7 +29,8 @@ namespace Core.Authoring.Customers.Systems
         private EntityQuery _freeBarmanQuery;
         private EntityQuery _purchasePointsQuery;
         private EntityQuery _barmanCashPointsPointArray;
-        private EntityQuery _phraseUiManager;
+        private EntityQuery _phrasePanelUi;
+        private EntityQuery _eventPhrasePanelUi;
 
         protected override void OnCreate()
         {
@@ -65,8 +66,11 @@ namespace Core.Authoring.Customers.Systems
             using var barmanCashPointsBuilder = new EntityQueryBuilder(Allocator.Temp);
             _barmanCashPointsPointArray = barmanCashPointsBuilder.WithAll<BarmanSpawnPoint, SpawnPoint>().Build(this);
             
-            using var phraseUiManagerBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _phraseUiManager = phraseUiManagerBuilder.WithAll<PhraseCustomerUiManagerView>().Build(this);
+            using var phrasePanelUiBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _phrasePanelUi = phrasePanelUiBuilder.WithAll<PhraseCustomerUi.PhrasePanelCustomerUi, PhraseCustomerUiView>().Build(this);
+            
+            using var eventPhrasePanelUiBuilder = new EntityQueryBuilder(Allocator.Temp);
+            _eventPhrasePanelUi = eventPhrasePanelUiBuilder.WithAll<EventPhrasePanelCustomerUi>().Build(this);
         }
 
         protected override void OnUpdate()
@@ -139,7 +143,18 @@ namespace Core.Authoring.Customers.Systems
                 
                 EntityManager.AddComponent<PhraseSayCustomer>(customerEntity);
                 animator.SetBool(CustomerAnimationConstants.CashIdle, true);
-                
+
+                if (!EntityManager.HasComponent<PanelCustomerIsShow>(customerEntity))
+                {
+                    var phraseEn = EntityManager.CreateEntity();
+                    EntityManager.AddComponentObject(phraseEn, new SpawnPhrasePanelCustomerUi
+                    {
+                        Customer = customerEntity,
+                        Index = row
+                    });
+                    EntityManager.AddComponent<PanelCustomerIsShow>(customerEntity);
+                }
+
                 var freeBarman = _freeBarmanQuery.ToEntityArray(Allocator.Temp)
                     .FirstOrDefault(entity => EntityManager.GetComponentData<BarmanIndex>(entity).Value == row);
 
@@ -183,24 +198,7 @@ namespace Core.Authoring.Customers.Systems
             
             foreach (var customerEntity in dissatisfiedCustomerEntity)
             {
-                if (_phraseUiManager.IsEmpty)
-                {
-                    continue;
-                }
-
-                var phraseUiManagerEntity = _phraseUiManager.ToEntityArray(Allocator.Temp)[0];
-                var phraseUiManager = EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity).PhraseCustomerUiManager;
-                
-                if (phraseUiManager.EventPanel.IsShow)
-                {
-                    continue;
-                } 
-                
-                var customerView = EntityManager.GetComponentObject<CustomerView>(customerEntity);
-                var randomPhrase = Random.Range(0, customerView.Dialogs.SwearsQueue.Length);
-                
-                phraseUiManager.EventPanel.SetPhrasePanelUiComponent(customerView.Dialogs.SwearsQueue[randomPhrase], customerView.Avatar);
-                phraseUiManager.StartEventPanelTween();
+                SpawnEventPanel(customerEntity, EventPhraseType.Displeased);
             } 
         }
 
@@ -225,17 +223,34 @@ namespace Core.Authoring.Customers.Systems
                 {
                     EntityManager.RemoveComponent<PhraseSayCustomer>(customerEntity);
                 }
-
-                if (_phraseUiManager.IsEmpty)
+                
+                var panelArray = _phrasePanelUi.ToComponentArray<PhraseCustomerUiView>();
+                
+                foreach (var panel in panelArray)
                 {
-                    continue;
+                    if (panel.Value._customer == customerEntity)
+                    {
+                        panel.Value.PanelFadeOut();
+                    }
                 }
-
-                var phraseUiManagerEntity = _phraseUiManager.ToEntityArray(Allocator.Temp)[0];
-                var phraseUiManagerView =
-                    EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity);
-                phraseUiManagerView.CustomerList.Remove(customerEntity);
             }
+        }
+        
+        private void SpawnEventPanel(Entity customerEntity, EventPhraseType type)
+        {
+            if (!_eventPhrasePanelUi.IsEmpty)
+            {
+                return;
+            }
+
+            var eventPhraseEntity = EntityManager.CreateEntity();
+            EntityManager.AddComponentObject(eventPhraseEntity, new SpawnEventPhrasePanelCustomerUi
+            {
+                Customer = customerEntity,
+                Type = type
+                    
+            });
+            EntityManager.AddComponent<EventPanelCustomerIsShow>(customerEntity);
         }
     }
 }

@@ -64,11 +64,11 @@ namespace Core.Authoring.Customers.Systems
                 return;
             }
 
-            CreateCustomer();
+            SpawnCustomer();
             _time = 0;
         }
 
-        private void CreateCustomer()
+        private void SpawnCustomer()
         {
             var storeRating = _storeRatingQuery.GetSingleton<StoreRating>();
             var config = EntityUtilities.GetGameConfig();

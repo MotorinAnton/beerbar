@@ -17,8 +17,10 @@ MonoBehaviour:
   StoreRatingUiPrefab: {fileID: -9139313091261699918, guid: 34ccfc2ab7630fd41ad954996a49a094, type: 3}
   WarehouseProductUiPrefab: {fileID: 3796220271820728868, guid: 631cd6083e0471b4bbbed43d67cf0d89, type: 3}
   WarehouseOrderElementUiPrefab: {fileID: 1463598947596503142, guid: 79466ddd93ab5bc45a2ae3a744371263, type: 3}
+  NoteBookShopPrefab: {fileID: -2538551092211982008, guid: 7035a344137e8e74a8403b978f46fa07, type: 3}
   WarehouseUiPrefab: {fileID: 6672006134818752213, guid: e8729a0bec176b2459be060c8912fa58, type: 3}
-  PhraseCustomerUiPrefab: {fileID: 8721915520859914042, guid: 9b3f1bbd54ec5a94781068cf7e52e3cb, type: 3}
+  PhraseCustomerUiManagerPrefab: {fileID: 8721915520859914042, guid: 9b3f1bbd54ec5a94781068cf7e52e3cb, type: 3}
+  PhraseCustomerUiPrefab: {fileID: 4515330954754068097, guid: a4eebb46bb3d57c4ab1b1d930d001f70, type: 3}
   AddButtonUiPrefab: {fileID: 7081998914603917433, guid: 8158b2fd93704b34eb6d933365dfcf06, type: 3}
   UpgradeAndEventButtonUiPrefab: {fileID: -5145366520946625939, guid: 435a96f78f9864844b79619480e586dd, type: 3}
   CustomerUiPrefab: {fileID: 9207285423208006843, guid: 445b6b152fc11b646857c1301c2e7da9, type: 3}
@@ -26,6 +28,7 @@ MonoBehaviour:
   ParametersUiPrefab: {fileID: 7878523023369837526, guid: 7fc8ebfe154c404418f79bfed0ec01a8, type: 3}
   LoadingScreenUiPrefab: {fileID: 1535897410239079732, guid: db019b89333d50f4bb4322f7ebc188a2, type: 3}
   MainMenuUiPrefab: {fileID: 6911360314811643784, guid: 00bb91d1741be3a49a4f9bfe7544d06e, type: 3}
+  PauseMenuUiPrefab: {fileID: 3936002966783570951, guid: e3bc681577bad1948aabb8bb28e37ba3, type: 3}
   UpgradeBarUiPrefab: {fileID: 3428549840901654382, guid: 64b83c03adcfb5c49949af2df857ef39, type: 3}
   UpgradeElementUiSmallPrefab: {fileID: 514488136803596681, guid: 2555dad3204cf7e429cb2bb0873bf108, type: 3}
   UpgradeElementUiBigPrefab: {fileID: 4483936485409714045, guid: 4212ec2cc8d18a343826caf845037d8a, type: 3}

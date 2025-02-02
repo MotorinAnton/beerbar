@@ -25,7 +25,8 @@ namespace Core.Authoring.Warehouses
             using var warehouseBuilder = new EntityQueryBuilder(Allocator.Temp);
             return warehouseBuilder.WithAll<WarehouseProduct, ProductOrder>().Build(systemBase);
         }
-        
+
+        // TODO: Добавить возможность передавать данные как структорой, так и tuple
         public static bool TryGetProductsFromStock(EntityManager entityManager, Entity entity,
             WarehouseProduct[] products, ProductType type, int level, int count)
         {
@@ -33,7 +34,7 @@ namespace Core.Authoring.Warehouses
                 product => product.ProductData.ProductType == type && product.ProductData.Level == level);
 
             var productData = targetProduct.ProductData;
-          
+            // TODO: Как обработать дефолтный продукт?
             if (productData.Level == 0)
             {
                 return false;

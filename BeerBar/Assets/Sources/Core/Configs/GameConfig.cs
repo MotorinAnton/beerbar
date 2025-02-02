@@ -1,4 +1,5 @@
-﻿using Core.Authoring.MovementArrows;
+﻿using Core.Authoring.CleanerDoor;
+using Core.Authoring.MovementArrows;
 using Core.Constants;
 using Unity.Entities;
 using Unity.Entities.Content;
@@ -18,6 +19,7 @@ namespace Core.Configs
         public CleanerConfig CleanerConfig;
         public ContainerConfig ContainerConfig;
         public ProductConfig ProductConfig;
+        public WarehouseConfig WarehouseConfig;
         public UIConfig UIConfig;
         public TableConfig TableConfig;
         public EventObjectConfig EventObjectConfig;
@@ -29,6 +31,7 @@ namespace Core.Configs
         public Material[] TubeSpraySelectMaterial;
         public MovementArrowAuthoring ClearArrow;
         public MovementArrowAuthoring RepairArrow;
+        public CleanerDoorAuthoring CleanerDoorPrefab;
     }
 
     public class GameConfigData : IComponentData

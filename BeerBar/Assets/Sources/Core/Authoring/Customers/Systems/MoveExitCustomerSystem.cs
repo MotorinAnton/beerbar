@@ -47,7 +47,7 @@ namespace Core.Authoring.Customers.Systems
         private EntityQuery _purchasePointsQuery;
         private EntityQuery _purchaseQueueAllCustomersQuery;
         private EntityQuery _storeRatingQuery;
-        private EntityQuery _phraseUiManager;
+        private EntityQuery _eventPhraseCustomerUi;
         private EntityQuery _bankQuery;
         
         protected override void OnCreate()
@@ -132,7 +132,7 @@ namespace Core.Authoring.Customers.Systems
             _storeRatingQuery = storeRatingBuilder.WithAllRW<StoreRating>().Build(this);
 
             using var phraseUiManagerBuilder = new EntityQueryBuilder(Allocator.Temp);
-            _phraseUiManager = phraseUiManagerBuilder.WithAll<PhraseCustomerUiManagerView>().Build(this);
+            _eventPhraseCustomerUi = phraseUiManagerBuilder.WithAll<EventPhrasePanelCustomerUi>().Build(this);
 
             using var bankBuilder = new EntityQueryBuilder(Allocator.Temp);
             _bankQuery = bankBuilder.WithAllRW<Bank>().Build(this);
@@ -365,19 +365,7 @@ namespace Core.Authoring.Customers.Systems
                     breakBottleView.Initialize(EntityManager, breakBottleObjectEntity);
                     EntityManager.RemoveComponent<BreakBottleCustomer>(customerEntity);
                     
-                    if (!_phraseUiManager.IsEmpty)
-                    {
-                        var randomPhrase = Random.Range(0, customerView.Dialogs.EventPurchase.Length);
-                        var phraseUiManagerEntity = _phraseUiManager.ToEntityArray(Allocator.Temp)[0];
-                        var phraseUiManager =
-                            EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity)
-                                .PhraseCustomerUiManager;
-
-                        phraseUiManager.EventPanel.SetPhrasePanelUiComponent(
-                            customerView.Dialogs.EventPurchase[randomPhrase], customerView.Avatar);
-
-                        phraseUiManager.StartEventPanelTween();
-                    } 
+                    SpawnEventPanel(customerEntity, EventPhraseType.DirtyTable);
                 }
                 
                 if (EntityManager.HasComponent<LossWalletCustomer>(customerEntity))
@@ -480,7 +468,7 @@ namespace Core.Authoring.Customers.Systems
                             .Position;
                         var storeRating = _storeRatingQuery.GetSingleton<StoreRating>();
 
-                        StarDirtTableEmotionEventPanel(customerEntity);
+                        SpawnEventPanel(customerEntity, EventPhraseType.DirtyTable);
                         SpawnDispleaseEmotion(customerEntity);
 
                         if (!customerUiView.FaceEmotionImage.IsActive())
@@ -542,23 +530,21 @@ namespace Core.Authoring.Customers.Systems
             }
         }
 
-        private void StarDirtTableEmotionEventPanel(Entity customerEntity)
+        private void SpawnEventPanel(Entity customerEntity, EventPhraseType type)
         {
-            if (_phraseUiManager.IsEmpty)
+            if (!_eventPhraseCustomerUi.IsEmpty)
             {
                 return;
             }
-            
-            var customerView = EntityManager.GetComponentObject<CustomerView>(customerEntity);
-            var randomPhrase = Random.Range(0, customerView.Dialogs.DirtyTable.Length);
-            var phraseUiManagerEntity = _phraseUiManager.ToEntityArray(Allocator.Temp)[0];
-            var phraseUiManager =
-                EntityManager.GetComponentObject<PhraseCustomerUiManagerView>(phraseUiManagerEntity)
-                    .PhraseCustomerUiManager;
 
-            phraseUiManager.EventPanel.SetPhrasePanelUiComponent(
-                customerView.Dialogs.DirtyTable[randomPhrase], customerView.Avatar);
-            phraseUiManager.StartEventPanelTween();
+            var eventPhraseEntity = EntityManager.CreateEntity();
+            EntityManager.AddComponentObject(eventPhraseEntity, new SpawnEventPhrasePanelCustomerUi
+            {
+                Customer = customerEntity,
+                Type = type
+                    
+            });
+            EntityManager.AddComponent<EventPanelCustomerIsShow>(customerEntity);
         }
         
         private void SpawnDispleaseEmotion(Entity customerEntity)
@@ -753,20 +739,22 @@ namespace Core.Authoring.Customers.Systems
                 var indexCustomer = EntityManager.GetComponentData<IndexMovePoint>(customer);
                 var rowCustomer = indexCustomer.Value % rowCount;
 
-                if (rowCustomer == updateRow && indexCustomer.Value >= rowCount)
+                if (rowCustomer != updateRow || indexCustomer.Value < rowCount)
                 {
-                    indexCustomer.Value -= rowCount;
-                    EntityManager.SetComponentData(customer, indexCustomer);
-                    EntityManager.RemoveComponent<WaitingCustomer>(customer);
-                    if (EntityManager.HasComponent<WaitTime>(customer))
-                    {
-                        EntityManager.RemoveComponent<WaitTime>(customer);
-                        EntityManager.RemoveComponent<StartWaitTime>(customer);
-                    }
-
-                    EntityManager.AddComponentData(customer,
-                        new WaitTime { Current = CustomerAnimationConstants.MoveQueueDelay * indexCustomer.Value });
+                    continue;
                 }
+
+                indexCustomer.Value -= rowCount;
+                EntityManager.SetComponentData(customer, indexCustomer);
+                EntityManager.RemoveComponent<WaitingCustomer>(customer);
+                if (EntityManager.HasComponent<WaitTime>(customer))
+                {
+                    EntityManager.RemoveComponent<WaitTime>(customer);
+                    EntityManager.RemoveComponent<StartWaitTime>(customer);
+                }
+
+                EntityManager.AddComponentData(customer,
+                    new WaitTime { Current = CustomerAnimationConstants.MoveQueueDelay * indexCustomer.Value });
             }
         }
 

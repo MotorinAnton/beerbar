@@ -116,10 +116,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5580677257210491342}
   - component: {fileID: 961928374192969798}
+  - component: {fileID: 1457459358109611872}
   - component: {fileID: 846815881333086932}
   - component: {fileID: 5519089310515889022}
   - component: {fileID: 6494985093207529066}
-  - component: {fileID: 1457459358109611872}
   m_Layer: 10
   m_Name: Tube_BreakdownFX
   m_TagString: Untagged
@@ -166,6 +166,27 @@ MonoBehaviour:
   _particles:
   - {fileID: 5519089310515889022}
   - {fileID: 4767154633803912331}
+--- !u!65 &1457459358109611872
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807078133003309078}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.43, y: 5.93, z: 0.18}
+  m_Center: {x: 0, y: 1.4, z: 0.18}
 --- !u!114 &846815881333086932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4936,27 +4957,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!65 &1457459358109611872
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 807078133003309078}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.43, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6612176346006454551
 GameObject:
   m_ObjectHideFlags: 0
